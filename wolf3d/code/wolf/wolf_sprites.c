@@ -34,12 +34,6 @@
 #include "../wolfiphone.h"
 
 
-// nobody should see this array!
-sprite_t Spr_Sprites[ MAX_SPRITES ];
-W32 n_of_sprt;
-
-
-
 /*
 -----------------------------------------------------------------------------
  Function: Sprite_Reset -Reset sprite status.
@@ -53,8 +47,8 @@ W32 n_of_sprt;
 */
 PUBLIC void Sprite_Reset( void )
 {
-	n_of_sprt = 0;
-	memset( Spr_Sprites, 0, sizeof( Spr_Sprites ) );
+	levelData.numSprites = 0;
+	memset( levelData.sprites, 0, sizeof( levelData.sprites ) );
 }
 
 /*
@@ -75,7 +69,7 @@ PUBLIC void Sprite_RemoveSprite( int sprite_id )
 		return;
 	}
 
-	Spr_Sprites[ sprite_id ].flags |= SPRT_REMOVE;
+	levelData.sprites[ sprite_id ].flags |= SPRT_REMOVE;
 }
 
 
@@ -95,7 +89,7 @@ PUBLIC int Sprite_GetNewSprite( void )
 	W32 n;
 	sprite_t* sprt;
 
-	for( n = 0, sprt = Spr_Sprites ; n < n_of_sprt ; ++n, ++sprt )
+	for( n = 0, sprt = levelData.sprites ; n < levelData.numSprites ; ++n, ++sprt )
 	{
 		if( sprt->flags & SPRT_REMOVE )
 		{ // free spot: clear it first
@@ -104,13 +98,13 @@ PUBLIC int Sprite_GetNewSprite( void )
 		}
 	}
 
-	if( n_of_sprt >= MAX_SPRITES )
+	if( levelData.numSprites >= MAX_SPRITES )
 	{
 		Com_Printf( "Warning n_of_sprt == MAX_SPRITES\n" );
 		return -1;
 	}
 
-	return n_of_sprt++;
+	return levelData.numSprites++;
 }
 
 
@@ -135,21 +129,21 @@ PUBLIC void Sprite_SetPos( int sprite_id, int x, int y, int angle )
 		return;
 	}
 
-	Spr_Sprites[ sprite_id ].x = x;
-	Spr_Sprites[ sprite_id ].y = y;
-	Spr_Sprites[ sprite_id ].ang = angle;
-	Spr_Sprites[ sprite_id ].tilex = POS2TILE( x );
-	Spr_Sprites[ sprite_id ].tiley = POS2TILE( y );
-	Spr_Sprites[ sprite_id ].flags |= SPRT_CHG_POS;
+	levelData.sprites[ sprite_id ].x = x;
+	levelData.sprites[ sprite_id ].y = y;
+	levelData.sprites[ sprite_id ].ang = angle;
+	levelData.sprites[ sprite_id ].tilex = POS2TILE( x );
+	levelData.sprites[ sprite_id ].tiley = POS2TILE( y );
+	levelData.sprites[ sprite_id ].flags |= SPRT_CHG_POS;
 
 	if( ! (x & HALFTILE) ) // (x%TILEGLOBAL>=HALFTILE)
 	{
-		Spr_Sprites[ sprite_id ].tilex--;
+		levelData.sprites[ sprite_id ].tilex--;
 	}
 
 	if( ! (y & HALFTILE) )
 	{
-		Spr_Sprites[ sprite_id ].tiley--;
+		levelData.sprites[ sprite_id ].tiley--;
 	}
 }
 
@@ -166,24 +160,26 @@ PUBLIC void Sprite_SetPos( int sprite_id, int x, int y, int angle )
  Notes: 
 -----------------------------------------------------------------------------
 */
+void CacheTextures( W16 start, W16 end );
 PUBLIC void Sprite_SetTex( int sprite_id, int index, int tex )
 {
 	if( sprite_id == -1 )
 	{
 		return;
 	}
-	
+	CacheTextures( tex, tex );
+
 	if( index == -1 )	// one texture for each phase
 	{
-		Spr_Sprites[ sprite_id ].tex[ 0 ] = tex;
-		Spr_Sprites[ sprite_id ].flags |= SPRT_ONE_TEX;
+		levelData.sprites[ sprite_id ].tex[ 0 ] = tex;
+		levelData.sprites[ sprite_id ].flags |= SPRT_ONE_TEX;
 	}
 	else
 	{
-		Spr_Sprites[ sprite_id ].tex[ index ] = tex;
+		levelData.sprites[ sprite_id ].tex[ index ] = tex;
 	}
 	
-	Spr_Sprites[ sprite_id ].flags |= SPRT_CHG_TEX;
+	levelData.sprites[ sprite_id ].flags |= SPRT_CHG_TEX;
 }
 
 
@@ -245,7 +241,7 @@ PUBLIC int Sprite_CreateVisList( void )
 	visptr = vislist;
 	num_visible = 0;
 
-	for( n = 0, sprt = Spr_Sprites; n < n_of_sprt; ++n, ++sprt )
+	for( n = 0, sprt = levelData.sprites; n < levelData.numSprites; ++n, ++sprt )
 	{
 		if( sprt->flags & SPRT_REMOVE )
 		{

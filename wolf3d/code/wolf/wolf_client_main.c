@@ -79,10 +79,7 @@ PUBLIC void Client_PrepRefresh( const char *r_mapname )
 	// clear any lines of console text
 	Con_ClearNotify();
 
-	if( r_world->musicName )
-	{
-		Sound_StartBGTrack( r_world->musicName, r_world->musicName );
-	}
+	Sound_StartBGTrack( levelData.musicName, levelData.musicName );
 
 	Player.playstate = ex_playing;	
 }

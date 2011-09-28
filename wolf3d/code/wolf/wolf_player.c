@@ -46,10 +46,10 @@ struct atkinf
 
 } attackinfo[ 4 ][ 14 ] = // 4 guns, 14 frames max for every gun!
 {
-	{ {6,0,1},{6,2,2},{6,0,3},{6,-1,4} },
-	{ {6,0,1},{6,1,2},{6,0,3},{6,-1,4} },
-	{ {6,0,1},{6,1,2},{6,3,3},{6,-1,4} },
-	{ {6,0,1},{6,1,2},{6,4,3},{6,-1,4} },
+	{ {6,0,1},{6,2,2},{6,0,3},{6,-1,0} },
+	{ {6,0,1},{6,1,2},{6,0,3},{6,-1,0} },
+	{ {6,0,1},{6,1,2},{6,3,3},{6,-1,0} },
+	{ {6,0,1},{6,1,2},{6,4,3},{6,-1,0} },
 };
 
 
@@ -73,13 +73,13 @@ PRIVATE _boolean PL_ChangeWeapon( player_t *self, int weapon )
 
 	if( self->ammo[ AMMO_BULLETS ] == 0 && weapon != WEAPON_KNIFE )
 	{
-		Com_Printf("Not enough ammo.\n");
+//		Com_Printf("Not enough ammo.\n");
 		return false;
 	}
 
 	if( ! (self->items & itemflag) ) 
 	{
-		Com_Printf( "No weapon.\n" );
+//		Com_Printf( "No weapon.\n" );
 		return false;
 	}
 
@@ -493,23 +493,7 @@ PUBLIC void PL_Process( player_t *self, LevelData_t *lvl )
 			self->attackframe = 0;
 			self->attackcount = attackinfo[ self->weapon ][ 0 ].tics;
 			self->weaponframe = attackinfo[ self->weapon ][ 0 ].frame;
-		}
-	}
-
-// process impulses
-	switch( Player.cmd.impulse )
-	{
-		case 0:
-			break; // no impulse
-
-		case 1:
-		case 2:
-		case 3:
-		case 4:
-			PL_ChangeWeapon( self, Player.cmd.impulse - 1 );
-			break;
-
-		case 10: // next weapon /like in Quake/ FIXME: weapprev, weapnext
+		} else if ( Player.cmd.buttons & BUTTON_CHANGE_WEAPON ) {
 			self->pendingweapon=self->weapon;
 			for( n = 0 ; n < 4; ++n )
 			{
@@ -524,13 +508,9 @@ PUBLIC void PL_Process( player_t *self, LevelData_t *lvl )
 				}
 			}
 			self->weapon = self->pendingweapon;
-			break;
-
-		default:
-			Com_Printf( "Unknown Impulse: %d\n", Player.cmd.impulse );
-			break;
+		}
+		
 	}
-
 }
 
 
@@ -578,6 +558,10 @@ PUBLIC void PL_Spawn( placeonplane_t location, LevelData_t *lvl )
 	}
 
 	Areas_ConnectAreas( Player.areanumber );
+	
+	char str[128];
+	sprintf( str, "Entering level E%iM%i", currentMap.episode + 1, currentMap.map + 1 );
+	iphoneSetNotifyText( str );
 }
 
 /*
@@ -594,6 +578,7 @@ PUBLIC void PL_Spawn( placeonplane_t location, LevelData_t *lvl )
 */
 PRIVATE void Cmd_Give_f( void )
 {
+	Com_Printf( "Giving stuff.\n" );
 	PL_GiveHealth( &Player, 999, 0 );
 	PL_GiveAmmo( &Player, AMMO_BULLETS, 99 );
 	PL_GiveWeapon( &Player, WEAPON_AUTO );
@@ -636,6 +621,7 @@ PRIVATE void Cmd_God_f( void )
 PRIVATE void PL_notarget_f( void )
 {
 	Player.flags ^= FL_NOTARGET;
+	Com_Printf( "Notarget mode %s\n", Player.flags & FL_NOTARGET ? "ON":"OFF" );
 }
 
 
@@ -658,7 +644,6 @@ PUBLIC void PL_Init(void)
 
 	Cmd_AddCommand( "god", Cmd_God_f );
 	Cmd_AddCommand( "notarget", PL_notarget_f );
-
 	Cmd_AddCommand( "give", Cmd_Give_f );
 }
 
@@ -678,12 +663,6 @@ PUBLIC void PL_Init(void)
 
 -----------------------------------------------------------------------------
 */
-#ifdef IPHONE
-void vibrateDevice();
-#else
-void vibrateDevice() {}
-#endif
-
 PUBLIC void PL_Damage( player_t *self, entity_t *attacker, int points )
 {
 	
@@ -700,7 +679,7 @@ PUBLIC void PL_Damage( player_t *self, entity_t *attacker, int points )
 	}
 
 	// vibe the phone
-	vibrateDevice();
+	SysIPhoneVibrate();
 
 	// note the direction of the last hit for the directional blends
 	{
@@ -876,28 +855,6 @@ PUBLIC void PL_GiveWeapon( player_t *self, int weapon )
 	}
 }
 
-/*
------------------------------------------------------------------------------
- Function: 
- 
- Parameters:
- 
- Returns:
- 
- Notes: 
-
------------------------------------------------------------------------------
-*/
-PUBLIC void PL_GiveLife( player_t *self )
-{
-	if( self->lives < 9 )
-	{
-		self->lives++;
-	}
-
-	Sound_StartSound( NULL, 0, CHAN_ITEM, Sound_RegisterSound( "lsfx/044.wav" ), 1, ATTN_NORM, 0 );
-}
-
 
 /*
 -----------------------------------------------------------------------------
@@ -913,12 +870,14 @@ PUBLIC void PL_GiveLife( player_t *self )
 */
 PUBLIC void PL_GivePoints( player_t *self, W32 points )
 {
+#if 0		// no score on iphone
 	self->score += points;
 	while( self->score >= self->next_extra )
 	{
 		self->next_extra += EXTRAPOINTS;
 		PL_GiveLife( self );
 	}	
+#endif
 }
 
 /*

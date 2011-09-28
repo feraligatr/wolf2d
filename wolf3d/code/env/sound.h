@@ -69,7 +69,6 @@ extern W16 numDefaultSoundDevice;
 extern W8	sound_initialized;
 
 extern void Sound_Init( void );
-extern void Sound_Shutdown( void );
 
 extern void Sound_Update( const vec3_t position, const vec3_t velocity, const vec3_t at, const vec3_t up);
 

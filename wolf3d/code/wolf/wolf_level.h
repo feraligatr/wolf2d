@@ -172,6 +172,8 @@ typedef struct
 
 } LevelDoors_t;
 
+#define MAX_POWERUPS 1000
+
 ///////////////////
 //
 //	Level
@@ -204,7 +206,12 @@ typedef struct
 
 	placeonplane_t pSpawn; // player spawn place
 
+	powerup_t		powerups[MAX_POWERUPS];
+	int				numPowerups;
 
+	sprite_t		sprites[ MAX_SPRITES ];
+	int				numSprites;
+	
 	char mapName[128];		/* Map name */
 	char musicName[128];	/* Music file name */
 	
@@ -223,7 +230,7 @@ typedef struct statinfo_t
 
 
 extern LevelData_t *r_world;
-
+extern LevelData_t	levelData;
 
 extern LevelData_t *Level_LoadMap( const char *levelname );
 extern void Level_PrecacheTextures_Sound( LevelData_t *lvl );
@@ -239,7 +246,7 @@ extern void Door_ResetDoors( LevelDoors_t *lvl );
 extern int Door_SpawnDoor( LevelDoors_t *lvl, int x, int y, int type );
 extern void Door_SetAreas( LevelDoors_t *lvl, int (*areas)[64] );
 extern void Door_OpenDoor( doors_t *Door );
-extern void Door_ProcessDoors_e( LevelDoors_t *lvl, int t_tk, int t_ms );
+extern void Door_ProcessDoors_e( LevelDoors_t *lvl, int t_tk );
 extern int Door_Opened( LevelDoors_t *lvl, int x, int y );
 extern _boolean Door_TryUse( doors_t *Door, int keys );
 

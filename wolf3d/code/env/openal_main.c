@@ -143,6 +143,9 @@ PRIVATE void Sound_Device_Register( void )
 */
 PUBLIC _boolean Sound_Device_Setup( void )
 {
+	Com_Printf( "...Initializing AudioSession\n" );
+	SysIPhoneInitAudioSession();
+	
 	Com_Printf( "...Initializing OpenAL subsystem\n" );
 
 	Sound_Device_Register();
@@ -194,8 +197,6 @@ PUBLIC _boolean Sound_Device_Setup( void )
 
 failed:
 
-	OpenAL_Shutdown();
-
 	if( Context )
 	{
 		pfalcDestroyContext( Context );
@@ -207,6 +208,8 @@ failed:
 		pfalcCloseDevice( Device );
 		Device = NULL;
 	}
+	
+	OpenAL_Shutdown();
 
 	return false;
 }

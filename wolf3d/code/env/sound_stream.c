@@ -50,7 +50,7 @@ typedef struct
 
 
 // anything greater than 1<<13 caused crashes on iphone OS 2.1 (on a 3G iphone)
-#define BUFFER_SIZE		(1<<13)
+#define BUFFER_SIZE		(1<<11)
 
 PRIVATE musicTrack_t	bgTrack;
 
@@ -171,7 +171,7 @@ PRIVATE _boolean Sound_OpenBGTrack( const char *name, musicTrack_t *track )
 	int ret;
 	extern cvar_t *music;
 	
-	if ( music->value == 0 ) {
+	if ( music->value == 0 || SysIPhoneOtherAudioIsPlaying() ) {
 		return 0;
 	}
 	

@@ -21,16 +21,21 @@
 #import "wolf3dAppDelegate.h"
 #import "EAGLView.h"
 #import <AudioToolbox/AudioServices.h>
+#include "../wolfiphone.h"
 
-extern int iphoneStartup();
-extern int iphoneShutdown();
+@interface UIApplication (Private)
+
+- (void)setSystemVolumeHUDEnabled:(BOOL)enabled forAudioCategory:(NSString *)category;
+- (void)setSystemVolumeHUDEnabled:(BOOL)enabled;
+
+@end
+
 
 char iphoneDocDirectory[1024];
 char iphoneAppDirectory[1024];
 
 
-void vibrateDevice() {
-	printf( "vibrate\n" );
+void SysIPhoneVibrate() {
 	AudioServicesPlaySystemSound( kSystemSoundID_Vibrate );
 }
 
@@ -38,6 +43,7 @@ void vibrateDevice() {
 
 @synthesize window;
 @synthesize glView;
+
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
 	application.statusBarHidden = YES;
@@ -78,6 +84,10 @@ void vibrateDevice() {
 	iphoneShutdown();
 }
 
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+	// wolf3d:foo should launch wolf3d now... next, add useful URL parameter encoding
+	return YES;
+}
 
 
 - (void)dealloc {
@@ -87,7 +97,6 @@ void vibrateDevice() {
 }
 
 - (void)restartAccelerometerIfNeeded {
-	int Sys_Milliseconds();
 
 	// I have no idea why this seems to happen sometimes...
 	if ( Sys_Milliseconds() - lastAccelUpdateMsec > 1000 ) {
@@ -103,14 +112,12 @@ void vibrateDevice() {
 
 - (void)accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration
 {	
-	int Sys_Milliseconds();
-	void WolfensteinTilts( float *tilts );
 	float acc[4];
 	acc[0] = acceleration.x;
 	acc[1] = acceleration.y;
 	acc[2] = acceleration.z;
 	acc[3] = acceleration.timestamp;
-	WolfensteinTilts( acc );
+	iphoneTiltEvent( acc );
 	lastAccelUpdateMsec = Sys_Milliseconds();
 }
 

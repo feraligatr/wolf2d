@@ -40,8 +40,6 @@
 #ifndef __WOLF_RENDERER_H__
 #define __WOLF_RENDERER_H__
 
-extern void R_SetGL3D( placeonplane_t viewport );
-
 extern void R_DrawBox( int x, int y, int w, int h, W32 color );
 
 extern void R_Draw_Door( int x, int y, float z1, float z2, _boolean vertical, _boolean backside, int tex, int amount );
@@ -55,7 +53,6 @@ extern void R_DrawPsyched( W32 percent );
 
 extern void R_DrawHUD( void );
 extern void R_DrawNumber( int x, int y, int number );
-extern void R_DrawWeapon( void );
 
 
 extern void R_put_line( int x, int y, const char *string );

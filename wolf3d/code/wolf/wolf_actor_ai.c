@@ -351,28 +351,28 @@ PRIVATE void A_KillActor( entity_t *self )
 	{
 		case en_guard:
 			PL_GivePoints( &Player, 100 );
-			Powerup_Spawn( tilex, tiley, pow_clip2, r_world );
+			Powerup_Spawn( tilex, tiley, pow_clip2 );
 			break;
 
 		case en_officer:
 			PL_GivePoints( &Player, 400 );
-			Powerup_Spawn( tilex, tiley, pow_clip2, r_world );
+			Powerup_Spawn( tilex, tiley, pow_clip2 );
 			break;
 
 		case en_mutant:
 			PL_GivePoints( &Player, 700 );
-			Powerup_Spawn( tilex, tiley, pow_clip2, r_world );
+			Powerup_Spawn( tilex, tiley, pow_clip2 );
 			break;
 
 		case en_ss:
 			PL_GivePoints( &Player, 500 );
 			if( Player.items & ITEM_WEAPON_3 ) // have a schmeiser?
 			{
-				Powerup_Spawn( tilex, tiley, pow_clip2, r_world );
+				Powerup_Spawn( tilex, tiley, pow_clip2 );
 			}
 			else
 			{
-				Powerup_Spawn( tilex, tiley, pow_machinegun, r_world );
+				Powerup_Spawn( tilex, tiley, pow_machinegun );
 			}
 			break;
 
@@ -382,12 +382,12 @@ PRIVATE void A_KillActor( entity_t *self )
 
 		case en_boss:
 			PL_GivePoints( &Player, 5000 );
-			Powerup_Spawn( tilex, tiley, pow_key1, r_world );
+			Powerup_Spawn( tilex, tiley, pow_key1 );
 			break;
 
 		case en_gretel:
 			PL_GivePoints( &Player, 5000 );
-			Powerup_Spawn( tilex, tiley, pow_key1, r_world );
+			Powerup_Spawn( tilex, tiley, pow_key1 );
 			break;
 
 		case en_gift:
@@ -430,22 +430,22 @@ PRIVATE void A_KillActor( entity_t *self )
 
 		case en_trans:
 			PL_GivePoints( &Player, 5000 );
-			Powerup_Spawn( tilex, tiley, pow_key1, r_world );
+			Powerup_Spawn( tilex, tiley, pow_key1 );
 			break;
 
 		case en_uber:
 			PL_GivePoints( &Player, 5000 );
-			Powerup_Spawn( tilex, tiley, pow_key1, r_world );
+			Powerup_Spawn( tilex, tiley, pow_key1 );
 			break;
 
 		case en_will:
 			PL_GivePoints( &Player, 5000 );
-			Powerup_Spawn( tilex, tiley, pow_key1, r_world );
+			Powerup_Spawn( tilex, tiley, pow_key1 );
 			break;
 
 		case en_death:
 			PL_GivePoints( &Player, 5000 );
-			Powerup_Spawn( tilex, tiley, pow_key1, r_world );
+			Powerup_Spawn( tilex, tiley, pow_key1 );
 			break;
 	}
 

@@ -72,7 +72,7 @@ PUBLIC void Game_Init( void )
 	skill = Cvar_Get( "skill", "1", CVAR_ARCHIVE );
 	g_version = Cvar_Get( "g_version", "0", CVAR_ARCHIVE ); 
 
-#ifndef EPISODE1	
+#ifndef LITE	
 	Cmd_AddCommand( "map", Map_f );
 #endif
 	

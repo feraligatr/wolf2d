@@ -103,7 +103,7 @@ PUBLIC int Door_SpawnDoor( LevelDoors_t *lvldoors, int x, int y, int type )
 		case 0x5C:
 			lvldoors->DoorMap[ x ][ y ].type = DOOR_G_VERT;
 			lvldoors->DoorMap[ x ][ y ].vertical = true;
-			lvldoors->DoorMap[ x ][ y ].texture = TEX_DLOCK + 1;
+			lvldoors->DoorMap[ x ][ y ].texture = TEX_DLOCK;
 			break;
 
 		case 0x5D:
@@ -121,7 +121,7 @@ PUBLIC int Door_SpawnDoor( LevelDoors_t *lvldoors, int x, int y, int type )
 		case 0x5F:
 			lvldoors->DoorMap[ x ][ y ].type = DOOR_S_HORIZ;
 			lvldoors->DoorMap[ x ][ y ].vertical = false;
-			lvldoors->DoorMap[ x ][ y ].texture = TEX_DLOCK;
+			lvldoors->DoorMap[ x ][ y ].texture = TEX_DLOCK + 1;
 			break;
 
 		case 0x64:
@@ -346,7 +346,7 @@ PRIVATE void Door_ChangeDoorState( doors_t *Door )
 
 -----------------------------------------------------------------------------
 */
-PUBLIC void Door_ProcessDoors_e( LevelDoors_t *lvldoors, int t_tk, int t_ms )
+PUBLIC void Door_ProcessDoors_e( LevelDoors_t *lvldoors, int t_tk )
 {
 	int n;
 

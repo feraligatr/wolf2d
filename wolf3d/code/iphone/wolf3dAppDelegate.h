@@ -21,13 +21,6 @@
 #import <UIKit/UIKit.h>
 #import <UIKit/UIAccelerometer.h>
 
-#ifdef _cplusplus
-extern "C" {
-#endif
-void vibrateDevice();
-#ifdef _cplusplus
-}
-#endif
 
 @class EAGLView;
 

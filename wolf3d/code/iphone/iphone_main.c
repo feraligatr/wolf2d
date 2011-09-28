@@ -21,14 +21,10 @@
 */
 
 /*
- *	unix_main.c: UNIX interface to application.
- *	
- *	Author:	Michael Liebscher <johnnycanuck@users.sourceforge.net>	
- *
- *	Acknowledgement:
- *	This code was derived from Quake II, and was originally
- *	written by Id Software, Inc.
- *
+
+ does clearing color and depth at the same time offer any beneft?
+ should we use the depth sense reversing trick to avoid depth clears?
+ 
  */
 
 #include "../wolfiphone.h"
@@ -36,7 +32,6 @@
 
 cvar_t	*controlScheme;
 cvar_t	*sensitivity;
-cvar_t	*stickSize;
 cvar_t	*stickTurnBase;
 cvar_t	*stickTurnScale;
 cvar_t	*stickMoveBase;
@@ -49,10 +44,15 @@ cvar_t	*tiltAverages;
 cvar_t	*tiltFire;
 cvar_t	*music;
 cvar_t	*showTilt;
+cvar_t	*showTime;
 cvar_t	*cropSprites;
 cvar_t	*blends;
 cvar_t	*gunFrame;
 cvar_t	*slowAI;
+cvar_t	*revLand;
+cvar_t	*mapScale;
+cvar_t	*hideControls;
+cvar_t	*autoFire;
 
 W32	sys_frame_time;
 
@@ -99,9 +99,12 @@ void Reset_f() {
  ==================
  */
 void iphoneStartup() {
-	int		i;
 	char	*s;
 	int		start = Sys_Milliseconds();
+
+	// temporary 
+	const char *systemVersion = SysIPhoneGetOSVersion();
+	printf( "systemVersion = %s\n", systemVersion );
 	
 	z_chain.next = z_chain.prev = &z_chain;
 	
@@ -142,16 +145,10 @@ void iphoneStartup() {
 	Cbuf_AddText( "exec config.cfg\n" );
 	Cbuf_AddEarlyCommands( true );
 	Cbuf_Execute();
-
+	
 	// add + commands from command line
 	Cbuf_AddLateCommands();
 	Cbuf_Execute();
-	
-	for ( i = 0 ; i < 10 ; i++ ) {
-		char	name[64];
-		sprintf( name, "iphone/font/%i.tga", i );
-		numberPics[i] = TM_FindTexture( name, TT_Pic );
-	}
 	
 	Com_Printf( "\n====== Application Initialized ======\n\n" );	
 	
@@ -160,8 +157,6 @@ void iphoneStartup() {
 	
 	controlScheme = Cvar_Get( "controlScheme", "0", CVAR_ARCHIVE );
 	sensitivity = Cvar_Get( "sensitivity", "0.3", CVAR_ARCHIVE );
-	
-	stickSize = Cvar_Get( "stickSize", "120", CVAR_ARCHIVE );
 	stickTurnBase = Cvar_Get( "stickTurnBase", "300", CVAR_ARCHIVE );
 	stickTurnScale = Cvar_Get( "stickTurnScale", "500", CVAR_ARCHIVE );
 	stickMoveBase = Cvar_Get( "stickMoveBase", "3000", CVAR_ARCHIVE );
@@ -175,24 +170,124 @@ void iphoneStartup() {
 	tiltAverages = Cvar_Get( "tiltAverages", "3", CVAR_ARCHIVE );
 	cropSprites = Cvar_Get( "cropSprites", "1", 0 );
 	showTilt = Cvar_Get( "showTilt", "-1", 0 );
+	showTime = Cvar_Get( "showTime", "0", 0 );
 	blends = Cvar_Get( "blends", "1", 0 );
 	gunFrame = Cvar_Get( "gunFrame", "0", 0 );
 	slowAI = Cvar_Get( "slowAI", "0", 0 );
+	revLand = Cvar_Get( "revLand", "0", CVAR_ARCHIVE );
+	mapScale = Cvar_Get( "mapScale", "10", CVAR_ARCHIVE );
+	hideControls = Cvar_Get( "hideControls", "0", CVAR_ARCHIVE );
+	autoFire = Cvar_Get( "autoFire", "0", 0 );
+	
+	// make sure volume changes and incoming calls draw the right orientation
+	SysIPhoneSetUIKitOrientation( revLand->value );
+	
+	// preload all the ogg FM synth sounds
+	Com_Printf( "before ogg preload: %i msec\n", Sys_Milliseconds() - start );
+	
+	Sound_RegisterSound( "lsfx/001.wav" );
+	Sound_RegisterSound( "lsfx/003.wav" );
+	Sound_RegisterSound( "lsfx/008.wav" );
+	Sound_RegisterSound( "lsfx/009.wav" );
+	Sound_RegisterSound( "lsfx/012.wav" );
+	Sound_RegisterSound( "lsfx/023.wav" );
+	Sound_RegisterSound( "lsfx/028.wav" );
+	Sound_RegisterSound( "lsfx/030.wav" );
+	Sound_RegisterSound( "lsfx/031.wav" );
+	Sound_RegisterSound( "lsfx/033.wav" );
+	Sound_RegisterSound( "lsfx/034.wav" );
+	Sound_RegisterSound( "lsfx/035.wav" );
+	Sound_RegisterSound( "lsfx/036.wav" );
+	Sound_RegisterSound( "lsfx/037.wav" );
+	Sound_RegisterSound( "lsfx/038.wav" );
+	Sound_RegisterSound( "lsfx/040.wav" );
+	Sound_RegisterSound( "lsfx/045.wav" );
+	Sound_RegisterSound( "lsfx/061.wav" );
+	Sound_RegisterSound( "lsfx/062.wav" );
+	Sound_RegisterSound( "lsfx/064.wav" );
+	Sound_RegisterSound( "lsfx/069.wav" );
+	Sound_RegisterSound( "lsfx/076.wav" );
+	Sound_RegisterSound( "lsfx/078.wav" );
+	Sound_RegisterSound( "lsfx/080.wav" );
+	Sound_RegisterSound( "lsfx/085.wav" );
+	Sound_RegisterSound( "lsfx/086.wav" );
 	
 	// these should get overwritten by LoadTheGame
+	memset( &currentMap, 0, sizeof( currentMap ) );
 	currentMap.skill = 1;
 	currentMap.episode = 0;
+	HudSetForScheme( 0 );
+	
+	Com_Printf( "before LoadTheGame: %i msec\n", Sys_Milliseconds() - start );
 	
 	if ( !LoadTheGame() ) {
-		memset( currentMap.mapFlags, 0,sizeof( currentMap.mapFlags ) );
 		PL_NewGame( &Player );
-		iphoneStartMap( 0, 0, 1 );
+		iphoneStartMap( currentMap.episode, currentMap.map, currentMap.skill );
 	}	
 	
+
 	// always start at main menu
 	menuState = IPM_MAIN;
 	
 	Com_Printf( "startup time: %i msec\n", Sys_Milliseconds() - start );
+}
+
+/*
+ ===================
+ iphonePreloadBeforePlay
+ 
+ This couold all be done at startup, but moving a bit of the delay
+ to after pressing the resume button works a little better.
+ ===================
+*/
+void iphonePreloadBeforePlay() {
+	int	start = Sys_Milliseconds();
+	
+	// the texnums might have been different in the savegame
+	HudSetTexnums();
+	
+	// preload all the other game gui textures that might pop up
+	TM_FindTexture( "iphone/gold_key.tga", TT_Pic );
+	TM_FindTexture( "iphone/silver_key.tga", TT_Pic );
+	TM_FindTexture( "iphone/L_damage.tga", TT_Pic );
+	TM_FindTexture( "iphone/R_damage.tga", TT_Pic );
+	
+	for ( int i = 0 ; i < 10 ; i++ ) {
+		char	name[64];
+		sprintf( name, "iphone/%i.tga", i );
+		numberPics[i] = TM_FindTexture( name, TT_Pic );
+	}
+	
+	for ( int i = 0 ; i < NUM_MUGSHOTS ; i++ ) {
+		TM_FindTexture( mugshotnames[ i ], TT_Pic );
+	}
+	
+	Sound_RegisterSound( "sfx/001.wav" );
+	Sound_RegisterSound( "sfx/002.wav" );
+	Sound_RegisterSound( "sfx/007.wav" );
+	Sound_RegisterSound( "sfx/010.wav" );
+	Sound_RegisterSound( "sfx/011.wav" );
+	Sound_RegisterSound( "sfx/012.wav" );
+	Sound_RegisterSound( "sfx/013.wav" );
+	Sound_RegisterSound( "sfx/015.wav" );
+	Sound_RegisterSound( "sfx/022.wav" );
+	Sound_RegisterSound( "sfx/024.wav" );
+	Sound_RegisterSound( "sfx/025.wav" );
+	Sound_RegisterSound( "sfx/026.wav" );
+	Sound_RegisterSound( "sfx/027.wav" );
+	Sound_RegisterSound( "sfx/035.wav" );
+	Sound_RegisterSound( "sfx/037.wav" );
+	Sound_RegisterSound( "sfx/046.wav" );
+	Sound_RegisterSound( "sfx/049.wav" );
+	Sound_RegisterSound( "sfx/071.wav" );
+	Sound_RegisterSound( "sfx/074.wav" );
+	Sound_RegisterSound( "sfx/076.wav" );
+	Sound_RegisterSound( "sfx/086.wav" );
+	Sound_RegisterSound( "sfx/088.wav" );
+	Sound_RegisterSound( "sfx/105.wav" );
+	Sound_RegisterSound( "sfx/107.wav" );
+	
+	Com_Printf( "preloadBeforePlay(): %i msec\n", Sys_Milliseconds() - start );	
 }
 
 /*

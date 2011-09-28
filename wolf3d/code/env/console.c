@@ -528,13 +528,10 @@ PRIVATE void Con_DrawInput( void )
 	
 #ifdef IPHONE
 	{
-		const char * GetCurrentCommandLine();
-		extern int consoleActive;
-
 		if ( consoleActive == 0 ) {
 			return;
 		}
-		strcpy( buf, GetCurrentCommandLine() );
+		strcpy( buf, SysIPhoneGetConsoleTextField() );
 		key_linepos = strlen( buf );
 		buf[key_linepos+1] = 0;
 		text = buf;
@@ -660,7 +657,6 @@ PUBLIC void Con_DrawConsole( float frac )
 	char			*text;
 	int				row;
 	W32				lines;
-	char			version[ 64 ];
 //	int w, h;
 	int heightfont, charwidth;
 
@@ -688,13 +684,6 @@ PUBLIC void Con_DrawConsole( float frac )
 	R_Draw_Fill( 0, -viddef.height + lines, viddef.width, viddef.height, colourBlack );
 	R_Draw_Fill( 0, lines-2, viddef.width, 2, colourconLGray );	
 
-
-//	SCR_AddDirtyPoint( 0, 0 );
-//	SCR_AddDirtyPoint( viddef.width-1, lines-1 );
-
-	my_snprintf( version, sizeof( version ), "v%s", APP_VERSION );
-	Font_SetColour( FONT0, colourGreen );
-	Font_put_lineR2L( FONT0, viddef.width-20, lines - 2 - heightfont, version );
 	Font_SetColour( FONT0, colourconLLGray );
 
 //

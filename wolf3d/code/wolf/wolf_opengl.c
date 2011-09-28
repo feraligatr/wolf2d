@@ -42,8 +42,6 @@
 #define HEIGHT_2D		480
 
 
-float cur_x_fov, cur_y_fov; // x & y field of view (in degrees)
-float ratio; // viewport width/height
 
 
 /*
@@ -60,103 +58,18 @@ float ratio; // viewport width/height
 */
 PUBLIC void GL_SetDefaultState( void )
 {
-
 	pfglClearColor( 1,0, 0.5 , 0.5 );
 	pfglCullFace( GL_FRONT );
 	pfglEnable( GL_TEXTURE_2D );
-
-	pfglEnable( GL_ALPHA_TEST );
-	pfglAlphaFunc( GL_GREATER, 0.666f );
-
 	pfglDisable( GL_DEPTH_TEST );
 	pfglDisable( GL_CULL_FACE );
 	pfglDisable( GL_BLEND );
-
 	pfglColor4f( 1, 1, 1, 1 );
-#ifndef IPHONE
-	pfglPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-#endif
 	pfglShadeModel( GL_FLAT );
-
-
 	pfglBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-
-
-
-	GL_UpdateSwapInterval();
-
 }
 
-/*
------------------------------------------------------------------------------
- Function: 
- 
- Parameters:
- 
- Returns:
- 
- Notes: 
 
------------------------------------------------------------------------------
-*/
-PRIVATE void R_CheckFOV( void )
-{
-/*
-	if(!vid_fov->modified) return;
-	vid_fov->modified=false;
-
-	if( vid_fov->value<1 || vid_fov->value>179)
-	{
-		Com_Printf("Wrong FOV: %f\n", vid_fov->value);
-		Cvar_SetValue(vid_fov->name, (cur_x_fov>=1 && cur_x_fov<=179)?cur_x_fov:DEFAULT_FOV);
-	}
-*/
-	ratio = (float) viddef.width / (float)viddef.height; // FIXME: move somewhere
-	cur_x_fov = 75;
-	cur_y_fov = CalcFov( cur_x_fov, (float)viddef.width, (float)viddef.height );
-
-}
-
-/*
------------------------------------------------------------------------------
- Function: 
- 
- Parameters:
- 
- Returns:
- 
- Notes: 
-
------------------------------------------------------------------------------
-*/
-PUBLIC void R_SetGL3D( placeonplane_t viewport )
-{
-	R_CheckFOV();
-
-	pfglMatrixMode( GL_PROJECTION );
-	pfglLoadIdentity();
-#ifdef IPHONE
-	pfglRotatef( 90, 0, 0, 1 );
-#endif
-	MYgluPerspective( cur_y_fov - 2.0f, ratio, 0.2f, 64.0f );	// tweak fov in to avoid edge tile clips
-	pfglMatrixMode( GL_MODELVIEW );
-	pfglLoadIdentity();
-
-	pfglRotatef( (float)(90 - FINE2DEG( viewport.angle )), 0, 1, 0 );
-	pfglTranslatef( -viewport.origin[ 0 ] / FLOATTILE, 0, viewport.origin[ 1 ] / FLOATTILE );
-
-	pfglCullFace( GL_BACK );
-
-	pfglEnable( GL_DEPTH_TEST );
-	pfglEnable( GL_CULL_FACE );
-	pfglEnable( GL_BLEND );	
-	pfglDisable( GL_BLEND );		// !@# draw all the walls opaque without alpha test
-	pfglDisable( GL_ALPHA_TEST );
-	qglDepthMask( GL_TRUE );
-	
-	// clear depth buffer
-	pfglClear( GL_DEPTH_BUFFER_BIT );
-}
 
 /*
 -----------------------------------------------------------------------------
@@ -196,6 +109,55 @@ PUBLIC void R_DrawBox( int x, int y, int w, int h, W32 color )
 
 
 /*
+ ====================
+ LoadWallTexture
+ 
+ Returns with the texture bound and glColor set to the right intensity.
+ Loads an image from the filesystem if necessary.
+ Used both during gameplay and for preloading during level parse.
+ 
+ Wolfenstein was very wasteful with texture usage, making almost half of
+ the textures just dim versions to provide "lighting" on the different
+ wall sides.  With only a few exceptions for things like the elevator tiles
+ and outdoor tiles that could only be used in particular orientations
+ ====================
+*/ 
+float	wallBrightness[1000];
+void LoadWallTexture( int wallPicNum ) {
+	assert( wallPicNum >= 0 && wallPicNum < 1000 );
+	texture_t *twall = wallTextures[wallPicNum];
+	if ( !twall ) {
+		if ( ( wallPicNum & 1 ) &&  
+			wallPicNum != 31 &&
+			wallPicNum != 41 &&
+			wallPicNum != 43 &&
+			wallPicNum != 133 ) {
+			// this wallPicNum is just a dim version of another image
+			
+			// load the brighter version
+			LoadWallTexture( wallPicNum - 1 );
+			// use the same texture
+			twall = wallTextures[wallPicNum] = wallTextures[wallPicNum - 1];
+			// at a dimmer intensity
+			wallBrightness[wallPicNum] = 0.7f;
+		} else {
+			// this wallPicNum has a real image associated with it
+			char	name[1024];
+			my_snprintf( name, sizeof( name ), "walls/%.3d.tga", wallPicNum );
+			twall = wallTextures[wallPicNum] = TM_FindTexture( name, TT_Wall );
+			wallBrightness[wallPicNum] = 1.0f;
+		}
+	}
+
+    R_Bind( twall->texnum );
+	
+	// almost half of the walls are just slightly dimmer versions of
+	// the "bright side", and are not stored as separate textures
+	float f = wallBrightness[wallPicNum];
+	pfglColor3f( f, f, f );
+}
+
+/*
 -----------------------------------------------------------------------------
  Function: 
  
@@ -217,7 +179,6 @@ PUBLIC void R_DrawBox( int x, int y, int w, int h, W32 color )
 PUBLIC void R_Draw_Wall( float x, float y, float z1, float z2, int type, int tex )
 {
 	float x1, x2, y1, y2;
-	texture_t *twall;
 
 	switch( type )
 	{
@@ -248,16 +209,8 @@ PUBLIC void R_Draw_Wall( float x, float y, float z1, float z2, int type, int tex
 			break;
 	}
 
-	assert( tex >= 0 && tex < 1000 );
-	twall = wallTextures[tex];
-	if ( !twall ) {
-		char	name[1024];
-		my_snprintf( name, sizeof( name ), "walls/%.3d.tga", tex );
-		twall = wallTextures[tex] = TM_FindTexture( name, TT_Wall );
-	}
-    R_Bind( twall->texnum );
-
-
+	LoadWallTexture( tex );
+	
 	pfglBegin( GL_QUADS );
 
 	pfglTexCoord2f( 1.0, 0.0 ); pfglVertex3f( x1, z2, y1 );
@@ -283,7 +236,6 @@ PUBLIC void R_Draw_Wall( float x, float y, float z1, float z2, int type, int tex
 PUBLIC void R_Draw_Door( int x, int y, float z1, float z2, _boolean vertical, _boolean backside, int tex, int amount )
 {
 	float x1, x2, y1, y2, amt;
-	texture_t *twall;
 
 	if( amount == DOOR_FULLOPEN )
 	{
@@ -322,16 +274,7 @@ PUBLIC void R_Draw_Door( int x, int y, float z1, float z2, _boolean vertical, _b
 		}
 	}
 
-	assert( tex >= 0 && tex < 1000 );
-	twall = wallTextures[tex];
-	if ( !twall ) {
-		char name[1024];
-		my_snprintf( name, sizeof( name ), "walls/%.3d.tga", tex );
-		twall = wallTextures[tex] = TM_FindTexture( name, TT_Wall );
-	}
-	
-    R_Bind( twall->texnum );
-
+	LoadWallTexture( tex );
 
 	pfglBegin( GL_QUADS );
 
@@ -376,7 +319,6 @@ PUBLIC void R_DrawSprites( void )
 	sina = (float)(0.5 * SinTable[ ang ]);
 	cosa = (float)(0.5 * CosTable[ ang ]);
 
-	//pfglEnable( GL_ALPHA_TEST );
 	pfglEnable( GL_BLEND );
 	qglDepthMask( GL_FALSE );
 	for( n = 0; n < n_sprt; ++n )
@@ -442,59 +384,6 @@ PUBLIC void R_DrawSprites( void )
 		
 		pfglEnd();
 	}
-
-	//pfglDisable( GL_ALPHA_TEST );		// !@# reanable just for sprites
-}
-
-/*
------------------------------------------------------------------------------
- Function: 
- 
- Parameters:
- 
- Returns:
- 
- Notes: 
-
------------------------------------------------------------------------------
-*/
-PUBLIC void R_DrawWeapon( void )
-{
-	char name[ 32 ];
-	texture_t *tex;	
-	static int w = 128;
-	static int h = 128;
-	static int scale = 2;
-	int x = (viddef.width - (128 * scale)) >> 1;
-	int y = viddef.height - (128 * scale) - 79;
-
-	my_snprintf( name, sizeof( name ), "%s/%d.tga", spritelocation, Player.weapon * 5 + Player.weaponframe + SPR_KNIFEREADY );
-
-	tex = TM_FindTexture( name, TT_Pic );
-
-
-	R_Bind( tex->texnum );
-
-	
-
-	pfglAlphaFunc( GL_GREATER, 0.3f );
-	
-	pfglEnable( GL_BLEND );
-		
-	pfglBegin( GL_QUADS );
-
-	pfglTexCoord2f( 0.0f, 0.0f );	pfglVertex2i( x, y );
-	pfglTexCoord2f( 1.0f, 0.0f );	pfglVertex2i( x + w * scale, y );
-	pfglTexCoord2f( 1.0f, 1.0f );	pfglVertex2i( x + w * scale, y + h * scale );
-	pfglTexCoord2f( 0.0f, 1.0f );	pfglVertex2i( x, y + h * scale );
-	
-	pfglEnd();
-	
-	pfglDisable( GL_BLEND );
-
-	pfglAlphaFunc( GL_GREATER, 0.666f );
-	
-
 }
 
 

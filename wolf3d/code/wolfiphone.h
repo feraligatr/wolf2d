@@ -73,13 +73,13 @@
 
 
 #include "wolf/wolf_math.h"
+#include "wolf/wolf_powerups.h"
+#include "wolf/wolf_sprites.h"
 #include "wolf/wolf_level.h"
 #include "wolf/wolf_local.h"
-#include "wolf/wolf_sprites.h"
 #include "wolf/wolf_actors.h"
 #include "wolf/wolf_actor_ai.h"
 #include "wolf/wolf_player.h"
-#include "wolf/wolf_powerups.h"
 #include "wolf/wolf_raycast.h"
 #include "wolf/wolf_renderer.h"
 

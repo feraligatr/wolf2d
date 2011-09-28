@@ -184,6 +184,9 @@ PUBLIC void R_RayCast( placeonplane_t viewport, LevelData_t *lvl )
 
 
 	}
+
+	// back to full brightness in case the last draw was a dim wall
+	pfglColor3f( 1, 1, 1 );
 }
 
 

@@ -285,30 +285,3 @@ PUBLIC void Sound_EndRegistration( void )
 }
 
 
-
-
-
-
-void Sound_FreeSounds( void )
-{
-	sfx_t	*sfx;
-	int		i;
-
-	// Stop all sounds
-	Sound_StopAllSounds();
-
-	// Free all sounds
-	for( i = 0 ; i < s_numSfx ; ++i )
-	{
-		sfx = s_sfx[ i ];
-
-		pfalDeleteBuffers( 1, &sfx->bufferNum );
-
-		Z_Free( sfx );
-	}
-
-	memset( s_sfxHash, 0, sizeof( s_sfxHash ) );
-	memset( s_sfx, 0, sizeof( s_sfx ) );
-
-	s_numSfx = 0;
-}

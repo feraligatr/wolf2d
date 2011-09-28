@@ -27,6 +27,7 @@ typedef GLfloat GLdouble;
 #define pfglTexParameteri qglTexParameteri
 #define pfglTexParameterf qglTexParameterf
 #define pfglTexImage2D qglTexImage2D
+#define pfglTexSubImage2D qglTexSubImage2D
 #define pfglFrustum qglFrustumf
 #define pfglOrtho qglOrthof
 #define pfglLoadIdentity qglLoadIdentity
@@ -46,15 +47,6 @@ typedef GLfloat GLdouble;
 
 
 #define GL_QUADS 888
-
-/*
-void		GLimp_BeginFrame();
-void		GLimp_EndFrame( void );
-_boolean	GLimp_Init( void *hinstance, void *hWnd );
-void		GLimp_Shutdown( void );
-int     	GLimp_SetMode( int *pwidth, int *pheight, int mode, _boolean fullscreen );
-void		GLimp_AppActivate( _boolean active );
-*/
 
 #ifdef __cplusplus
 extern "C" {

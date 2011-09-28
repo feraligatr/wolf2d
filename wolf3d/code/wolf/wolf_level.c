@@ -161,30 +161,21 @@ PRIVATE W16	cachedMutant = 0;
 
 PRIVATE int progress_bar = 0;
 
-extern void R_EndFrame( void );
-
 LevelData_t levelData;
 
 
-PRIVATE void CacheTextures( W16 start, W16 end )
+void CacheTextures( W16 start, W16 end )
 {
 	W16 i;
 	static char texname[ 64 ];
-	
-
-	if( end < start )
-	{
-		return;
-	}
 
 	for( i = start ; i <= end ; ++i )
 	{
-		my_snprintf( texname, sizeof( texname ), "%s/%.3d.tga", spritelocation, i );
-		spriteTextures[i] = TM_FindTexture( texname, TT_Wall );
+		if ( !spriteTextures[i] ) {
+			my_snprintf( texname, sizeof( texname ), "%s/%.3d.tga", spritelocation, i );
+			spriteTextures[i] = TM_FindTexture( texname, TT_Sprite );
+		}
 	}
-
-//	R_DrawPsyched( ++progress_bar + 30 );
-//	R_EndFrame();
 }
 
 /*
@@ -631,7 +622,7 @@ PRIVATE void Lvl_SpawnStatic( LevelData_t *lvl, int type, int x, int y )
 	}
 	else
 	{
-		Powerup_Spawn( x, y, statinfo[ type ].powerup, lvl );
+		Powerup_Spawn( x, y, statinfo[ type ].powerup );
 		if( statinfo[ type ].powerup == pow_cross || 
 			statinfo[ type ].powerup == pow_chalice ||
 			statinfo[ type ].powerup == pow_bible ||
@@ -1059,6 +1050,19 @@ PUBLIC LevelData_t *Level_LoadMap( const char *levelname )
 	
 	FS_CloseFile( fhandle );
 		
+	// HUGE HACK to take out the pushwall maze that occasionally
+	// gets players stuck in level E4M2 without actually touching
+	// a map editor...
+	if ( !strcmp( levelname, "maps/w31.map" ) ) {
+		for ( x = 22 ; x <= 32 ; x++ ) {
+				for ( y0 = 30 ; y0 <= 32 ; y0++ ) {
+				newMap->Plane1[ y0 * 64 + x ] = newMap->Plane1[ 30*64+21 ];
+				newMap->Plane2[ y0 * 64 + x ] = newMap->Plane2[ 30*64+21 ];
+				newMap->Plane3[ y0 * 64 + x ] = newMap->Plane3[ 30*64+21 ];
+			}
+		}
+	}
+	
 	
 	for( y0 = 0 ; y0 < 64 ; ++y0 )
 	for( x = 0 ; x < 64 ; ++x )
@@ -1188,11 +1192,8 @@ PUBLIC void Level_PrecacheTextures_Sound( LevelData_t *lvl )
 	{
 		if( lvl->tilemap[ x ][ y ] & WALL_TILE )
 		{
-			my_snprintf( texname, sizeof( texname ), "walls/%.3d.tga", lvl->wall_tex_x[ x ][ y ] );
-			wallTextures[lvl->wall_tex_x[ x ][ y ] ] = TM_FindTexture( texname, TT_Wall );
-			
-			my_snprintf( texname, sizeof( texname ), "walls/%.3d.tga", lvl->wall_tex_y[ x ][ y ] );
-			wallTextures[lvl->wall_tex_y[ x ][ y ]] = TM_FindTexture( texname, TT_Wall );
+			LoadWallTexture( lvl->wall_tex_x[ x ][ y ] );
+			LoadWallTexture( lvl->wall_tex_y[ x ][ y ] );
 		}
 
 		if( lvl->tilemap[ x ][ y ] & POWERUP_TILE )
@@ -1204,10 +1205,9 @@ PUBLIC void Level_PrecacheTextures_Sound( LevelData_t *lvl )
 	}
 
 	// Doors
-	for( x = TEX_DOOR; x < TEX_DLOCK+1 ; ++x )
+	for( x = TEX_DOOR; x < TEX_DLOCK+2 ; ++x )
 	{
-		my_snprintf( texname, sizeof( texname ), "walls/%.3d.tga", x );
-		wallTextures[x] = TM_FindTexture( texname, TT_Wall );		
+		LoadWallTexture( x );
 	}
 
 
@@ -1216,22 +1216,9 @@ PUBLIC void Level_PrecacheTextures_Sound( LevelData_t *lvl )
 
 	// Weapon frames
 	CacheTextures( SPR_KNIFEREADY, SPR_CHAINATK4 );
-#if 0
-	for( x = 1; x < 8 ; ++x )
-	{
-		my_snprintf( texname, sizeof( texname ), "pics/FACE%dAPIC.tga", x );
-		(void)TM_FindTexture( texname, TT_Pic );
-
-		my_snprintf( texname, sizeof( texname ), "pics/FACE%dBPIC.tga", x );
-		(void)TM_FindTexture( texname, TT_Pic );
-
-		my_snprintf( texname, sizeof( texname ), "pics/FACE%dCPIC.tga", x );
-		(void)TM_FindTexture( texname, TT_Pic );
-	}
-
-	my_snprintf( texname, sizeof( texname ), "pics/FACE8APIC.tga" );
-	(void)TM_FindTexture( texname, TT_Pic );
-#endif	
+	
+	// in case the last wall load was a dim copy
+	pfglColor3f( 1, 1, 1 );
 }
 
 

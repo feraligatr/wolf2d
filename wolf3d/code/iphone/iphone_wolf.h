@@ -22,6 +22,9 @@
 // automatic sell screen at the end of episode 1
 //#define EPISODE_ONE_ONLY
 
+// this is the version number displayed on the menu screen
+#define WOLF_IPHONE_VERSION 1.1
+
 extern viddef_t viddef;
 
 typedef enum menuState {
@@ -33,14 +36,19 @@ typedef enum menuState {
 	IPM_CONTROLS,
 	IPM_INTERMISSION,
 	IPM_VICTORY,
-	IPM_AUTOMAP
+	IPM_AUTOMAP,
+	IPM_STATS,
+	IPM_HUDEDIT
+	
 } menuState_t;
 
 extern menuState_t menuState;
 
 void iphoneDrawMenus();
 
-#define SAVEGAME_VERSION	106
+// bumped to 107 on moving powerups structure into leveldata
+// bumped to 108 with custom huds
+#define SAVEGAME_VERSION	108
 
 #define MAX_SKILLS		4
 #define MAX_MAPS		60
@@ -69,6 +77,8 @@ extern char iphoneDocDirectory[1024];
 extern char iphoneAppDirectory[1024];
 
 extern texture_t *numberPics[10];
+#define NUM_MUGSHOTS	23
+extern char *mugshotnames[ NUM_MUGSHOTS ];
 
 extern vec3_t	vnull;
 
@@ -80,7 +90,6 @@ extern int		consoleActive;
 
 extern cvar_t	*controlScheme;
 extern cvar_t	*sensitivity;
-extern cvar_t	*stickSize;
 extern cvar_t	*stickTurnBase;
 extern cvar_t	*stickTurnScale;
 extern cvar_t	*stickMoveBase;
@@ -93,10 +102,15 @@ extern cvar_t	*tiltAverages;
 extern cvar_t	*tiltFire;
 extern cvar_t	*music;
 extern cvar_t	*showTilt;
+extern cvar_t	*showTime;
 extern cvar_t	*cropSprites;
 extern cvar_t	*blends;
 extern cvar_t	*gunFrame;
 extern cvar_t	*slowAI;
+extern cvar_t	*revLand;
+extern cvar_t	*mapScale;
+extern cvar_t	*hideControls;
+extern cvar_t	*autoFire;
 
 // the native iPhone code should set the following each frame:
 extern int	numTouches;
@@ -108,30 +122,35 @@ extern float	tiltPitch;
 extern int	numPrevTouches;
 extern int prevTouches[5][2];
 
+typedef struct {
+	int		enterFrame;
+	int		beforeSwap;
+	int		afterSwap;
+} logTime_t;
+#define MAX_LOGGED_TIMES	512
+extern logTime_t	loggedTimes[MAX_LOGGED_TIMES];	// indexed by iphoneFrameNum
 
-// the layout drawing code sets these, which are then used
-// by the touch processing
-extern int	menuButtonX, menuButtonY, menuButtonSize;
-extern int	fireButtonX, fireButtonY, fireButtonSize;
-extern int	moveAxisX, moveAxisY, moveAxisSize;
-extern int	turnAxisX, turnAxisY, turnAxisSize;
-
-// incremented once each frame, regardless of framerate
-extern int	frameNum;
+void LoadWallTexture( int wallPicNum );
 
 int	TouchDown( int x, int y, int w, int h );
 int	TouchReleased( int x, int y, int w, int h );
 int iphoneCenterText( int x, int y, const char *str );
 void iphoneDrawNumber( int x, int y, int number, int charWidth, int charHeight );
 void iphoneDrawPic( int x, int y, int w, int h, const char *pic );
+int iphoneDrawPicWithTouch( int x, int y, int w, int h, const char *pic );
+void iphoneDrawPicNum( int x, int y, int w, int h, int glTexNum );
 void R_Draw_Blend( int x, int y, int w, int h, colour4_t c );
 void SaveTheGame();
 int LoadTheGame();
-void StartGame( void );
-void iphoneShutdown();
+void StartGame();
 void iphoneOpenAutomap();
+void iphoneDrawFace();
+void iphoneDrawNotifyText();
+void iphonePreloadBeforePlay();
 
 void InitImmediateModeGL();
+void iphoneRotateForLandscape();
+void iphoneCheckForLandscapeReverse();
 
 extern colour4_t colorPressed;
 
@@ -139,13 +158,71 @@ extern int damageflash;
 extern int bonusFrameNum;
 extern int attackDirTime[2];
 
-// interfaces from the game code
+
+#define HF_DISABLED				1
+
+typedef struct {
+	int		x, y;
+	int		width, height;
+	int		glTexNum;
+	int		hudFlags;
+} hudPic_t;
+
+//#define ALLOW_MAP_VIEW_HUD
+
+typedef struct {
+	hudPic_t	forwardStick;
+	hudPic_t	sideStick;
+	hudPic_t	turnStick;
+	hudPic_t	fire;
+	hudPic_t	menu;
+	hudPic_t	map;
+	hudPic_t	ammo;
+#ifdef ALLOW_MAP_VIEW_HUD	
+	hudPic_t	mapView;
+#endif	
+} hud_t;
+
+extern hud_t	huds;
+
+void HudSetForScheme( int schemeNum );
+void HudSetTexnums();
+void HudEditFrame();
+
+
+
+//---------------------------------------
+// interfaces from the original game code
+//---------------------------------------
 void iphoneStartBonusFlash();
 void iphoneStartDamageFlash( int points );
 void iphoneSetAttackDirection( int dir );
 void iphoneStartIntermission( int framesFromNow );
 void iphoneSetNotifyText( const char *str, ... );
 	
-// interfaces to hadware / system
-void OpenURL( const char *url );
+//---------------------------------------
+// interfaces to Objective-C land
+//---------------------------------------
+void SysIPhoneSwapBuffers();
+void SysIPhoneVibrate();
+void SysIPhoneOpenURL( const char *url );
+void SysIPhoneSetUIKitOrientation( int isLandscapeRight );
+void SysIPhoneLoadJPG( W8* jpegData, int jpegBytes, W8 **pic, W16 *width, W16 *height, W16 *bytes );
+const char * SysIPhoneGetConsoleTextField();
+void SysIPhoneSetConsoleTextField(const char *);
+void SysIPhoneInitAudioSession();
+int SysIPhoneOtherAudioIsPlaying();
+const char *SysIPhoneGetOSVersion();
+
+//---------------------------------------
+// interfaces from Objective-C land
+//---------------------------------------
+void iphoneStartup();
+void iphoneShutdown();
+void iphoneFrame();
+void iphoneTiltEvent( float *tilts );
+void iphoneTouchEvent( int numTouches, int touches[16] );
+void iphoneActivateConsole();
+void iphoneDeactivateConsole();
+void iphoneExecuteCommandLine();
 

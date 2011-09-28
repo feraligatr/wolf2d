@@ -16,6 +16,45 @@
 
 #include "wolfiphone.h"
 
+struct AVSystemControllerPrivate;
+
+@interface AVSystemController : NSObject
+{
+    struct AVSystemControllerPrivate *_priv;
+}
+
++ (void)initialize;
++ (id)sharedAVSystemController;
+- (id)init;
+- (void)dealloc;
+- (BOOL)changeActiveCategoryVolumeBy:(float)fp8 fallbackCategory:(id)fp12 resultVolume:(float *)fp16 affectedCategory:(id *)fp20;
+- (BOOL)changeActiveCategoryVolumeBy:(float)fp8;
+- (BOOL)setActiveCategoryVolumeTo:(float)fp8 fallbackCategory:(id)fp12 resultVolume:(float *)fp16 affectedCategory:(id *)fp20;
+- (BOOL)setActiveCategoryVolumeTo:(float)fp8;
+- (BOOL)getActiveCategoryVolume:(float *)fp8 andName:(id *)fp12 fallbackCategory:(id)fp16;
+- (BOOL)getActiveCategoryVolume:(float *)fp8 andName:(id *)fp12;
+- (BOOL)changeActiveCategoryVolumeBy:(float)fp8 forRoute:(id)fp12 andDeviceIdentifier:(id)fp16;
+- (BOOL)setActiveCategoryVolumeTo:(float)fp8 forRoute:(id)fp12 andDeviceIdentifier:(id)fp16;
+- (BOOL)activeCategoryVolumeDidChangeTo:(float)fp8 forRoute:(id)fp12 andDeviceIdentifier:(id)fp16;
+- (BOOL)getActiveCategoryVolume:(float *)fp8 andName:(id *)fp12 forRoute:(id)fp16 andDeviceIdentifier:(id)fp20;
+- (BOOL)toggleActiveCategoryMuted;
+- (BOOL)toggleActiveCategoryMutedForRoute:(id)fp8 andDeviceIdentifier:(id)fp12;
+- (BOOL)getActiveCategoryMuted:(char *)fp8;
+- (BOOL)getActiveCategoryMuted:(char *)fp8 forRoute:(id)fp12 andDeviceIdentifier:(id)fp16;
+- (BOOL)changeVolumeBy:(float)fp8 forCategory:(id)fp12;
+- (BOOL)setVolumeTo:(float)fp8 forCategory:(id)fp12;
+- (BOOL)getVolume:(float *)fp8 forCategory:(id)fp12;
+- (id)routeForCategory:(id)fp8;
+- (id)volumeCategoryForAudioCategory:(id)fp8;
+- (id)attributeForKey:(id)fp8;
+- (BOOL)setAttribute:(id)fp8 forKey:(id)fp12 error:(id *)fp16;
+- (void)makeError:(id *)fp8 withDescription:(id)fp12 code:(long)fp16;
+- (BOOL)okToNotifyFromThisThread;
+- (void)handleServerDied;
+
+@end
+
+AVSystemController *SharedAVSystemController;
 EAGLView *eaglview;
 
 // A class extension to declare private methods
@@ -95,40 +134,57 @@ EAGLView *eaglview;
         NSLog(@"failed to make complete framebuffer object %x", glCheckFramebufferStatusOES(GL_FRAMEBUFFER_OES));
     }
 	
-    self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:0.032 
+    glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
+	
+#if 0	
+	// set swapinterval if possible
+	void *eglSwapInterval;	
+	eglSwapInterval = dlsym( RTLD_DEFAULT, "eglSwapInterval" );
+	if ( eglSwapInterval ) {
+		((void(*)(int))eglSwapInterval)( 2 );
+	}
+#endif
+	
+	// with swapinterval, we want to update as fast as possible
+	float	interval = 1.0 / 30.0f;
+    self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:interval 
 														   target:self 
 														 selector:@selector(drawView) 
 														 userInfo:nil repeats:YES];
+	
     return self;
 }
 
 - (void)drawView {
-	int	start, end;
-	
-    [EAGLContext setCurrentContext:context];
-    
-    glBindFramebufferOES(GL_FRAMEBUFFER_OES, viewFramebuffer);
-
 	[ (wolf3dAppDelegate *)[UIApplication sharedApplication].delegate restartAccelerometerIfNeeded];
 	
-	start = Sys_Milliseconds();
+#if 0	
+	//------------------
+	// Volume button hack
+	{
+		if ( SharedAVSystemController ) {
+			float newVolume;
+			NSString *categoryName;
+			static float activeVolume = 0.9;
+			if ([SharedAVSystemController getActiveCategoryVolume:&newVolume andName:&categoryName]) {
+				if (activeVolume < newVolume) {
+					[SharedAVSystemController setActiveCategoryVolumeTo:activeVolume];
+					Com_Printf( "Volume up: %i\n", Sys_Milliseconds() );
+				}
+			}
+		}
+	}
+#endif	
+	//------------------
 	
-	extern void iphoneFrame();
-	iphoneFrame();
-
-	end = Sys_Milliseconds();
-//	Com_Printf( "msec: %i\n", end - start );
-
-	[self swapBuffers];
-}
-
-void GLimp_EndFrame() {
-	[eaglview swapBuffers];
+	iphoneFrame();	// swapBuffers() will be called from here
 }
 
 - (void)swapBuffers {
-    glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
+//    glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
+	loggedTimes[iphoneFrameNum&(MAX_LOGGED_TIMES-1)].beforeSwap = Sys_Milliseconds();
     [context presentRenderbuffer:GL_RENDERBUFFER_OES];
+	loggedTimes[iphoneFrameNum&(MAX_LOGGED_TIMES-1)].afterSwap = Sys_Milliseconds();
 }
 
 - (void)layoutSubviews {
@@ -138,7 +194,6 @@ void GLimp_EndFrame() {
 
 
 - (void)destroyFramebuffer {
-    
     glDeleteFramebuffersOES(1, &viewFramebuffer);
     viewFramebuffer = 0;
     glDeleteRenderbuffersOES(1, &viewRenderbuffer);
@@ -156,8 +211,6 @@ void GLimp_EndFrame() {
     [context release];  
     [super dealloc];
 }
-
-void WolfensteinTouches( int numTouches, int touches[16] );
 
 - (void) handleTouches:(NSSet*)touches withEvent:(UIEvent*)event {
 	int touchCount = 0;
@@ -188,7 +241,10 @@ void WolfensteinTouches( int numTouches, int touches[16] );
 	// toggle the console with four touches
 	if ( touchCount == 4 && previousTouchCount != 4 ) {			
 		if ( textField == nil ) {
-			void iphoneActivateConsole();
+			// do this before starting the textField, which
+			// takes a long time
+			iphoneActivateConsole();
+			
 			textField = [UITextField alloc];
 			[textField initWithFrame:CGRectMake( 0, 0, 20, 20 ) ];
 			[self addSubview:textField];
@@ -198,8 +254,6 @@ void WolfensteinTouches( int numTouches, int touches[16] );
 			textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
 			textField.autocorrectionType = UITextAutocorrectionTypeNo;
 			[textField becomeFirstResponder];
-
-			iphoneActivateConsole();
 		} else {
 			void iphoneDeactivateConsole();
 			[textField resignFirstResponder];
@@ -211,7 +265,7 @@ void WolfensteinTouches( int numTouches, int touches[16] );
 	}
 	previousTouchCount = touchCount;
 	
-	WolfensteinTouches( touchCount, points );
+	iphoneTouchEvent( touchCount, points );
 }
 
 
@@ -241,32 +295,45 @@ void WolfensteinTouches( int numTouches, int touches[16] );
 
 - (BOOL)textFieldShouldReturn:(UITextField *)_textField 
 {
-	void iphoneExecuteCommandLine();
 	iphoneExecuteCommandLine();
 	return YES;
 }
 
 @end
 
-const char * GetCurrentCommandLine() {
-	assert( eaglview->textField != nil );
+
+const char * SysIPhoneGetConsoleTextField() {
+	if ( eaglview->textField == nil ) {
+		return "";
+	}
 	return [ eaglview->textField.text UTF8String ];
 }
 
-void SetCurrentCommandLine( const char * str) {
+void SysIPhoneSetConsoleTextField( const char * str) {
 	assert( eaglview->textField != nil );	
 	eaglview->textField.text = [ NSString stringWithUTF8String: str ];
 }
 
-void OpenURL( const char *url ) {
+void SysIPhoneSwapBuffers() {
+	[eaglview swapBuffers];
+}
+
+void SysIPhoneOpenURL( const char *url ) {
 	Com_Printf( "OpenURL char *: %s\n", url );
 	
 	NSString *nss = [NSString stringWithCString: url encoding: NSASCIIStringEncoding];
 	[[UIApplication sharedApplication] openURL:[NSURL URLWithString: nss]];
 }
 
+void SysIPhoneSetUIKitOrientation( int isLandscapeRight ) {
+	if ( isLandscapeRight ) {
+		[UIApplication sharedApplication].statusBarOrientation = UIInterfaceOrientationLandscapeRight;
+	} else {
+		[UIApplication sharedApplication].statusBarOrientation = UIInterfaceOrientationLandscapeLeft;
+	}
+}
 
-void iPhoneLoadJPG( W8* jpegData, int jpegBytes, W8 **pic, W16 *width, W16 *height, W16 *bytes ) {
+void SysIPhoneLoadJPG( W8* jpegData, int jpegBytes, W8 **pic, W16 *width, W16 *height, W16 *bytes ) {
 	CFDataRef data;
 	int dataBytes = 0;
 	UIImage *img = [ UIImage imageWithData: [NSData dataWithBytes: (const char *)jpegData length: (NSUInteger)jpegBytes ] ];

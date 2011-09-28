@@ -144,10 +144,6 @@ PUBLIC void R_Draw_StretchPic( int x, int y, int w, int h, const char *pic )
 		return;
 	}
 
-//	if( scrap_dirty )
-//		Scrap_Upload();
-
-
 	R_Bind( gl->texnum );
 	
 	pfglBegin( GL_QUADS );
@@ -160,100 +156,6 @@ PUBLIC void R_Draw_StretchPic( int x, int y, int w, int h, const char *pic )
 	pfglEnd();
 }
 
-
-/*
------------------------------------------------------------------------------
- Function: R_Draw_Pic -Draw image to the screen. 
- 
- Parameters: x -[in] x-coordinate.
-			 y -[in] y-coordinate. 
-			 pic -[in] Image filename to draw.
- 
- Returns: Nothing.
- 
- Notes: 
-	
------------------------------------------------------------------------------
-*/
-PUBLIC void R_Draw_Pic( int x, int y, const char *pic )
-{
-	texture_t *tex;
-
-	tex = TM_FindTexture( pic, TT_Pic );
-	if( ! tex )
-	{
-		Com_Printf( "Can't find pic: %s\n", pic );
-		return;
-	}
-//	if( scrap_dirty )
-//		Scrap_Upload();
-
-
-	
-	R_Bind( tex->texnum );
-
-	pfglBegin( GL_QUADS );
-
-	pfglTexCoord2f( 0.0, 0.0 );		pfglVertex2i( x, y );
-	pfglTexCoord2f( 1.0, 0.0 );		pfglVertex2i( x + tex->width, y );
-	pfglTexCoord2f( 1.0, 1.0 );		pfglVertex2i( x + tex->width, y + tex->height );
-	pfglTexCoord2f( 0.0, 1.0 );		pfglVertex2i( x, y + tex->height );
-	
-	pfglEnd();
-
-}
-
-
-
-/*
------------------------------------------------------------------------------
- Function: R_Draw_Tile -Tile image on the screen. 
- 
- Parameters: x -[in] x-coordinate.
-			 y -[in] y-coordinate. 
-			 w -[in] width of region.
-			 h -[in] height of region.
-			 pic -[in] Image filename to draw.
- 
- Returns: Nothing.
- 
- Notes: 
-	This repeats a tile graphic to fill a region on the screen.
------------------------------------------------------------------------------
-*/
-PUBLIC void R_Draw_Tile( int x, int y, int w, int h, const char *pic )
-{
-	texture_t	*image;
-
-	image = TM_FindTexture( pic, TT_Wall );
-	if( ! image )
-	{
-		Com_Printf( "Can't find pic: %s\n", pic );
-		return;
-	}
-
-
-	R_Bind( image->texnum );
-	
-	pfglBegin( GL_QUADS );
-
-	
-	pfglTexCoord2i( x/image->upload_width, y/image->upload_height);
-	pfglVertex2i( x, y );
-
-	pfglTexCoord2i( (x + w)/image->upload_width, y/image->upload_height);
-	pfglVertex2i( x + w, y );
-
-	pfglTexCoord2i( (x+w)/image->upload_width, (y+h)/image->upload_height);
-	pfglVertex2i( x + w, y + h );
-
-	pfglTexCoord2i( x/image->upload_width, (y+h)/image->upload_height );
-	pfglVertex2i( x, y + h );
-
-
-	pfglEnd ();
-
-}
 
 
 /*
@@ -274,11 +176,26 @@ PUBLIC void R_Draw_Tile( int x, int y, int w, int h, const char *pic )
 */
 PUBLIC void R_Draw_Fill( int x, int y, int w, int h, colour3_t c )
 {
-	qglScissor( x, 320-(y+h), w, h );
+#if 1
+	// as of 2.2 OS, doing a clear with a small scissor rect is MUCH slower
+	// than drawing geometry, so they must not be optimizing that case...
+	colour4_t	c4;
+	c4[0] = c[0];
+	c4[1] = c[1];
+	c4[2] = c[2];
+	c4[3] = 255;
+	R_Draw_Blend( x, y, w, h, c4 );
+#else
+	if ( revLand->value ) {
+		qglScissor( x, y, w, h );
+	} else {
+		qglScissor( x, 320-(y+h), w, h );
+	}
 	qglEnable( GL_SCISSOR_TEST );
 	qglClearColor( c[0] / 255.0f,  c[1] / 255.0f,  c[2] / 255.0f, 1.0f );
 	qglClear( GL_COLOR_BUFFER_BIT );
 	qglDisable( GL_SCISSOR_TEST );
+#endif
 }
 
 PUBLIC void R_Draw_Blend( int x, int y, int w, int h, colour4_t c )

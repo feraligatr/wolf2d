@@ -68,10 +68,16 @@ typedef enum
 // add new types <!only!> here (after last)
 
 } pow_t;
-	
+
+typedef struct powerup_s
+{
+	int x, y;
+	pow_t type;
+	int sprite;
+} powerup_t;
 
 extern void Powerup_Reset( void );
-extern void Powerup_Spawn( int x, int y, int type, LevelData_t *lvl );
+extern void Powerup_Spawn( int x, int y, int type );
 extern void Powerup_PickUp( int x, int y );
 
 

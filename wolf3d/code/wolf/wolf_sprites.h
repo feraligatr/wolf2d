@@ -393,15 +393,14 @@ typedef struct sprite_s
 	int flags;
 // 8 textures: one for each rotation phase!
 // if SPRT_ONE_TEX flag use tex with index 0!
-	int tex[ 8 ];
-
+	
+	// these are Wolf sprite texture numbers, not OpenGL sprites
+	// or indexes in the textureManager list
+	int tex[ 8 ];	
 } sprite_t;
 
 // total sprites on level in a moment
 #define MAX_SPRITES 1024
-
-extern sprite_t Spr_Sprites[ MAX_SPRITES ];
-extern W32 n_of_sprt;
 
 typedef struct visobj_s
 {

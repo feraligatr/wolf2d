@@ -180,6 +180,7 @@ extern void Client_Init( void );
 //
 #define	BUTTON_ATTACK		1
 #define	BUTTON_USE			2
+#define	BUTTON_CHANGE_WEAPON 4
 #define	BUTTON_ANY			128			// any key whatsoever
 
 

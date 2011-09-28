@@ -12,16 +12,17 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
-		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
 		4333CCE80F5CC23E00AE2B6F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4333CCE70F5CC23E00AE2B6F /* AudioToolbox.framework */; };
 		4364BF3F0F5CB25900F29317 /* dist.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4364BF3E0F5CB25900F29317 /* dist.plist */; };
-		43AE7CAB0F61FB0E00B2F562 /* wolf3dEpisode1_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 43AE7CAA0F61FB0E00B2F562 /* wolf3dEpisode1_icon.png */; };
 		43AE7E9F0F67387500B2F562 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AE7E9E0F67387500B2F562 /* CoreGraphics.framework */; };
+		43AF6B950F996DA200777569 /* iphone_sys.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AF6B940F996DA200777569 /* iphone_sys.m */; };
 		43CF02ED0F56955F00E4A23D /* wolf3d_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 43CF02EC0F56955F00E4A23D /* wolf3d_icon.png */; };
 		43CF02FF0F56974E00E4A23D /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 43CF02FE0F56974E00E4A23D /* Default.png */; };
 		43CF030A0F56D5C200E4A23D /* iphone_loop.c in Sources */ = {isa = PBXBuildFile; fileRef = 43CF03090F56D5C200E4A23D /* iphone_loop.c */; };
+		43E341290F9BB4B6003C5D00 /* wolf3dlite_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 43E341280F9BB4B6003C5D00 /* wolf3dlite_icon.png */; };
 		43E8D2E10F4FC61E003F09B2 /* iphone_main.c in Sources */ = {isa = PBXBuildFile; fileRef = 43E8D2DF0F4FC61E003F09B2 /* iphone_main.c */; };
 		43E8D4E00F51B48B003F09B2 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43E8D4DF0F51B48B003F09B2 /* OpenAL.framework */; };
+		720EBBAE0F82E0BB003F989A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 720EBBAD0F82E0BB003F989A /* QuartzCore.framework */; };
 		7229CC460F6B3222004123C5 /* wolf_actor_ai.c in Sources */ = {isa = PBXBuildFile; fileRef = 7229CC250F6B3222004123C5 /* wolf_actor_ai.c */; };
 		7229CC470F6B3222004123C5 /* wolf_actors.c in Sources */ = {isa = PBXBuildFile; fileRef = 7229CC270F6B3222004123C5 /* wolf_actors.c */; };
 		7229CC480F6B3222004123C5 /* wolf_ai_com.c in Sources */ = {isa = PBXBuildFile; fileRef = 7229CC290F6B3222004123C5 /* wolf_ai_com.c */; };
@@ -93,26 +94,28 @@
 		72935BA00F6B2D9D0085DD28 /* wavfile.c in Sources */ = {isa = PBXBuildFile; fileRef = 72935B6E0F6B2D9D0085DD28 /* wavfile.c */; };
 		72935BA20F6B2D9D0085DD28 /* zmem.c in Sources */ = {isa = PBXBuildFile; fileRef = 72935B720F6B2D9D0085DD28 /* zmem.c */; };
 		72A7E8F70F5F2063005B83C0 /* iphone_menus.c in Sources */ = {isa = PBXBuildFile; fileRef = 72A7E8F60F5F2063005B83C0 /* iphone_menus.c */; };
+		72B5FF390F7E5C3D00C8A372 /* hud.c in Sources */ = {isa = PBXBuildFile; fileRef = 72B5FF380F7E5C3D00C8A372 /* hud.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		1D6058910D05DD3D006BFB54 /* wolf3d.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wolf3d.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D6058910D05DD3D006BFB54 /* wolf3dlite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wolf3dlite.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		28AD733E0D9D9553002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		28FD14FF0DC6FC520079059D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
-		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* wolf3d_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wolf3d_Prefix.pch; sourceTree = "<group>"; };
 		4333CCE70F5CC23E00AE2B6F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
 		4364BF3E0F5CB25900F29317 /* dist.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = dist.plist; sourceTree = "<group>"; };
-		43AE7CAA0F61FB0E00B2F562 /* wolf3dEpisode1_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wolf3dEpisode1_icon.png; sourceTree = "<group>"; };
 		43AE7E9E0F67387500B2F562 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		43AF6B940F996DA200777569 /* iphone_sys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iphone_sys.m; sourceTree = "<group>"; };
 		43CF02EC0F56955F00E4A23D /* wolf3d_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wolf3d_icon.png; sourceTree = "<group>"; };
 		43CF02FE0F56974E00E4A23D /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		43CF03090F56D5C200E4A23D /* iphone_loop.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = iphone_loop.c; sourceTree = "<group>"; };
+		43E341280F9BB4B6003C5D00 /* wolf3dlite_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wolf3dlite_icon.png; sourceTree = "<group>"; };
 		43E8D2DF0F4FC61E003F09B2 /* iphone_main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = iphone_main.c; sourceTree = "<group>"; };
 		43E8D4DF0F51B48B003F09B2 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = /System/Library/Frameworks/OpenAL.framework; sourceTree = "<absolute>"; };
+		720EBBAD0F82E0BB003F989A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
 		7229CC240F6B3222004123C5 /* wolf_act_stat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wolf_act_stat.h; path = ../wolf/wolf_act_stat.h; sourceTree = SOURCE_ROOT; };
 		7229CC250F6B3222004123C5 /* wolf_actor_ai.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = wolf_actor_ai.c; path = ../wolf/wolf_actor_ai.c; sourceTree = SOURCE_ROOT; };
 		7229CC260F6B3222004123C5 /* wolf_actor_ai.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wolf_actor_ai.h; path = ../wolf/wolf_actor_ai.h; sourceTree = SOURCE_ROOT; };
@@ -252,6 +255,7 @@
 		72935B730F6B2D9D0085DD28 /* zmem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = zmem.h; path = ../env/zmem.h; sourceTree = SOURCE_ROOT; };
 		72A7E8F30F5F2001005B83C0 /* iphone_wolf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iphone_wolf.h; sourceTree = "<group>"; };
 		72A7E8F60F5F2063005B83C0 /* iphone_menus.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = iphone_menus.c; sourceTree = "<group>"; };
+		72B5FF380F7E5C3D00C8A372 /* hud.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hud.c; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -263,10 +267,10 @@
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */,
-				28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */,
 				43E8D4E00F51B48B003F09B2 /* OpenAL.framework in Frameworks */,
 				4333CCE80F5CC23E00AE2B6F /* AudioToolbox.framework in Frameworks */,
 				43AE7E9F0F67387500B2F562 /* CoreGraphics.framework in Frameworks */,
+				720EBBAE0F82E0BB003F989A /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,7 +280,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1D6058910D05DD3D006BFB54 /* wolf3d.app */,
+				1D6058910D05DD3D006BFB54 /* wolf3dlite.app */,
 				4364BF3E0F5CB25900F29317 /* dist.plist */,
 			);
 			name = Products;
@@ -305,6 +309,7 @@
 				7229CE540F6C8CDE004123C5 /* gles_glue.c */,
 				7229CE450F6C89F8004123C5 /* EAGLView.h */,
 				7229CE460F6C89F8004123C5 /* EAGLView.m */,
+				72B5FF380F7E5C3D00C8A372 /* hud.c */,
 				7229CE480F6C89F8004123C5 /* wolf3dAppDelegate.h */,
 				7229CE490F6C89F8004123C5 /* wolf3dAppDelegate.m */,
 				7229CC8E0F6B3363004123C5 /* wolfiphone.h */,
@@ -312,6 +317,7 @@
 				72A7E8F60F5F2063005B83C0 /* iphone_menus.c */,
 				43CF03090F56D5C200E4A23D /* iphone_loop.c */,
 				43E8D2DF0F4FC61E003F09B2 /* iphone_main.c */,
+				43AF6B940F996DA200777569 /* iphone_sys.m */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -319,7 +325,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				43AE7CAA0F61FB0E00B2F562 /* wolf3dEpisode1_icon.png */,
+				43E341280F9BB4B6003C5D00 /* wolf3dlite_icon.png */,
 				43CF02FE0F56974E00E4A23D /* Default.png */,
 				43CF02EC0F56955F00E4A23D /* wolf3d_icon.png */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
@@ -331,9 +337,9 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				720EBBAD0F82E0BB003F989A /* QuartzCore.framework */,
 				4333CCE70F5CC23E00AE2B6F /* AudioToolbox.framework */,
 				43E8D4DF0F51B48B003F09B2 /* OpenAL.framework */,
-				28FD15070DC6FC5B0079059D /* QuartzCore.framework */,
 				28FD14FF0DC6FC520079059D /* OpenGLES.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
@@ -511,7 +517,7 @@
 			);
 			name = wolf3d;
 			productName = wolf3d;
-			productReference = 1D6058910D05DD3D006BFB54 /* wolf3d.app */;
+			productReference = 1D6058910D05DD3D006BFB54 /* wolf3dlite.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -540,7 +546,7 @@
 				43CF02ED0F56955F00E4A23D /* wolf3d_icon.png in Resources */,
 				43CF02FF0F56974E00E4A23D /* Default.png in Resources */,
 				4364BF3F0F5CB25900F29317 /* dist.plist in Resources */,
-				43AE7CAB0F61FB0E00B2F562 /* wolf3dEpisode1_icon.png in Resources */,
+				43E341290F9BB4B6003C5D00 /* wolf3dlite_icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -558,7 +564,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = "/bin/sh -x";
-			shellScript = "PBXCP=${DEVELOPER_DIR}/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp\n${PBXCP} -exclude .svn \"${PROJECT_DIR}/../../base\" \"${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\"\n";
+			shellScript = "PBXCP=${DEVELOPER_DIR}/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp\nBASE=${PROJECT_DIR}/../../base\nDST=${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}\n${PBXCP} -exclude .svn ${BASE} ${DST}\n# \"${PROJECT_DIR}/../../base\" \"${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\"\nSCRIPTS=${PROJECT_DIR}/../../scripts\n/usr/bin/perl ${SCRIPTS}/scrubBase.pl ${BASE} ${DST}\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -641,6 +647,8 @@
 				7229CE4A0F6C89F8004123C5 /* EAGLView.m in Sources */,
 				7229CE4C0F6C89F8004123C5 /* wolf3dAppDelegate.m in Sources */,
 				7229CE550F6C8CDE004123C5 /* gles_glue.c in Sources */,
+				72B5FF390F7E5C3D00C8A372 /* hud.c in Sources */,
+				43AF6B950F996DA200777569 /* iphone_sys.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -661,8 +669,8 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Info.plist;
 				PRODUCT_NAME = wolf3d;
-				PROFILE_PREFIX = com.idsoftware;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "242E7162-329E-4733-B361-E893AB528543";
+				PROFILE_PREFIX = nu.r3;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "94041F5C-2EDC-4F49-AF97-95ECE6BB398D";
 			};
 			name = Debug;
 		};
@@ -670,7 +678,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: John Carmack";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Cass Everitt";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = wolf3d_Prefix.pch;
@@ -678,10 +686,47 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Info.plist;
 				PRODUCT_NAME = wolf3d;
-				PROFILE_PREFIX = com.idsoftware;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "329BF7D2-0B30-4F7B-9204-EB2CBD012BA8";
+				PROFILE_PREFIX = nu.r3;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "94041F5C-2EDC-4F49-AF97-95ECE6BB398D";
 			};
 			name = Release;
+		};
+		431181700F994C5400FF9351 /* AdHocDistLite */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_ENTITLEMENTS = dist.plist;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Cass Everitt";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_THUMB_SUPPORT = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E2E91433-8CD1-46DB-9DC5-B7E4C84FD1C2";
+				SDKROOT = iphoneos2.0;
+				SYMROOT = ../../build;
+			};
+			name = AdHocDistLite;
+		};
+		431181710F994C5400FF9351 /* AdHocDistLite */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Cass Everitt";
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = wolf3d_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					LITE,
+					IPHONE,
+				);
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = Info.plist;
+				PRODUCT_NAME = wolf3dlite;
+				PROFILE_PREFIX = nu.r3;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "42086F40-083A-4573-8902-E1E628A229ED";
+			};
+			name = AdHocDistLite;
 		};
 		4364BF480F5CB27300F29317 /* AdHocDist */ = {
 			isa = XCBuildConfiguration;
@@ -696,6 +741,7 @@
 				PREBINDING = NO;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E2E91433-8CD1-46DB-9DC5-B7E4C84FD1C2";
 				SDKROOT = iphoneos2.0;
+				SYMROOT = ../../build;
 			};
 			name = AdHocDist;
 		};
@@ -703,7 +749,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: id Software";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Cass Everitt";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = wolf3d_Prefix.pch;
@@ -712,11 +758,11 @@
 				INFOPLIST_FILE = Info.plist;
 				PRODUCT_NAME = wolf3d;
 				PROFILE_PREFIX = nu.r3;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "31C73095-0DD9-4ABA-BB25-8D23F661F10F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "42086F40-083A-4573-8902-E1E628A229ED";
 			};
 			name = AdHocDist;
 		};
-		43AE7CA40F61EC4E00B2F562 /* ReleaseEpisode1 */ = {
+		43AE7CA40F61EC4E00B2F562 /* ReleaseLite */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
@@ -727,30 +773,31 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
 				SDKROOT = iphoneos2.0;
+				SYMROOT = ../../build;
 			};
-			name = ReleaseEpisode1;
+			name = ReleaseLite;
 		};
-		43AE7CA50F61EC4E00B2F562 /* ReleaseEpisode1 */ = {
+		43AE7CA50F61EC4E00B2F562 /* ReleaseLite */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: John Carmack";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Cass Everitt";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = wolf3d_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					EPISODE1,
+					LITE,
 					IPHONE,
 				);
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Info.plist;
-				PRODUCT_NAME = wolf3dEpisode1;
-				PROFILE_PREFIX = com.idsoftware;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "329BF7D2-0B30-4F7B-9204-EB2CBD012BA8";
+				PRODUCT_NAME = wolf3dlite;
+				PROFILE_PREFIX = nu.r3;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "94041F5C-2EDC-4F49-AF97-95ECE6BB398D";
 			};
-			name = ReleaseEpisode1;
+			name = ReleaseLite;
 		};
-		43AE7CAE0F61FC9200B2F562 /* DebugEpisode1 */ = {
+		43AE7CAE0F61FC9200B2F562 /* DebugLite */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
@@ -761,30 +808,31 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				SDKROOT = iphoneos2.0;
+				SYMROOT = ../../build;
 			};
-			name = DebugEpisode1;
+			name = DebugLite;
 		};
-		43AE7CAF0F61FC9200B2F562 /* DebugEpisode1 */ = {
+		43AE7CAF0F61FC9200B2F562 /* DebugLite */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: John Carmack";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Cass Everitt";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = wolf3d_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					EPISODE1,
+					LITE,
 					IPHONE,
 				);
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Info.plist;
-				PRODUCT_NAME = wolf3dEpisode1;
-				PROFILE_PREFIX = com.idsoftware;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "329BF7D2-0B30-4F7B-9204-EB2CBD012BA8";
+				PRODUCT_NAME = wolf3dlite;
+				PROFILE_PREFIX = nu.r3;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "94041F5C-2EDC-4F49-AF97-95ECE6BB398D";
 			};
-			name = DebugEpisode1;
+			name = DebugLite;
 		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -797,6 +845,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				SDKROOT = iphoneos2.0;
+				SYMROOT = ../../build;
 			};
 			name = Debug;
 		};
@@ -811,6 +860,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
 				SDKROOT = iphoneos2.0;
+				SYMROOT = ../../build;
 			};
 			name = Release;
 		};
@@ -821,10 +871,11 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,
-				43AE7CAF0F61FC9200B2F562 /* DebugEpisode1 */,
+				43AE7CAF0F61FC9200B2F562 /* DebugLite */,
 				1D6058950D05DD3E006BFB54 /* Release */,
-				43AE7CA50F61EC4E00B2F562 /* ReleaseEpisode1 */,
+				43AE7CA50F61EC4E00B2F562 /* ReleaseLite */,
 				4364BF490F5CB27300F29317 /* AdHocDist */,
+				431181710F994C5400FF9351 /* AdHocDistLite */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -833,10 +884,11 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
-				43AE7CAE0F61FC9200B2F562 /* DebugEpisode1 */,
+				43AE7CAE0F61FC9200B2F562 /* DebugLite */,
 				C01FCF5008A954540054247B /* Release */,
-				43AE7CA40F61EC4E00B2F562 /* ReleaseEpisode1 */,
+				43AE7CA40F61EC4E00B2F562 /* ReleaseLite */,
 				4364BF480F5CB27300F29317 /* AdHocDist */,
+				431181700F994C5400FF9351 /* AdHocDistLite */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

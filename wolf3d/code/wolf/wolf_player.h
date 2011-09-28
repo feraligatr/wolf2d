@@ -161,7 +161,6 @@ extern void PL_Damage( player_t *self, entity_t *attacker, int points );
 extern _boolean PL_GiveHealth( player_t *self, int points, int max );
 extern _boolean PL_GiveAmmo( player_t *self, int type, int ammo );
 extern void PL_GiveWeapon( player_t *self, int weapon );
-extern void PL_GiveLife( player_t *self );
 extern void PL_GivePoints( player_t *self, W32 points );
 extern void PL_GiveKey( player_t *self, int key );
 

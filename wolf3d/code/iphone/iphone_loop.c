@@ -1,35 +1,124 @@
 /*
- remove wolf_render.c
- for the iphone build, we only need the following lsfx files:
  
- 001
- 003
- 008
- 009
- 012
- 023
- 028
- 030
- 031
- 033
- 034
- 035
- 036
- 037
- 038
- 040
- 044
- 045
- 061
- 062
- 064
- 069
- 076
- 078
- 080
- 085
- 086
+ Copyright (C) 2009 Id Software, Inc.
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ 
+ */
 
+/*
+mac wolf wall mapping:
+cp 000.5551 ../../../base/walls/000.5551
+cp 001.5551 ../../../base/walls/010.5551
+cp 002.5551 ../../../base/walls/004.5551
+cp 003.5551 ../../../base/walls/006.5551
+cp 004.5551 ../../../base/walls/022.5551
+cp 005.5551 ../../../base/walls/018.5551
+cp 006.5551 ../../../base/walls/020.5551
+cp 007.5551 ../../../base/walls/044.5551
+cp 008.5551 ../../../base/walls/014.5551
+cp 009.5551 ../../../base/walls/008.5551
+cp 010.5551 ../../../base/walls/032.5551
+cp 011.5551 ../../../base/walls/038.5551
+cp 014.5551 ../../../base/walls/040.5551
+cp 015.5551 ../../../base/walls/041.5551
+cp 016.5551 ../../../base/walls/030.5551
+cp 017.5551 ../../../base/walls/028.5551
+cp 018.5551 ../../../base/walls/026.5551
+cp 019.5551 ../../../base/walls/046.5551
+cp 020.5551 ../../../base/walls/050.5551
+cp 021.5551 ../../../base/walls/078.5551
+cp 022.5551 ../../../base/walls/066.5551
+cp 025.5551 ../../../base/walls/056.5551
+cp 026.5551 ../../../base/walls/058.5551
+cp 027.5551 ../../../base/walls/086.5551
+cp 028.5551 ../../../base/walls/090.5551
+cp 029.5551 ../../../base/walls/068.5551
+cp 030.5551 ../../../base/walls/126.5551
+cp 031.5551 ../../../base/walls/132.5551
+cp 032.5551 ../../../base/walls/133.5551
+cp 033.5551 ../../../base/walls/130.5551
+cp 034.5551 ../../../base/walls/128.5551
+
+ // SOD? cp 012.5551 ../../../base/walls/000.5551
+ // SOD? cp 013.5551 ../../../base/walls/000.5551
+ // SOD? cp 023.5551 ../../../base/walls/000.5551
+ // SOD? cp 024.5551 ../../../base/walls/000.5551
+ 
+ All odd numbers except 31, 41, 43, and 133 can be just darkened down
+ 
+
+cp 000.tga ../../newWalls/000.tga
+cp 001.tga ../../newWalls/010.tga
+cp 002.tga ../../newWalls/004.tga
+cp 003.tga ../../newWalls/006.tga
+cp 004.tga ../../newWalls/022.tga
+cp 005.tga ../../newWalls/018.tga
+cp 006.tga ../../newWalls/020.tga
+cp 007.tga ../../newWalls/044.tga
+cp 008.tga ../../newWalls/014.tga
+cp 009.tga ../../newWalls/008.tga
+cp 010.tga ../../newWalls/032.tga
+cp 011.tga ../../newWalls/038.tga
+cp 014.tga ../../newWalls/040.tga
+cp 015.tga ../../newWalls/041.tga
+cp 016.tga ../../newWalls/030.tga
+cp 017.tga ../../newWalls/028.tga
+cp 018.tga ../../newWalls/026.tga
+cp 019.tga ../../newWalls/046.tga
+cp 020.tga ../../newWalls/050.tga
+cp 021.tga ../../newWalls/078.tga
+cp 022.tga ../../newWalls/066.tga
+cp 025.tga ../../newWalls/056.tga
+cp 026.tga ../../newWalls/058.tga
+cp 027.tga ../../newWalls/086.tga
+cp 028.tga ../../newWalls/090.tga
+cp 029.tga ../../newWalls/068.tga
+cp 030.tga ../../newWalls/126.tga
+cp 031.tga ../../newWalls/132.tga
+cp 032.tga ../../newWalls/133.tga
+cp 033.tga ../../newWalls/130.tga
+cp 034.tga ../../newWalls/128.tga
+ 
+ mac wolf weapon mapping:
+cp weapon00.5551 ../../../base/sprites/514.5551
+cp weapon01.5551 ../../../base/sprites/515.5551
+cp weapon02.5551 ../../../base/sprites/516.5551
+cp weapon03.5551 ../../../base/sprites/517.5551
+cp weapon04.5551 ../../../base/sprites/518.5551
+cp weapon05.5551 ../../../base/sprites/519.5551
+cp weapon06.5551 ../../../base/sprites/520.5551
+cp weapon07.5551 ../../../base/sprites/521.5551
+cp weapon08.5551 ../../../base/sprites/522.5551
+cp weapon09.5551 ../../../base/sprites/523.5551
+cp weapon10.5551 ../../../base/sprites/524.5551
+cp weapon11.5551 ../../../base/sprites/525.5551
+cp weapon12.5551 ../../../base/sprites/526.5551
+cp weapon13.5551 ../../../base/sprites/527.5551
+cp weapon14.5551 ../../../base/sprites/528.5551
+cp weapon15.5551 ../../../base/sprites/529.5551
+ 
+ 
+mac wolf sprite mapping
+
+brown shirt corpse
+cp 039.5551 ~/dev/iphone/wolf3d/base/sprites/099.5551
+ 
+brown plant
+cp 136.5551 ~/dev/iphone/wolf3d/base/sprites/013.5551
+ 
  */
 
 #include "../wolfiphone.h"
@@ -59,18 +148,47 @@ int		tiltHistoryNum;
 int	numPrevTouches;
 int prevTouches[5][2];
 
-
-// the layout drawing code sets these, which are then used
-// by the touch processing
-int	fireButtonX, fireButtonY, fireButtonSize;
-int	moveAxisX, moveAxisY, moveAxisSize;
-int	turnAxisX, turnAxisY, turnAxisSize;
-
 texture_t *numberPics[10];
+
+char *mugshotnames[ NUM_MUGSHOTS ] =
+{
+"iphone/FACE1APIC.tga",
+"iphone/FACE1BPIC.tga",
+"iphone/FACE1CPIC.tga",
+
+"iphone/FACE2APIC.tga",
+"iphone/FACE2BPIC.tga",
+"iphone/FACE2CPIC.tga",
+
+"iphone/FACE3APIC.tga",
+"iphone/FACE3BPIC.tga",
+"iphone/FACE3CPIC.tga",
+
+"iphone/FACE4APIC.tga",
+"iphone/FACE4BPIC.tga",
+"iphone/FACE4CPIC.tga",
+
+"iphone/FACE5APIC.tga",
+"iphone/FACE5BPIC.tga",
+"iphone/FACE5CPIC.tga",
+
+"iphone/FACE6APIC.tga",
+"iphone/FACE6BPIC.tga",
+"iphone/FACE6CPIC.tga",
+
+"iphone/FACE7APIC.tga",
+"iphone/FACE7BPIC.tga",
+"iphone/FACE7CPIC.tga",
+
+"iphone/FACE8APIC.tga",
+"iphone/GOTGATLINGPIC.tga"		
+};
 
 int damageflash;
 int bonusFrameNum;
 int attackDirTime[2];
+
+logTime_t	loggedTimes[MAX_LOGGED_TIMES];	// indexed by iphoneFrameNum
 
 /*
  ==================
@@ -82,6 +200,10 @@ void iphoneActivateConsole() {
 	extern float scr_conlines;
 	scr_conlines = 0.5f;
 	consoleActive = 1;
+	
+	// draw a frame immediately, because the UIKit takes
+	// a long time to bring up the keyboard
+	iphoneFrame();
 }
 
 /*
@@ -98,18 +220,17 @@ void iphoneDeactivateConsole() {
 
 /*
  ==================
- iphoneExecuteCommandLine
+ iphoneExecuteConsoleCommand
  
  ==================
  */
 void iphoneExecuteCommandLine() {
-	const char * GetCurrentCommandLine();
-	void SetCurrentCommandLine(const char *);
 	char buf[256];
-	strcpy( buf, GetCurrentCommandLine() );
+	strcpy( buf, SysIPhoneGetConsoleTextField() );
 	
+	Com_Printf( "%s\n", buf );
 	Cmd_ExecuteString( buf );
-	SetCurrentCommandLine( "" );
+	SysIPhoneSetConsoleTextField( "" );
 }
 
 
@@ -249,7 +370,7 @@ int	TouchReleased( int x, int y, int w, int h ) {
 		return 0;
 	}
 	
-	if ( numTouches != 0 ) {
+	if ( numTouches == numPrevTouches ) {
 		// finger dragged off
 		Sound_StartLocalSound( "iphone/baborted_01.wav" );
 		return 0;
@@ -258,6 +379,21 @@ int	TouchReleased( int x, int y, int w, int h ) {
 	// released
 	Sound_StartLocalSound( "iphone/baction_01.wav" );
 	return 1;
+}
+
+/*
+ ==================
+ iphoneRotateForLandscape
+ 
+ ==================
+ */
+void iphoneRotateForLandscape() {
+	if ( revLand->value ) {
+		// reverse landscape mode
+		pfglRotatef( -90, 0, 0, 1 );
+	} else {
+		pfglRotatef( 90, 0, 0, 1 );
+	}
 }
 
 /*
@@ -279,7 +415,7 @@ void iphoneSet2D( void ) {
 	
 	pfglMatrixMode( GL_PROJECTION );
     pfglLoadIdentity();
-	pfglRotatef( 90, 0, 0, 1 );
+	iphoneRotateForLandscape();
 	pfglOrtho( 0, 480, 320, 0, -99999, 99999 );
 }
 
@@ -314,23 +450,48 @@ If activeFraction is less than 1.0, the range will clamp
 to the limits before the edge of the box is hit.
 ==================
 */
-float	AxisHit( int x, int y, int size, int isXaxis, float activeFraction ) {
+float	AxisHit( hudPic_t *hud ) {
+	int x = hud->x;
+	int y = hud->y;
+	int width = hud->width;
+	int height = hud->width;
+	float activeFraction = 0.8f;
 	int	i;
+	int isXaxis = ( hud != &huds.forwardStick );
+	
+	if ( hud->hudFlags & HF_DISABLED ) {
+		return 0;
+	}
 	
 	// allow the touches to go outside the indicated bounds with clamping
-	x -= size/2;
-	y -= size/2;
-	size *= 2;
+	x += width / 2;
+	y += height / 2;
+	width *= 2;
 	activeFraction *= 0.5f;
+	
+	// if the axis is not paired with another, leave it skinnier along the axis
+	if ( hud == &huds.sideStick && huds.forwardStick.x == hud->x && huds.forwardStick.y == hud->y ) {
+		height *= 2;
+	}
+	if ( hud == &huds.turnStick && huds.forwardStick.x == hud->x && huds.forwardStick.y == hud->y ) {
+		height *= 2;
+	}
+	if ( hud == &huds.forwardStick ) {
+		// don't bother checking for a skinny forwardStick
+		height *= 2;
+	}
+
+	x -= width / 2;
+	y -= height / 2;
 	
 	for ( i = 0 ; i < numTouches ; i++ ) {
 		if ( touches[i][0] >= x && touches[i][1] >= y
-			&& touches[i][0] < x + size && touches[i][1] < y + size ) {
+			&& touches[i][0] < x + width && touches[i][1] < y + height ) {
 				float	f;
 				if ( isXaxis ) {
-					f = (float)( touches[i][0] - x ) / size * 2.0f - 1.0f;
+					f = (float)( touches[i][0] - x ) / width * 2.0f - 1.0f;
 				} else {
-					f = (float)( touches[i][1] - y ) / size * 2.0f - 1.0f;
+					f = (float)( touches[i][1] - y ) / height * 2.0f - 1.0f;
 				}
 				f /= activeFraction;
 				if ( f > 1.0f ) {
@@ -347,21 +508,45 @@ float	AxisHit( int x, int y, int size, int isXaxis, float activeFraction ) {
 	return 0;
 }
 
-void WolfensteinTouches( int _numTouches, int _touches[16] ) {
+void iphoneTouchEvent( int _numTouches, int _touches[16] ) {
 	numTouches = _numTouches;
 	for ( int i = 0 ; i < numTouches ; i++ ) {
-		touches[i][0] = 480 - _touches[i*2+1];
-		touches[i][1] = _touches[i*2+0];
+		if ( revLand->value ) {
+			touches[i][0] = _touches[i*2+1];
+			touches[i][1] = 319 - _touches[i*2+0];
+		} else {
+			touches[i][0] = 479 - _touches[i*2+1];
+			touches[i][1] = _touches[i*2+0];
+		}
 	}
 }
 
-void WolfensteinTilts( float *tilts ) {
+void iphoneCheckForLandscapeReverse() {
+	static int reverseCount;
+	
+	// if we stay significantly negative for half a second, flip orientation
+	if ( tiltPitch < -0.35 ) {
+		if ( ++reverseCount > 10 ) {
+			Cvar_SetValue( revLand->name, !revLand->value );
+			SysIPhoneSetUIKitOrientation( revLand->value );
+		}
+	} else {
+		reverseCount = 0;
+	}
+}
+
+void iphoneTiltEvent( float *tilts ) {
 	int		i;
 	int		j;
 	int		c;
 	float	sum[3];
 	static float prevTime;
-	
+
+	if ( revLand->value ) {
+		tilts[1] = -tilts[1];
+		tilts[0] = -tilts[0];
+	}
+
 	c = tiltAverages->value;
 	if ( c < 1 ) {
 		c = 1;
@@ -416,7 +601,28 @@ void ShowTilt() {
 	R_Draw_Fill( 240, 0, 1, MAX_TILT_HISTORY*4, whiteColor );
 }
 
-					 
+void ShowTime() {
+	int	i;
+	if ( !showTime->value ) {
+		return;
+	}
+	colour4_t frameColor = { 0, 0, 255, 255 };
+	colour4_t swapColor = { 255, 0, 0, 255 };
+	colour4_t activeColor = { 0, 255, 0, 255 };
+	
+	for ( i = 1 ; i < 30 ; i++ ) {
+		logTime_t *lt = &loggedTimes[(iphoneFrameNum - i ) & (MAX_LOGGED_TIMES-1)];
+		logTime_t *ltp = &loggedTimes[(iphoneFrameNum - i - 1 ) & (MAX_LOGGED_TIMES-1)];
+		int	frameTime = lt->enterFrame - ltp->enterFrame;
+		int	swapTime = lt->afterSwap - lt->beforeSwap;
+		int	activeTime = lt->beforeSwap - lt->enterFrame;
+		R_Draw_Fill( 0, i * 4, frameTime * 8, 2, frameColor );
+		R_Draw_Fill( frameTime * 8 - swapTime * 8, i * 4, swapTime * 8, 2, swapColor );
+		R_Draw_Fill( 0, i * 4, activeTime * 8, 2, activeColor );
+	}
+}
+
+
 /*
 ==================
 CreateIphoneUserCmd
@@ -440,21 +646,21 @@ PRIVATE void CreateIphoneUserCmd()
 	usercmd_t *cmd = &Player.cmd;
 	memset( cmd, 0, sizeof( *cmd ) );
 		   
-	if ( TouchDown( fireButtonX, fireButtonY, fireButtonSize, fireButtonSize ) ) {
+	if ( TouchDown( huds.fire.x, huds.fire.y, huds.fire.width, huds.fire.height ) ) {
 		cmd->buttons |= BUTTON_ATTACK;
 	}
 	if ( tiltFire->value > 0 && tiltPitch < tiltFire->value ) {
 		cmd->buttons |= BUTTON_ATTACK;
 	}
-	
-	cmd->forwardmove = -stickMoveValue * AxisHit( moveAxisX, moveAxisY, moveAxisSize, 0, 0.8f );
-   
-	if( controlScheme->value == 0 || controlScheme->value == 1 ) {
-		Player.position.angle += -stickTurnValue * AxisHit( moveAxisX, moveAxisY, moveAxisSize, 1, 0.8f );
-	} else {
-		Player.position.angle += -stickTurnValue * AxisHit( turnAxisX, turnAxisY, turnAxisSize, 1, 0.8f );
-		cmd->sidemove = stickMoveValue * AxisHit( moveAxisX, moveAxisY, moveAxisSize, 1, 0.8f );
+
+	// tapping the weapon issues the nextWeapon impulse
+	if ( TouchReleased( 240 - 40, 320 - 80 - 64, 80, 64 ) ) {
+		cmd->buttons |= BUTTON_CHANGE_WEAPON;
 	}
+	
+	cmd->forwardmove = -stickMoveValue * AxisHit( &huds.forwardStick );
+	cmd->sidemove = stickMoveValue * AxisHit( &huds.sideStick );
+	Player.position.angle += -stickTurnValue * AxisHit( &huds.turnStick );
 
 	// accelerometer tilting
 	cmd->sidemove += tiltMove->value * DeadBandAdjust( tilt, tiltDeadBand->value );
@@ -474,91 +680,14 @@ iphoneHighlightPicWhenTouched
 Draw transparent except when touched
 =================
 */
-void iphoneHighlightPicWhenTouched( int x, int y, int w, int h, const char *pic ) {
+void iphoneHighlightPicNumWhenTouched( int x, int y, int w, int h, int glTexNum ) {
 	if ( TouchDown( x, y, w, h ) ) {
 		pfglColor4f(1,1,1,1);
 	} else {
 		pfglColor4f(1,1,1,0.5);
 	}
-	R_Draw_StretchPic( x, y, w, h, pic );
+	iphoneDrawPicNum( x, y, w, h, glTexNum );
 	pfglColor4f(1,1,1,1);
-}
-int iphoneActivatePicWhenTouched( int x, int y, int w, int h, const char *pic ) {
-	iphoneHighlightPicWhenTouched( x, y, w, h, pic );
-	return TouchReleased( x, y, w, h );
-}
-
-
-/*
-==================
-iphoneDrawControls
-
- scheme 0: turnstick on left
- scheme 1: turnstick on right
- scheme 2: dualstick, move on left
- scheme 3: dualstick, move on right
-=================
-*/
-static const int BUTTON_SIZE = 100;
-void iphoneDrawControls( void ) {
-	int	ss = (int)stickSize->value;
-
-	switch ( (int)controlScheme->value ) {
-		case 0:
-			moveAxisX = 0;
-			moveAxisY = 320 - ss;
-			moveAxisSize = ss;
-			iphoneHighlightPicWhenTouched( moveAxisX, moveAxisY, moveAxisSize, moveAxisSize, "iphone/diractional_02.tga" );
-			
-			fireButtonX = 480 - BUTTON_SIZE;
-			fireButtonY = 320 - BUTTON_SIZE;
-			fireButtonSize = BUTTON_SIZE;
-			break;
-			
-		case 1:
-			moveAxisX = 480 - ss;
-			moveAxisY = 320 - ss;
-			moveAxisSize = ss;
-			iphoneHighlightPicWhenTouched( moveAxisX, moveAxisY, moveAxisSize, moveAxisSize, "iphone/diractional_02.tga" );
-			
-			fireButtonX = 0;
-			fireButtonY = 320 - BUTTON_SIZE;
-			fireButtonSize = BUTTON_SIZE;
-			break;
-			
-		case 2:
-			moveAxisX = 0;
-			moveAxisY = 320 - ss;
-			moveAxisSize = ss;
-			iphoneHighlightPicWhenTouched( moveAxisX, moveAxisY, moveAxisSize, moveAxisSize, "iphone/diractional_01.tga" );
-			
-			turnAxisX = 480 - ss;
-			turnAxisY = 320 - ss;
-			turnAxisSize = ss;
-			iphoneHighlightPicWhenTouched( turnAxisX, turnAxisY, turnAxisSize, turnAxisSize, "iphone/diractional_03.tga" );
-			
-			fireButtonX = 480-BUTTON_SIZE;
-			fireButtonY = 0;
-			fireButtonSize = BUTTON_SIZE;
-			break;
-		case 3:
-			moveAxisX = 480 - ss;
-			moveAxisY = 320 - ss;
-			moveAxisSize = ss;
-			iphoneHighlightPicWhenTouched( moveAxisX, moveAxisY, moveAxisSize, moveAxisSize, "iphone/diractional_01.tga" );
-			
-			turnAxisX = 0;
-			turnAxisY = 320 - ss;
-			turnAxisSize = ss;
-			iphoneHighlightPicWhenTouched( turnAxisX, turnAxisY, turnAxisSize, turnAxisSize, "iphone/diractional_03.tga" );
-			
-			fireButtonX = 480-BUTTON_SIZE;
-			fireButtonY = 0;
-			fireButtonSize = BUTTON_SIZE;
-			break;
-	}
-
-	iphoneHighlightPicWhenTouched( fireButtonX, fireButtonY, fireButtonSize, fireButtonSize, "iphone/shoot.tga" );
 }
 
 /*
@@ -570,17 +699,17 @@ void iphoneDrawControls( void ) {
 void iphoneDrawWeapon( void ) {
 	char name[ 32 ];
 	texture_t *tex;	
-	static int w = 200;
-	static int h = 200;
+	static int w = 128;
+	static int h = 128;
 	int x = (viddef.width - w ) >> 1;
 	int y = viddef.height - 80 - h;
 	int	frame;
 	
 	if ( gunFrame->value ) {
 		// screenshots look better with the muzzle flash
-		frame = Player.weapon * 5 + gunFrame->value + SPR_KNIFEREADY;
+		frame = Player.weapon * 4 + gunFrame->value + SPR_KNIFEREADY;
 	} else {
-		frame = Player.weapon * 5 + Player.weaponframe + SPR_KNIFEREADY;
+		frame = Player.weapon * 4 + Player.weaponframe + SPR_KNIFEREADY;
 	}
 	
 	my_snprintf( name, sizeof( name ), "%s/%d.tga", spritelocation, frame);
@@ -602,6 +731,7 @@ void iphoneDrawWeapon( void ) {
  ==================
  iphoneDrawNumber
  
+ x is the midpoint, y is the top
  ==================
  */
 void iphoneDrawNumber( int x, int y, int number, int charWidth, int charHeight ) {	
@@ -635,31 +765,6 @@ void iphoneDrawNumber( int x, int y, int number, int charWidth, int charHeight )
 	}
 }
 
-/*
- ==================
- iphoneDrawHUD
- 
- ==================
- */
-void iphoneDrawHUD( void ) {
-	int		y;
-	
-	if( Player.items & ITEM_KEY_1 ) {
-		R_Draw_Pic( 0, 100, "iphone/GOLDKEYPIC.tga" );
-	}
-	
-	if( Player.items & ITEM_KEY_2 ) {
-		R_Draw_Pic( 0, 130, "iphone/SILVERKEYPIC.tga" );
-	}
-	
-	iphoneDrawNumber( 240, 304, Player.health, 16, 16 );
-	if ( fireButtonY < 160 ) {
-		y = fireButtonY + fireButtonSize + 8;
-	} else {
-		y = fireButtonY - 8 - 48;
-	}
-	iphoneDrawNumber( fireButtonX + fireButtonSize/2, y, Player.ammo[AMMO_BULLETS], 48, 48 );
-}
 
 /*
  ==================
@@ -667,55 +772,28 @@ void iphoneDrawHUD( void ) {
  
  ==================
  */
-void iphoneDrawFace( void ) {
+void iphoneDrawFace() {
 	int i;
 	int w = 64;
 	int h = 80;
 	int x = (viddef.width - w ) >> 1;
 	int y = viddef.height - h;
 	const char *pic;
-	static const char *mugshotnames[ 24 ] =
-	{
-		"iphone/newhead/FACE1APIC.tga",
-		"iphone/newhead/FACE1BPIC.tga",
-		"iphone/newhead/FACE1CPIC.tga",
-		
-		"iphone/newhead/FACE2APIC.tga",
-		"iphone/newhead/FACE2BPIC.tga",
-		"iphone/newhead/FACE2CPIC.tga",
-		
-		"iphone/newhead/FACE3APIC.tga",
-		"iphone/newhead/FACE3BPIC.tga",
-		"iphone/newhead/FACE3CPIC.tga",
-		
-		"iphone/newhead/FACE4APIC.tga",
-		"iphone/newhead/FACE4BPIC.tga",
-		"iphone/newhead/FACE4CPIC.tga",
-		
-		"iphone/newhead/FACE5APIC.tga",
-		"iphone/newhead/FACE5BPIC.tga",
-		"iphone/newhead/FACE5CPIC.tga",
-		
-		"iphone/newhead/FACE6APIC.tga",
-		"iphone/newhead/FACE6BPIC.tga",
-		"iphone/newhead/FACE6CPIC.tga",
-		
-		"iphone/newhead/FACE7APIC.tga",
-		"iphone/newhead/FACE7BPIC.tga",
-		"iphone/newhead/FACE7CPIC.tga",
-		
-		"iphone/newhead/FACE8APIC.tga"
-	};
-	
-	static const char *godmugshotnames[] =
-	{
-		"iphone/newhead/GODMODEFACE0PIC.tga",
-		"iphone/newhead/GODMODEFACE1PIC.tga",
-		"iphone/newhead/GODMODEFACE2PIC.tga"	
-	};
 
+	// solid background
 	iphoneDrawPic( 240 - 64, 320 - 80, 128, 80, "iphone/status_hud.tga" );
+
+	// keys on the side
+	if( Player.items & ITEM_KEY_1 ) {
+		iphoneDrawPic( 240-64, 320-72, 32, 64, "iphone/gold_key.tga" );
+	}
 	
+	if( Player.items & ITEM_KEY_2 ) {
+		iphoneDrawPic( 240+32, 320-72, 32, 64, "iphone/silver_key.tga" );
+	}
+	
+	
+	// decide on the face
 	Player.facecount += tics;
 	if ( Player.face_gotgun && Player.facecount > 0 ) {
 		// gotgun will set facecount to a negative number initially, go back
@@ -736,13 +814,9 @@ void iphoneDrawFace( void ) {
 
 	if( Player.health )
 	{
-		if( g_version->value == SPEAROFDESTINY && Player.flags & FL_GODMODE )
+		if( Player.face_gotgun )
 		{
-			pic = godmugshotnames[ Player.faceframe ];		
-		}
-		else if( Player.face_gotgun )
-		{
-			pic = "iphone/newhead/GOTGATLINGPIC.tga";		
+			pic = mugshotnames[ 22 ];
 		}
 		else
 		{
@@ -758,20 +832,11 @@ void iphoneDrawFace( void ) {
 	}
 	else
 	{
-#if 0		// forgot to convert the mutant face pic...
-		if( Player.LastAttacker && Player.LastAttacker->type == en_needle )
-		{
-			pic = "iphone/MUTANTBJPIC.tga";
-		}
-		else
-#endif			
-		{
-			pic = "iphone/newhead/FACE8APIC.tga";
-		}
+		pic = mugshotnames[ 21 ];
 	}
 
-	R_Draw_StretchPic( x, y, w, h, pic );
-	
+	iphoneDrawPic( x, y, w, h, pic );
+		
 	// blend the right / left damage indicators on the side
 	for ( i = 0 ; i < 2 ; i++ ) {
 		float	f;
@@ -796,6 +861,9 @@ void iphoneDrawFace( void ) {
 		}
 		pfglColor4f( 1, 1, 1, 1 );
 	}
+	
+	// draw the tiny health numbers on top of the face
+	iphoneDrawNumber( 240, 304, Player.health, 16, 16 );
 }
 
 /*
@@ -834,7 +902,7 @@ void iphoneDrawNotifyText() {
 	}
 	
 	pfglColor4f( 1, 1, 1, f );
-	iphoneCenterText( 240, 20, notifyText );
+	iphoneCenterText( 240, 5, notifyText );
 	pfglColor4f( 1, 1, 1, 1 );
 }
 
@@ -869,6 +937,68 @@ void iphoneSetAttackDirection( int dir ) {
 	}
 }
 
+void iphoneDrawHudControl( hudPic_t *hud ) {
+	if ( hud->hudFlags & HF_DISABLED ) {
+		return;
+	}
+	iphoneHighlightPicNumWhenTouched( hud->x, hud->y, hud->width, hud->height, hud->glTexNum );
+}
+
+int iphoneDrawHudButton( hudPic_t *hud ) {
+	if ( hud->hudFlags & HF_DISABLED ) {
+		return 0;
+	}
+	iphoneDrawHudControl( hud );
+	return TouchReleased( hud->x, hud->y, hud->width, hud->height );
+}
+
+void iphoneUpdateMapView() {
+#ifdef ALLOW_MAP_VIEW_HUD		
+	if ( huds.mapView.hudFlags & HF_DISABLED ) {
+		return;
+	}
+	R_Bind( huds.mapView.glTexNum );
+	int playerx = Player.position.origin[0] / (float)TILEGLOBAL;
+	int playery = Player.position.origin[1] / (float)TILEGLOBAL;
+	
+	for ( int j = 0; j < 16; j++ ) {
+		int y = ( ( iphoneFrameNum << 4 )  + j ) & 63;
+		int disty = playery - y;
+		GLubyte row[ 64 * 4 ];
+		for( int x = 0 ; x < 64; ++x ) {
+			int distx = playerx - x;
+			if ( distx >= -1 && distx <= 1 && disty == 0 ) {
+				row[ x * 4 + 0 ] = 255;
+				row[ x * 4 + 1 ] = 255;
+				row[ x * 4 + 2 ] = 255;
+				row[ x * 4 + 3 ] = 255;
+			} else if ( disty >= -1 && disty <= 1 && distx == 0 ) {
+				row[ x * 4 + 0 ] = 255;
+				row[ x * 4 + 1 ] = 255;
+				row[ x * 4 + 2 ] = 255;
+				row[ x * 4 + 3 ] = 255;
+			} else if ( r_world->tilemap[ x ][ y ] & ( WALL_TILE | PUSHWALL_TILE ) || ! r_world->tileEverVisible[ x ][ y ] ) {
+				row[ x * 4 + 0 ] = 0;
+				row[ x * 4 + 1 ] = 0;
+				row[ x * 4 + 2 ] = 0;
+				row[ x * 4 + 3 ] = 0;
+			} else {
+				row[ x * 4 + 0 ] = 0;
+				row[ x * 4 + 1 ] = 0;
+				row[ x * 4 + 2 ] = 0;
+				row[ x * 4 + 3 ] = 255;
+			}
+		}
+		pfglTexSubImage2D(GL_TEXTURE_2D, 0, 0, 63 - y, 64, 1, GL_RGBA, GL_UNSIGNED_BYTE, row );
+	}
+#endif	
+}
+
+void iphoneDrawMapView() {
+#ifdef ALLOW_MAP_VIEW_HUD		
+	iphoneDrawHudControl( &huds.mapView );
+#endif
+}
 
 /*
 ==================
@@ -879,18 +1009,21 @@ iphoneFrame
 void iphoneFrame() {
 	unsigned char blendColor[4];
 	
-	int	msec = 14;	// fixed time
-
 	iphoneFrameNum++;
-	
+	loggedTimes[iphoneFrameNum&(MAX_LOGGED_TIMES-1)].enterFrame = Sys_Milliseconds();
+
 	// check for delayed intermission trigger after boss kill
 	if ( intermissionTriggerFrame > 0 && iphoneFrameNum >= intermissionTriggerFrame ) {
 		iphoneStartIntermission( 0 );
 	}
 	
+	iphoneUpdateMapView();
+	
 	// toggle / scroll down the console
 	Client_Screen_RunConsole();
 
+	// check for flipping the phone orientation
+	iphoneCheckForLandscapeReverse();
 	
 	// fixed frame timing, assume we go 30hz
 	tics = 2;		// wolf's global rate counter
@@ -903,7 +1036,7 @@ void iphoneFrame() {
 		Client_Screen_DrawConsole();	
 		
 		iphoneSavePrevTouches();
-		GLimp_EndFrame();
+		SysIPhoneSwapBuffers();
 		return;
 	}
 	if ( menuState != IPM_GAME ) {
@@ -912,7 +1045,7 @@ void iphoneFrame() {
 		iphoneDrawMenus();
 	
 		iphoneSavePrevTouches();
-		GLimp_EndFrame();
+		SysIPhoneSwapBuffers();
 		return;
 	}
 
@@ -932,18 +1065,55 @@ void iphoneFrame() {
 			ProcessGuards();
 		}
 		PushWall_Process();
-		Door_ProcessDoors_e( &r_world->Doors, tics, msec );
+		Door_ProcessDoors_e( &r_world->Doors, tics );
 		
 		levelstate.time += tics;
 	}
+	
+	// clear depth buffer
+	qglDepthMask( GL_TRUE );
+	pfglClear( GL_DEPTH_BUFFER_BIT );
 
 	// fill the floor and ceiling
+	pfglDisable( GL_BLEND );
+	pfglDisable( GL_DEPTH_TEST );
+	pfglMatrixMode( GL_MODELVIEW );
+    pfglLoadIdentity();
+	pfglMatrixMode( GL_PROJECTION );
+    pfglLoadIdentity();
+	iphoneRotateForLandscape();
+	pfglOrtho( 0, 480, 320, 0, -99999, 99999 );
 	R_Draw_Fill( 0, 0, viddef.width, viddef.height >> 1, r_world->ceilingColour );
 	R_Draw_Fill( 0, viddef.height >> 1, viddef.width, viddef.height, r_world->floorColour );
+	
+	// setup to draw the 3D world 
+	float cur_x_fov, cur_y_fov; // x & y field of view (in degrees)
+	float ratio; // viewport width/height
+	ratio = (float) viddef.width / (float)viddef.height; // FIXME: move somewhere
+	cur_x_fov = 75;
+	cur_y_fov = CalcFov( cur_x_fov, (float)viddef.width, (float)viddef.height );
+	
+	pfglMatrixMode( GL_PROJECTION );
+	pfglLoadIdentity();
+	iphoneRotateForLandscape();
+	MYgluPerspective( cur_y_fov - 2.0f, ratio, 0.2f, 64.0f );	// tweak fov in to avoid edge tile clips
+	pfglMatrixMode( GL_MODELVIEW );
+	pfglLoadIdentity();
+	
+	pfglRotatef( (float)(90 - FINE2DEG( Player.position.angle )), 0, 1, 0 );
+	pfglTranslatef( -Player.position.origin[ 0 ] / FLOATTILE, 0, Player.position.origin[ 1 ] / FLOATTILE );
 
-	// draw 3D world 
-	R_SetGL3D( Player.position );
+	pfglCullFace( GL_BACK );
+	
+	pfglEnable( GL_DEPTH_TEST );
+	pfglEnable( GL_CULL_FACE );
+	pfglDisable( GL_BLEND );
+	pfglDisable( GL_ALPHA_TEST );
+	
+	// find and draw all the walls
 	R_RayCast( Player.position, r_world );
+
+	// blend in the sprites
 	R_DrawSprites();
 
 	// draw 2D overlays
@@ -990,36 +1160,33 @@ void iphoneFrame() {
 	}
 	
 	iphoneDrawNotifyText();
-	
+
+	iphoneDrawMapView();
+
 	iphoneDrawFace();	
 
-	iphoneDrawControls();
-
-	iphoneDrawHUD();
+	iphoneDrawNumber( huds.ammo.x + huds.ammo.width / 2, huds.ammo.y, Player.ammo[AMMO_BULLETS], 48, 48 );
 	
-	// draw menu and map buttons
-	if ( controlScheme->value < 2 ) {
-		if ( iphoneActivatePicWhenTouched( 480-50, 0, 50, 50, "iphone/menu.tga" ) ) {
-			menuState = IPM_MAIN;
-		}
-		if ( iphoneActivatePicWhenTouched( 0, 0, 50, 50, "iphone/map.tga" ) ) {
-			iphoneOpenAutomap();
-		}
-	} else {
-		if ( iphoneActivatePicWhenTouched( 0, 50, 50, 50, "iphone/menu.tga" ) ) {
-			menuState = IPM_MAIN;
-		}
-		if ( iphoneActivatePicWhenTouched( 0, 0, 50, 50, "iphone/map.tga" ) ) {
-			iphoneOpenAutomap();
-		}
+	if ( hideControls->value != 1 ) {
+		iphoneDrawHudControl( &huds.forwardStick );
+		iphoneDrawHudControl( &huds.sideStick );
+		iphoneDrawHudControl( &huds.turnStick );
+		iphoneDrawHudControl( &huds.fire );
 	}
 	
+	if ( iphoneDrawHudButton( &huds.menu ) ) {
+		menuState = IPM_MAIN;
+	}
+	if ( iphoneDrawHudButton( &huds.map ) ) {
+		iphoneOpenAutomap();
+	}
+		
 	Client_Screen_DrawConsole();	
 
-	ShowTilt();
+	ShowTilt();		// debug tool
+	ShowTime();		// debug tool
 	
 	iphoneSavePrevTouches();
 	
-	// do the swapbuffers
-	GLimp_EndFrame();
+	SysIPhoneSwapBuffers();	// do the swapbuffers
 }

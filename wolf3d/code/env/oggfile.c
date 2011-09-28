@@ -139,7 +139,7 @@ PUBLIC _boolean LoadOggInfo( const char *filename, W8 **wav, soundInfo_t *info )
 
 	info->samples = size / ( info->channels * info->sample_size );
 
-	Com_Printf("Loaded %s: channels=%d, sample_rate=%d, sample_size=%d, samples=%d.  \n", newFilename, info->channels, info->sample_rate, info->sample_size, info->samples );
+//	Com_Printf("Loaded %s: channels=%d, sample_rate=%d, sample_size=%d, samples=%d.  \n", newFilename, info->channels, info->sample_rate, info->sample_size, info->samples );
 	free( newFilename );
 
 	*wav = (W8 *)Z_Malloc( size );

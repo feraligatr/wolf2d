@@ -105,36 +105,10 @@ PRIVATE void Sound_AllocChannels( void )
 	}
 }
 
-/*
------------------------------------------------------------------------------
- Function: Sound_FreeChannels -Free sound channels. 
- 
- Parameters: Nothing.
- 
- Returns: Nothing.
- 
- Notes: 
-
------------------------------------------------------------------------------
-*/
-PRIVATE void Sound_FreeChannels( void )
-{
-	channel_t	*ch;
-	int			i;
-
-	for( i = 0, ch = s_channels; i < s_numChannels; i++, ch++)
-	{
-		pfalDeleteSources( 1, &ch->sourceName );
-
-		memset( ch, 0, sizeof( *ch ) );
-	}
-
-	s_numChannels = 0;
-}
 
 /*
 -----------------------------------------------------------------------------
- Function: Sound_FreeChannels -Free sound channels. 
+ Function: Sound_ChannelState -Free sound channels. 
  
  Parameters: Nothing.
  
@@ -169,11 +143,14 @@ PRIVATE void Sound_StopChannel( channel_t *ch )
 {
 	ch->sfx = NULL;
 
+	// as of 2.2.1, OpenAL on the iphone doesn't seem to stop sounds properly.
+	// Only deleting the entire source seems to work.
+	
 	pfalSourceStop( ch->sourceName );
-	pfalSourcei( ch->sourceName, AL_BUFFER, 0 );
-#ifdef IPHONE 
-	// OpenAL on the iphone doesn't seem to stop sounds properly.
-	// Maybe regenning the source will work...
+//	pfalSourceStopv( 1, &ch->sourceName );
+//	pfalSourcei( ch->sourceName, AL_BUFFER, 0 );
+//	pfalSourceRewind( ch->sourceName );
+#if 1
 	pfalDeleteSources( 1, &ch->sourceName );
 	pfalGenSources( 1, &ch->sourceName );
 #endif
@@ -700,24 +677,6 @@ PRIVATE void Sound_StopSound_f( void )
 }
 
 
-/*
------------------------------------------------------------------------------
- Function: Sound_Restart_f -Console function to restart the sound module.
- 
- Parameters: Nothing.
- 
- Returns: Nothing.
- 
- Notes: 
-	Restart the sound subsystem so it can pick up new parameters and flush
-	all sounds.
------------------------------------------------------------------------------
-*/
-PRIVATE void Sound_Restart_f( void )
-{
-	Sound_Shutdown();
-	Sound_Init();
-}
 
 /////////////////////////////////////////////////////////////////////
 //	End of Console Commands
@@ -729,6 +688,7 @@ extern void Sound_SoundList_f( void );
 
 PRIVATE void Sound_Register( void )
 {
+	
 	s_initSound = Cvar_Get( "s_initSound", "1", CVAR_INIT );	
 	s_masterVolume	= Cvar_Get( "s_masterVolume", "1.0", CVAR_ARCHIVE );
 	s_sfxVolume		= Cvar_Get( "s_sfxVolume", "1.0", CVAR_ARCHIVE );
@@ -742,7 +702,6 @@ PRIVATE void Sound_Register( void )
 	Cmd_AddCommand( "play", Sound_Play_f );
 	Cmd_AddCommand( "stopsound", Sound_StopSound_f );
 	Cmd_AddCommand( "listSounds", Sound_SoundList_f );
-	Cmd_AddCommand( "snd_restart", Sound_Restart_f );
 }
 
 
@@ -769,23 +728,3 @@ PUBLIC void Sound_Init( void )
 	Com_Printf( "------------------------------------\n" );
 }
 
-
-PUBLIC void Sound_Shutdown( void )
-{
-	Cmd_RemoveCommand( "play" );
-	Cmd_RemoveCommand( "stopsound" );
-	Cmd_RemoveCommand( "listSounds" );
-	Cmd_RemoveCommand( "snd_restart" );
-
-	if( ! sound_initialized )
-	{
-		return;
-	}
-
-	Sound_FreeSounds();
-	Sound_FreeChannels();
-
-	Sound_Device_Shutdown();
-
-	sound_initialized = false;
-}

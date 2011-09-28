@@ -33,18 +33,6 @@
 
 #include "../wolfiphone.h"
 
-typedef struct powerup_s
-{
-	int x, y;
-	pow_t type;
-	int sprite;
-	struct powerup_s *prev, *next;
-
-} powerup_t;
-
-powerup_t *powerups = NULL;
-
-
 int Pow_Texture[ pow_last ] =
 {
 	SPR_STAT_34,	// pow_gibs
@@ -88,26 +76,10 @@ int Pow_Texture[ pow_last ] =
 
 -----------------------------------------------------------------------------
 */
-PRIVATE powerup_t *Pow_Remove( powerup_t *powerup )
+PRIVATE void Pow_Remove( powerup_t *powerup )
 {
-	powerup_t *next;
-
-	if( powerup == NULL ) 
-		return NULL;
-
-	if( powerup->prev ) 
-		powerup->prev->next = powerup->next;
-
-	if( powerup->next ) 
-		powerup->next->prev = powerup->prev;
-
-	next = powerup->next;
-	if( powerups == powerup ) 
-		powerups = next; //fuck!
-
-	MM_FREE( powerup );
-
-	return next;
+	powerup->x = -1;
+	powerup->y = -1;
 }
 
 /*
@@ -124,20 +96,17 @@ PRIVATE powerup_t *Pow_Remove( powerup_t *powerup )
 */
 PRIVATE powerup_t *Pow_AddNew( void )
 {
-	powerup_t *newp;
-	
-	newp = MM_MALLOC( sizeof( powerup_t ) );
-	newp->prev = NULL;
-	newp->next = powerups;
-
-	if( powerups )
-	{
-		powerups->prev = newp;
+	for ( int i = 0 ; i < levelData.numPowerups ; i++ ) {
+		if ( levelData.powerups[i].x == -1 ) {
+			return &levelData.powerups[i];
+		}
 	}
-
-	powerups = newp;
-
-	return newp;
+	
+	if ( levelData.numPowerups == MAX_POWERUPS ) {
+		return &levelData.powerups[0];
+	}
+	levelData.numPowerups++;
+	return &levelData.powerups[levelData.numPowerups-1];
 }
 
 /*
@@ -154,14 +123,7 @@ PRIVATE powerup_t *Pow_AddNew( void )
 */
 PUBLIC void Powerup_Reset( void )
 {
-	powerup_t *powerup = powerups;
-
-	while( powerup )
-	{
-		powerup = Pow_Remove( powerup );
-	}
-	
-	powerups = NULL;
+	levelData.numPowerups = 0;
 }
 
 /*
@@ -314,14 +276,15 @@ PRIVATE int Pow_Give( pow_t type )
 // Artifacts
 //
 		case pow_fullheal:
-			PL_GiveHealth( &Player, 999, 0 );
+			// go to 150 health
+			PL_GiveHealth( &Player, 150, 150 );
 			PL_GiveAmmo( &Player, AMMO_BULLETS, 25 );
-			PL_GiveLife( &Player );
 			if ( ++levelstate.found_treasure == levelstate.total_treasure ) {
 				iphoneSetNotifyText( "You found the last treasure!" );
 			} else {
 				iphoneSetNotifyText( "Full Heal" );
 			}
+			Sound_StartSound( NULL, 0, CHAN_ITEM, Sound_RegisterSound( "lsfx/034.wav" ), 1, ATTN_NORM, 0 );
 			// no extra lives on iPhone			Com_Printf( "Extra life!\n" );
 			break;
 
@@ -361,17 +324,17 @@ PRIVATE int Pow_Give( pow_t type )
 
 -----------------------------------------------------------------------------
 */
-PUBLIC void Powerup_Spawn( int x, int y, int type, LevelData_t *lvl )
+PUBLIC void Powerup_Spawn( int x, int y, int type )
 {
 	powerup_t *newp;
 
-	lvl->tilemap[ x ][ y ] |= POWERUP_TILE;
+	levelData.tilemap[ x ][ y ] |= POWERUP_TILE;
 	newp = Pow_AddNew();
 	newp->sprite = Sprite_GetNewSprite();
 	Sprite_SetPos( newp->sprite, TILE2POS( newp->x = x ), TILE2POS( newp->y = y ), 0 );
 	newp->type = type;
 	Sprite_SetTex( newp->sprite, -1, Pow_Texture[ type ] );
-	lvl->tilemap[ x ][ y ] |= POWERUP_TILE;
+	levelData.tilemap[ x ][ y ] |= POWERUP_TILE;
 // good place to update total treasure count!
 }
 
@@ -390,23 +353,18 @@ PUBLIC void Powerup_Spawn( int x, int y, int type, LevelData_t *lvl )
 */
 PUBLIC void Powerup_PickUp( int x, int y )
 {
+	int		i;
 	powerup_t *pow;
 	_boolean p_left = false, p_pick = false;
 
-	for( pow = powerups ; pow ; pow = pow->next )
-	{
-check_again:
+	for ( i = 0, pow = levelData.powerups ; i < levelData.numPowerups ; i++, pow++ ) {
 		if( pow->x == x && pow->y == y)
 		{// got a powerup here
 			if( Pow_Give( pow->type ) ) //FIXME script
 			{// picked up this stuff, remove it!
 				p_pick = true;
 				Sprite_RemoveSprite( pow->sprite );
-				pow = Pow_Remove( pow );
-				if( pow )
-					goto check_again;
-				else
-					break;
+				Pow_Remove( pow );
 			}
 			else
 			{// player do not need it, so may be next time!
@@ -417,11 +375,11 @@ check_again:
 
 	if( p_left )
 	{
-		r_world->tilemap[ x ][ y ] |= POWERUP_TILE;
+		levelData.tilemap[ x ][ y ] |= POWERUP_TILE;
 	}
 	else
 	{
-		r_world->tilemap[ x ][ y ] &= ~POWERUP_TILE;
+		levelData.tilemap[ x ][ y ] &= ~POWERUP_TILE;
 	}
 }
 

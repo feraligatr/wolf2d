@@ -102,7 +102,6 @@ typedef struct
 // extern void		Sound_SoundList_f( void );
 extern _boolean	Sound_LoadSound( sfx_t *sfx );
 extern sfx_t	*Sound_FindSound( const char *name );
-extern void Sound_FreeSounds( void );
 
 extern _boolean Sound_Device_Setup( void );
 extern void Sound_Device_Shutdown( void );

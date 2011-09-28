@@ -490,29 +490,74 @@ PUBLIC texture_t *TM_FindTexture( const char *name, texturetype_t type )
 		return r_notexture;
 	}
 
+//	Com_Printf( "Loading texture: %s\n", name );
+	
 	// look for the pre-digested 5551 version
 	strcpy( digested, name );
 	strcpy( digested + len - 4, ".5551" );
 	fh = FS_OpenFile( digested, 0 );
 	if ( fh ) {
+		typedef struct {
+			int		internalFormat;
+			int		externalFormat;
+			int		bpp;
+		} formatInfo_t;
+		
+		static formatInfo_t formatInfo[7] = {
+// the wall exporter always saved as 5551 even when there was no alpha
+			{ GL_RGBA, GL_UNSIGNED_SHORT_5_5_5_1, 16 },
+			{ GL_RGBA, GL_UNSIGNED_SHORT_5_5_5_1, 16 },
+			{ GL_RGBA, GL_UNSIGNED_SHORT_4_4_4_4, 16 },
+			{ GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG, GL_UNSIGNED_BYTE, 4 },
+			{ GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG, GL_UNSIGNED_BYTE, 4 },
+			{ GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG, GL_UNSIGNED_BYTE, 2 },
+			{ GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG, GL_UNSIGNED_BYTE, 2 },
+		};
+		
+		
 		picHeader_t *ph = (picHeader_t *)fh->filedata;
+		
+		int noMips = 0;
+		formatInfo_t *fi;
+		if ( ph->picFormat & PF_NO_MIPS ) {
+			noMips = 1;
+			fi = &formatInfo[ph->picFormat&~PF_NO_MIPS];
+		} else {
+			fi = &formatInfo[ph->picFormat];
+		}
 		int	w = ph->uploadWidth;
 		int h = ph->uploadHeight;
 		int	l = 0;
 		texture_t *tx = TM_AllocateTexture( name );
-		tx->width = w;
-		tx->height = h;
+		tx->width = ph->srcWidth;
+		tx->height = ph->srcHeight;
 		tx->upload_width = w;
 		tx->upload_height = h;
 		tx->header = *ph;
-		unsigned short *s = (unsigned short *)(ph+1);
+		tx->maxS = (float)ph->srcWidth / ph->uploadWidth;
+		tx->maxT = (float)ph->srcHeight / ph->uploadHeight;
+		unsigned char *s = (unsigned char *)(ph+1);
 		while( 1 ) {
-		   pfglTexImage2D( GL_TEXTURE_2D, l, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_SHORT_5_5_5_1, s );
+			int	size = (w*h*fi->bpp)/8;
+			if ( fi->bpp < 16 ) {
+				if ( size < 32 ) {
+					// minimum PVRTC size
+					size = 32;
+				}
+				qglCompressedTexImage2D( GL_TEXTURE_2D, l, fi->internalFormat, w, h, 0, 
+							   size, s );
+			} else {
+				qglTexImage2D( GL_TEXTURE_2D, l, fi->internalFormat, w, h, 0, 
+							   fi->internalFormat, fi->externalFormat, s );
+			}
 		   if ( w == 1 && h == 1 ) {
 			   break;
 		   }
+			if ( noMips ) {
+				break;
+			}
 		   l++;
-		   s += w*h;
+		   s += size;
 		   w >>= 1;
 		   if ( w == 0 ) {
 			   w = 1;
@@ -523,24 +568,30 @@ PUBLIC texture_t *TM_FindTexture( const char *name, texturetype_t type )
 		   }
 		}
 		FS_CloseFile( fh );
-		pfglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-		pfglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
-		pfglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+		if ( noMips ) {
+			pfglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+		} else {
+			pfglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+		}
 		pfglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 		
 		if ( type == TT_Wall ) {
 			pfglTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 2.0f );
+			pfglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
 		} else {
 			pfglTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 0 );
+			pfglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
 		}
+		pfglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
 		return tx;
 	}
-	
+
 	// load a normal TGA
 	LoadTGA( name, &data, &width, &height, &bytes );
 	if ( data ) {
 		tex = TM_LoadTexture( name, data, width, height, type, bytes );
 		MM_FREE( data );
+		tex->maxS = tex->maxT = 1.0f;
 		return tex;
 	}
 	
@@ -548,7 +599,6 @@ PUBLIC texture_t *TM_FindTexture( const char *name, texturetype_t type )
 	{
 		int jpgSize = 0;
 		W8 *jpgData;
-		void iPhoneLoadJPG( W8* jpegData, int jpegBytes, W8 **pic, W16 *width, W16 *height, W16 *bytes );
 		// try jpeg if no tga exists
 		strcpy( digested, name );
 		strcpy( digested + len - 4, ".jpg" );
@@ -560,7 +610,7 @@ PUBLIC texture_t *TM_FindTexture( const char *name, texturetype_t type )
 		jpgSize = FS_GetFileSize( fh );
 		jpgData = fh->ptrStart;
 		
-		iPhoneLoadJPG( jpgData, jpgSize, &data, &width, &height, &bytes );
+		SysIPhoneLoadJPG( jpgData, jpgSize, &data, &width, &height, &bytes );
 		FS_CloseFile( fh );
 
 		if ( ! data ) {
@@ -569,6 +619,7 @@ PUBLIC texture_t *TM_FindTexture( const char *name, texturetype_t type )
 		}
 		tex = TM_LoadTexture( name, data, width, height, type, bytes );
 		MM_FREE( data );
+		tex->maxS = tex->maxT = 1.0f;
 		return tex;
 	}
 

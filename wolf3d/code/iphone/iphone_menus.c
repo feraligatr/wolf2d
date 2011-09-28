@@ -29,12 +29,46 @@ colour4_t colorPressed = { 128, 128, 0, 255 };
 
 /*
  ==================
+ iphoneDrawPicNum
+ 
+ ==================
+ */
+void iphoneDrawPicNum( int x, int y, int w, int h, int glTexNum ) {
+	R_Bind( glTexNum );
+	pfglBegin( GL_QUADS );
+
+	pfglTexCoord2f( 0.0f, 0.0f );	pfglVertex2i( x, y );
+	pfglTexCoord2f( 1.0f, 0.0f );	pfglVertex2i( x+w, y );
+	pfglTexCoord2f( 1.0f, 1.0f );	pfglVertex2i( x+w, y+h );
+	pfglTexCoord2f( 0.0f, 1.0f );	pfglVertex2i( x, y+h );
+
+	pfglEnd();
+}
+
+/*
+ ==================
  iphoneDrawPic
  
  ==================
  */
 void iphoneDrawPic( int x, int y, int w, int h, const char *pic ) {
-	R_Draw_StretchPic( x, y, w, h, pic );
+	texture_t *gl;
+	
+	gl = TM_FindTexture( pic, TT_Pic );
+	if( ! gl ) {
+		Com_Printf( "Can't find pic: %s\n", pic );
+		return;
+	}
+
+	R_Bind( gl->texnum );
+	pfglBegin( GL_QUADS );
+	
+	pfglTexCoord2f( 0.0f, 0.0f );	pfglVertex2i( x, y );
+	pfglTexCoord2f( gl->maxS, 0.0f );	pfglVertex2i( x+w, y );
+	pfglTexCoord2f( gl->maxS, gl->maxT );	pfglVertex2i( x+w, y+h );
+	pfglTexCoord2f( 0.0f, gl->maxT );	pfglVertex2i( x, y+h );
+	
+	pfglEnd();
 }
 
 /*
@@ -51,7 +85,7 @@ int iphoneDrawPicWithTouch( int x, int y, int w, int h, const char *pic ) {
 		// it wasn't active previously
 		pfglColor3f( 1, 1, 1 );
 	}
-	R_Draw_StretchPic( x, y, w, h, pic );
+	iphoneDrawPic( x, y, w, h, pic );
 	if ( TouchDown( x, y, w, h ) ) {
 		colour4_t color = { 255, 255, 255, 64 };
 		R_Draw_Blend( x, y, w, h, color );
@@ -72,8 +106,6 @@ void iphoneSlider( int x, int y, int w, int h, const char *title, cvar_t *cvar,
 	float value = cvar->value;
 	char	str[80];
 	float	f = ( value - min ) / ( max - min );
-	colour4_t backColor = { 32, 32, 80, 255 };
-	colour4_t highlightColor = { 64, 64, 160, 255 };
 	
 	if ( f < 0 ) {
 		f = 0;
@@ -83,10 +115,22 @@ void iphoneSlider( int x, int y, int w, int h, const char *title, cvar_t *cvar,
 	}
 	
 	// draw the background
-	R_Draw_Fill( x, y, w, h, backColor );
+	iphoneDrawPic( x, y, w, h, "iphone/stat_bar_2.tga" );
 	
 	// draw the current range
-	R_Draw_Fill( x+2, y+2, f*(w-4), h-4, highlightColor );
+	texture_t *gl;
+	
+	gl = TM_FindTexture( "iphone/stat_bar_1.tga", TT_Pic );
+	assert( gl );
+	R_Bind( gl->texnum );
+	pfglBegin( GL_QUADS );
+	
+	pfglTexCoord2f( 0.0f, 0.0f );	pfglVertex2i( x, y );
+	pfglTexCoord2f( f, 0.0f );	pfglVertex2i( x+w*f, y );
+	pfglTexCoord2f( f, 1.0f );	pfglVertex2i( x+w*f, y+h );
+	pfglTexCoord2f( 0.0f, 1.0f );	pfglVertex2i( x, y+h );
+	
+	pfglEnd();
 	
 	// draw the title and fraction
 	sprintf( str, "%s : %i%%", title, (int)(f*100) );
@@ -136,7 +180,7 @@ int BackButton() {
 void GetMoreLevels( int x, int y ) {
 	if ( iphoneDrawPicWithTouch( x, y, 128, 64, "iphone/button_levels.tga" ) ) {
 		// directly to the app store for more levels
-		OpenURL( "http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=304694876" );
+		SysIPhoneOpenURL( "http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=309470478" );
 	}
 }
 
@@ -177,7 +221,10 @@ void SaveTheGame() {
 	
 	currentMap.version = SAVEGAME_VERSION;
 	fwrite( &currentMap, 1,sizeof(currentMap), f );
-	fwrite( r_world, 1,sizeof(*r_world), f );
+	
+	fwrite( &huds, 1,sizeof(huds), f);
+		
+	fwrite( &levelData, 1,sizeof(levelData), f );
 	fwrite( &LevelRatios, 1,sizeof(LevelRatios), f );
 	fwrite( &levelstate, 1,sizeof(levelstate), f );
 	fwrite( Guards, 1,sizeof(Guards), f );
@@ -218,6 +265,9 @@ int LoadTheGame() {
 		return 0;
 	}
 	
+	// load the huds
+	fread( &huds, 1,sizeof(huds), f);
+	
 	// do a normal map start
 	Cvar_SetValue( skill->name, currentMap.skill );
 	PL_NewGame( &Player );
@@ -227,8 +277,7 @@ int LoadTheGame() {
 	currentMap.levelCompleted = oldCompleted;
 	
 	// load modifiactions on top
-	r_world = Z_Malloc( sizeof( *r_world ) );
-	fread( r_world, 1,sizeof(*r_world), f);
+	fread( &levelData, 1,sizeof(levelData), f);
 	fread( &LevelRatios, 1,sizeof(LRstruct), f );
 	fread( &levelstate, 1,sizeof(levelstate), f );
 	fread( Guards, 1,sizeof(Guards), f );
@@ -305,15 +354,19 @@ void iphoneMainMenu() {
 	float	scale = 40 / 32.0;
 	
 	iphoneDrawPic( 480-256, 0, 256, 128, "iphone/wolf_logo.tga" );
-#ifdef EPISODE1
+#ifdef LITE
 	iphoneDrawPic( -20, 0, 256, 64, "iphone/ep_1.tga" );
 	GetMoreLevels( 0, 96 );
 #else
 	iphoneDrawPic( -20, 0, 256, 64, "iphone/ep_1_6.tga" );
 #endif
-	iphoneDrawPic( 0, 320 - 128, 128, 128, "iphone/id_logo.tga" );
+
+	// we don't need the logo here now that we have a splash screen
+	// iphoneDrawPic( 0, 320 - 128, 128, 128, "iphone/id_logo.tga" );
 	
 	if ( iphoneDrawPicWithTouch( 300 - 64*scale, 80, 128*scale, 64*scale, "iphone/button_resume.tga" ) ) {
+		iphonePreloadBeforePlay();
+		
 		// if the game was saved at the intermission screen, immediately
 		// bring it back up when it is loaded
 		if ( currentMap.levelCompleted ) {
@@ -332,9 +385,27 @@ void iphoneMainMenu() {
 		menuState = IPM_SKILL;
 	}
 	if ( iphoneDrawPicWithTouch( 300 - 64*scale, 270, 128*scale, 32*scale, "iphone/button_web.tga" ) ) {
-		OpenURL( "http://www.idsoftware.com/wolfenstein3dclassic/" );
+		SysIPhoneOpenURL( "http://www.idsoftware.com/wolfenstein3dclassic/" );
+	}
+
+	if ( SysIPhoneOtherAudioIsPlaying() ) {
+		iphoneDrawPic( 480 - 64, 220, 64, 64, "iphone/music_off.tga" );
+	} else {
+		if ( music->value ) {
+			if ( iphoneDrawPicWithTouch( 480 - 64, 220, 64, 64, "iphone/music_on.tga" ) ) {
+				Cvar_SetValue( music->name, 0 );
+				Sound_StopBGTrack();
+			}
+		} else {
+			if ( iphoneDrawPicWithTouch( 480 - 64, 220, 64, 64, "iphone/music_off.tga" ) ) {
+				Cvar_SetValue( music->name, 1 );
+				Sound_StartBGTrack( levelData.musicName, levelData.musicName );
+			}
+		}
 	}
 	
+	sprintf( str, "v%3.1f", WOLF_IPHONE_VERSION );
+	iphoneCenterText( 460, 300, str );	
 }
 
 
@@ -351,6 +422,12 @@ void iphoneControlMenu() {
 		menuState = IPM_MAIN;
 	}
 	
+	if ( iphoneDrawPicWithTouch( 480-128, 0, 128, 32, "iphone/advanced_button.tga" ) ) {
+		Cvar_SetValue( controlScheme->name, -1 );
+		iphonePreloadBeforePlay();	// make sure all the hud textures are loaded	
+		menuState = IPM_HUDEDIT;
+	}
+	
 	for ( i = 0 ; i < 4 ; i++ ) {
 		char	str[128];
 		int remap[4] = { 3,4,1,2};	// artist named them differently than intended...
@@ -358,8 +435,9 @@ void iphoneControlMenu() {
 		if ( i != controlScheme->value ) {
 			pfglColor3f( 0.5, 0.5, 0.5 );
 		}
-		if ( iphoneDrawPicWithTouch( 120 * i, 40, 120, 120, str ) ) {
+		if ( iphoneDrawPicWithTouch( 5 + 120 * i, 40, 110, 110, str ) ) {
 			Cvar_SetValue( controlScheme->name, i );
+			HudSetForScheme( i );
 		}
 		pfglColor3f( 1, 1, 1 );
 	}
@@ -426,7 +504,7 @@ void iphoneSkillMenu() {
 void iphoneEpisodeMenu() {
 	int		e;
 	char	str[64];
-#ifdef EPISODE1
+#ifdef LITE
 	int		numE = 1;
 #else
 	int		numE = 6;
@@ -450,7 +528,7 @@ void iphoneEpisodeMenu() {
 		pfglColor3f( 1, 1, 1 );
 	}
 
-#ifdef EPISODE1
+#ifdef LITE
 	// buy more episodes button
 	GetMoreLevels( 240 - 64, 200 );	
 #endif	
@@ -463,6 +541,11 @@ void iphoneEpisodeMenu() {
  ==================
  */
 void iphoneMapMenu() {
+#ifdef LITE	
+# define NUM_MAPS 3
+#else
+# define NUM_MAPS 10
+#endif
 	int		e, m, s;
 	char	str[64];
 	
@@ -489,12 +572,12 @@ void iphoneMapMenu() {
 	// draw the episode selection
 	my_snprintf( str, sizeof( str ), "iphone/button_ep%i.tga", e+1 );
 	iphoneDrawPicWithTouch( 96, 0, 384, 48, str );
-	
+		
 	// draw the individual maps
-	for ( m = 0 ; m < 10 ; m++ ) {
+	for ( m = 0 ; m < NUM_MAPS; m++ ) {
 		int		x;
 		int		y;
-		colour4_t colorSecret = { 32, 32, 32, 255 };
+		colour4_t colorSecret = { 64, 0, 0, 255 };
 		colour4_t colorNoTry = { 0, 0, 0, 255 };
 		colour4_t colorTried = { 80, 80, 0, 255 };
 		colour4_t colorCompleted = { 0, 80, 0, 255 };
@@ -524,7 +607,7 @@ void iphoneMapMenu() {
 		// bit5 = 100% treasure
 		if ( m == 9  && !( ch & MF_TRIED ) ) {
 			color = colorSecret;
-		} if ( ch & MF_COMPLETED ) {
+		} else if ( ch & MF_COMPLETED ) {
 			color = colorCompleted;
 		} else if ( ch & MF_TRIED ) {
 			color = colorTried;
@@ -533,7 +616,7 @@ void iphoneMapMenu() {
 		}
 		
 		// blink the level you are currently on
-		if ( ( iphoneFrameNum & 8 ) && levelNum == currentMap.map && e == currentMap.episode ) {
+		if ( ( iphoneFrameNum & 8 ) && m == currentMap.map && e == currentMap.episode ) {
 			color = colorNoTry;
 		}
 		
@@ -566,6 +649,7 @@ void iphoneMapMenu() {
 		if ( TouchReleased( x - 46, y - 9, 88, 32 ) ) {
 			PL_NewGame( &Player );
 			iphoneStartMap( e, m, s );
+			iphonePreloadBeforePlay();			
 		}
 	}
 }
@@ -589,7 +673,7 @@ void iphoneStartIntermission( int framesFromNow ) {
 	currentMap.mapFlags[currentMap.skill][mapNum] |= MF_COMPLETED;
 
 	// mark the awards
-	if ( levelstate.time / 70.0f < levelstate.fpartime * 60 ) {	// fpartime is in minutes, time is in tics
+	if ( levelstate.time / 60.0f <= levelstate.fpartime * 60 ) {	// fpartime is in minutes, time is in tics
 		currentMap.mapFlags[currentMap.skill][mapNum] |= MF_TIME;
 	}	
 	if( levelstate.killed_monsters == levelstate.total_monsters ) {
@@ -671,15 +755,15 @@ void DrawRatio( int y, int got, int total, const char *bonusPic ) {
 
 /*
  ==================
- iphoneIntermission
+ DrawIntermissionStats
  
+ Used for both the intermission and the stats view
  ==================
  */
-void iphoneIntermission() {
-	int		nextLevel = 0;
+void DrawIntermissionStats() {
 	char	str[128];
 	
-	iphoneDrawPic( 0, 0, 480, 320, "iphone/intermission.tga" );
+	iphoneDrawPic( 0, 0, 480, 320, "iphone/intermission_256.tga" );
 
 	// episode
 	my_snprintf( str, sizeof( str ), "iphone/button_ep%i.tga", currentMap.episode+1 );
@@ -690,8 +774,8 @@ void iphoneIntermission() {
 
 	// par / time
 	DrawTime( 51, 63, levelstate.fpartime * 60 );	// fpartime is in minutes
-	DrawTime( 285, 63, levelstate.time / 70 );	// levelstate.time is in tics
-	if ( levelstate.time/70 <= levelstate.fpartime * 60 ) {
+	DrawTime( 285, 63, levelstate.time / 60 );	// levelstate.time is in tics
+	if ( levelstate.time/60 <= levelstate.fpartime * 60 ) {
 		iphoneDrawPic( 480 - 40, 63, 32, 32, "iphone/partime.tga" );
 	}
 	
@@ -699,6 +783,18 @@ void iphoneIntermission() {
 	DrawRatio( 124, levelstate.killed_monsters, levelstate.total_monsters, "iphone/kills.tga" );
 	DrawRatio( 189, levelstate.found_secrets, levelstate.total_secrets, "iphone/secrets.tga" );
 	DrawRatio( 255, levelstate.found_treasure, levelstate.total_treasure, "iphone/treasure.tga" );
+}
+
+/*
+ ==================
+ iphoneIntermission
+ 
+ ==================
+ */
+void iphoneIntermission() {
+	int		nextLevel = 0;
+	
+	DrawIntermissionStats();
 
 	// require all touches off before the intermission can exit
 	if ( numTouches == 0 && hasReleased == 0 ) {
@@ -726,6 +822,16 @@ void iphoneIntermission() {
 	{
 		int		currentLevel = currentMap.episode * 10 + currentMap.map;
 		
+#ifdef LITE
+		switch ( currentLevel ) {
+			case 2:
+				// go back to the episode select screen
+				menuState = IPM_VICTORY;
+				Sound_StartBGTrack( "music/URAHERO.ogg", "music/URAHERO.ogg" );
+				return;
+			default: nextLevel = currentLevel + 1; break;
+		}		
+#else		
 		if( Player.playstate == ex_secretlevel ) {
 			switch( currentLevel ) {
 				case 0: nextLevel = 9; break;
@@ -756,6 +862,7 @@ void iphoneIntermission() {
 				default: nextLevel = currentLevel + 1; break;
 			}
 		}
+#endif
 	}
 	
 	iphoneStartMap( (nextLevel/10), (nextLevel%10), skill->value );
@@ -768,7 +875,7 @@ void iphoneIntermission() {
  ==================
  */
 void iphoneVictory() {
-	iphoneDrawPic( 0, 0, 480, 320, "iphone/victory.tga" );
+	iphoneDrawPic( 0, 0, 480, 320, "iphone/victory_256.tga" );
 	if ( !TouchReleased( 0, 0, 480, 320 ) ) {
 		return;
 	}
@@ -782,8 +889,6 @@ void iphoneVictory() {
  ==================
  */
 float	mapOrigin[2];
-float	mapCenterY;
-float	mapScale;
 
 typedef struct {
 	W8	x, y;
@@ -808,7 +913,6 @@ void iphoneOpenAutomap() {
 	
 	mapOrigin[0] = Player.position.origin[0] / (float)TILEGLOBAL;
 	mapOrigin[1] = Player.position.origin[1] / (float)TILEGLOBAL;
-	mapScale = 10;
 	menuState = IPM_AUTOMAP;
 
 	// identify all the tiles to fill in
@@ -853,10 +957,7 @@ void iphoneOpenAutomap() {
 					mt->y = y;
 					mt->texnum = tex;
 					if ( !wallTextures[mt->texnum] ) {
-						char	name[1024];
-						my_snprintf( name, sizeof( name ), "walls/%.3d.tga", mt->texnum );
-						wallTextures[mt->texnum] = TM_FindTexture( name, TT_Wall );
-						assert( wallTextures[mt->texnum] ); 
+						LoadWallTexture(mt->texnum);
 					}
 					mt++;
 					continue;
@@ -869,12 +970,7 @@ void iphoneOpenAutomap() {
 				mt->x = x;
 				mt->y = y;
 				mt->texnum = r_world->Doors.DoorMap[ x ][ y ].texture;
-				if ( !wallTextures[ mt->texnum] ) {
-					char	name[1024];
-					my_snprintf( name, sizeof( name ), "walls/%.3d.tga", mt->texnum );
-					wallTextures[mt->texnum] = TM_FindTexture( name, TT_Wall );
-					assert( wallTextures[mt->texnum] ); 
-				}
+				LoadWallTexture(mt->texnum);
 				mt++;
 				continue;
 			}
@@ -887,7 +983,7 @@ void iphoneOpenAutomap() {
 	}
 
 	// add solid sprite objects	
-	for( n = 0, sprt = Spr_Sprites; n < n_of_sprt; ++n, ++sprt ) {
+	for( n = 0, sprt = levelData.sprites; n < levelData.numSprites; ++n, ++sprt ) {
 		if( sprt->flags & SPRT_REMOVE ) {
 			continue;
 		}
@@ -935,14 +1031,20 @@ void iphoneAutomap() {
 	float	px, py;
 	float	angle, c, s;
 	int		texnum;
+	float	scale;
 	
 	// do touch ops before drawing for minimum latency
+	
+	scale = mapScale->value;
+	if ( scale < 4 ) {	// ensure we don't div by 0 from a console cvar change
+		scale = 4;
+	}
 	
 	// drag for scrolling
 	if ( numTouches == 1 ) {
 		if ( numPrevTouches == 1 ) {
-			mapOrigin[0] -= ( touches[0][0] - prevTouches[0][0] ) / mapScale;
-			mapOrigin[1] += ( touches[0][1] - prevTouches[0][1] ) / mapScale;
+			mapOrigin[0] -= ( touches[0][0] - prevTouches[0][0] ) / scale;
+			mapOrigin[1] += ( touches[0][1] - prevTouches[0][1] ) / scale;
 		}
 	}
 	
@@ -958,26 +1060,27 @@ void iphoneAutomap() {
 			if ( prevDist == 0 ) {
 				prevDist = curDist;
 			}
-			mapScale *= curDist / prevDist;
-			if ( mapScale < 4 ) {
-				mapScale = 4;
+			scale *= curDist / prevDist;
+			if ( scale < 4 ) {
+				scale = 4;
 			}
-			if ( mapScale > 64 ) {
-				mapScale = 64;
+			if ( scale > 64 ) {
+				scale = 64;
 			}
+			Cvar_SetValue( mapScale->name, scale );
 		}
 		
 	}
 	
-	// todo -- double tap for center on player
+	// todo -- double tap for center on player?
 	
 	
 	// set up matrix for drawing in tile units
 	pfglMatrixMode( GL_PROJECTION );
     pfglLoadIdentity();
-	pfglRotatef( 90, 0, 0, 1 );
-	pfglOrtho( mapOrigin[0]-240.0 / mapScale, mapOrigin[0]+240.0 / mapScale,
-			  mapOrigin[1]-160.0 / mapScale, mapOrigin[1]+160.0 / mapScale, -99999, 99999 );
+	iphoneRotateForLandscape();
+	pfglOrtho( mapOrigin[0]-240.0 / scale, mapOrigin[0]+240.0 / scale,
+			  mapOrigin[1]-160.0 / scale, mapOrigin[1]+160.0 / scale, -99999, 99999 );
 
 	mt = mapTiles;
 	texnum = 99999;
@@ -1036,11 +1139,35 @@ void iphoneAutomap() {
 	// back button for returning to game
 	pfglMatrixMode( GL_PROJECTION );
     pfglLoadIdentity();
-	pfglRotatef( 90, 0, 0, 1 );
+	iphoneRotateForLandscape();
 	pfglOrtho( 0, 480, 320, 0, -99999, 99999 );
 	if ( BackButton() ) {
 		menuState = IPM_GAME;
 	}
+	
+	// stats button for stats display
+	if ( iphoneDrawPicWithTouch( 480-64, 0, 64, 32, "iphone/stats.tga" ) ) {
+		menuState = IPM_STATS;
+	}
+}
+
+void iphoneStats() {
+	DrawIntermissionStats();
+	
+	// require all touches off before the intermission can exit
+	if ( numTouches == 0 && hasReleased == 0 ) {
+		hasReleased = 1;
+		return;			// don't let the TouchReleased immediately fire
+	}
+	if ( !hasReleased ) {
+		return;
+	}
+	
+	if ( !TouchReleased( 0, 0, 480, 320 ) ) {
+		return;
+	}
+	
+	menuState = IPM_AUTOMAP;
 }
 
 void iphoneDrawMenus() {
@@ -1055,6 +1182,8 @@ void iphoneDrawMenus() {
 		case IPM_INTERMISSION: iphoneIntermission(); break;
 		case IPM_VICTORY: iphoneVictory(); break;
 		case IPM_AUTOMAP: iphoneAutomap(); break;
+		case IPM_STATS: iphoneStats(); break;
+		case IPM_HUDEDIT: HudEditFrame(); break;
 	}
 }
 
