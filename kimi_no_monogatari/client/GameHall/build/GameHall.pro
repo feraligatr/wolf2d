@@ -7,6 +7,9 @@ QT += opengl
 
 INCLUDEPATH += $${ROOT_DIR}/include
 INCLUDEPATH += F:/3d/ogre_src_v1-7-3/OgreMain/include
+INCLUDEPATH += F:/3d/ogre_v1-7-3-build/include
+
+PRECOMPILED_HEADER = ../include/pch.h
 
 HEADERS += $${ROOT_DIR}/include/GameHallWindow.h
 HEADERS += $${ROOT_DIR}/include/GameHallApplication.h
