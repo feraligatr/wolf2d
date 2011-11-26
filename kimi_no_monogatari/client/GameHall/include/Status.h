@@ -29,7 +29,7 @@ public:
 #define RETURN_IF_ERROR(x) \
 	{ \
 		GSTATUS ret = (x); \
-		if (GStatus::isError(ret)) return x; \
+		if (GStatus::isError(ret)) return ret; \
 	}
 
 #endif

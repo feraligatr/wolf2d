@@ -41,11 +41,13 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="..\include;..\..\client\GameHall\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				UsePrecompiledHeader="0"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="server_pch.h"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -171,8 +173,24 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\Server.cpp"
+				RelativePath="..\src\main.cpp"
 				>
+			</File>
+			<File
+				RelativePath="..\src\MainService.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\pch.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
@@ -180,6 +198,14 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath="..\include\MainService.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\server_pch.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
