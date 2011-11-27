@@ -2,6 +2,8 @@
 
 #include "MainService.h"
 
+#define DEFAULT_UPDATE_INTERVAL 100
+
 MainService::MainService()
 : m_acceptor(m_io_service)
 {
@@ -14,6 +16,7 @@ MainService::~MainService()
 
 GSTATUS MainService::init()
 {
+	m_update_interval = DEFAULT_UPDATE_INTERVAL;
 	boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::tcp::v4(), 92);
 	m_acceptor.open(endpoint.protocol());
 	m_acceptor.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
@@ -26,26 +29,17 @@ GSTATUS MainService::run()
 {
 	while (TRUE)
 	{
-		time_ms_t last_time = getCurrentTime();
+		pi::time_ms_t last_time = pi::getCurrentTime();
 		m_io_service.poll();
-		time_ms_t elapsed = getCurrentTime() - last_time;
+		pi::time_ms_t elapsed = pi::getCurrentTime() - last_time;
 		if (elapsed < m_update_interval)
 		{
-			rest(m_update_interval - elapsed);
+			pi::thread_sleep(m_update_interval - elapsed);
 		};
 	}
 	return GSTATUS_OK;
 }
 
 void MainService::destroy()
-{
-}
-
-time_ms_t MainService::getCurrentTime()
-{
-	return 1;
-}
-
-void MainService::rest(time_ms_t rest_time)
 {
 }

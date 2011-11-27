@@ -4,4 +4,18 @@
 #include "pch.h"
 #include <boost/asio.hpp>
 
+#include "server_pi.h"
+
+/*
+	create a session. after session got new message. session invoke the global handler for message, the default global handler should 
+	
+	push the new message into global queue(with the needed parameters. 
+	like room id, user id). and the global queue will send the parameters to different queue by the ids. then the different queue
+	will handle the message.
+
+	session has basic information about the other things.
+
+	we will have a global message manager to create message for session. or the session should got message from the global handler?
+*/
+
 #endif // _SERVER_PCH_H_

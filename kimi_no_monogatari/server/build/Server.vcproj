@@ -192,6 +192,10 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath="..\src\server_pi.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
