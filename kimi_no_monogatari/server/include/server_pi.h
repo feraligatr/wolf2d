@@ -6,8 +6,12 @@
 namespace pi
 {
 
-typedef int time_ms_t;
-time_ms_t getCurrentTime();
+// do some initialization work for pi.
+GSTATUS pi_init();
+void pi_destroy();
+
+typedef unsigned long long time_ms_t;
+time_ms_t getTickSinceStartup();
 
 void thread_sleep(u32 interval);
 

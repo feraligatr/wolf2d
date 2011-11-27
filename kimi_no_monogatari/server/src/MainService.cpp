@@ -29,12 +29,12 @@ GSTATUS MainService::run()
 {
 	while (TRUE)
 	{
-		pi::time_ms_t last_time = pi::getCurrentTime();
+		pi::time_ms_t last_time = pi::getTickSinceStartup();
 		m_io_service.poll();
-		pi::time_ms_t elapsed = pi::getCurrentTime() - last_time;
+		pi::time_ms_t elapsed = pi::getTickSinceStartup() - last_time;
 		if (elapsed < m_update_interval)
 		{
-			pi::thread_sleep(m_update_interval - elapsed);
+			pi::thread_sleep((u32)(m_update_interval - elapsed));
 		};
 	}
 	return GSTATUS_OK;

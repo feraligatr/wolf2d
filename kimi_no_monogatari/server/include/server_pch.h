@@ -3,6 +3,8 @@
 
 #include "pch.h"
 #include <boost/asio.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/thread.hpp>
 
 #include "server_pi.h"
 
