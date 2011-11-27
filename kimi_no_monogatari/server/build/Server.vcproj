@@ -173,11 +173,27 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\src\DummyMessageDispatcher.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\DummyServer.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\main.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\src\MainService.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Message.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\MessageManager.cpp"
 				>
 			</File>
 			<File
@@ -193,7 +209,19 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\Server.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\server_pi.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Session.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\SessionManager.cpp"
 				>
 			</File>
 		</Filter>
@@ -203,11 +231,47 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath="..\include\DummyMessageDispatcher.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\DummyServer.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\MainService.h"
 				>
 			</File>
 			<File
+				RelativePath="..\include\Message.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\MessageDispatcher.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\MessageHandler.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\MessageManager.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\Server.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\server_pch.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\Session.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\SessionManager.h"
 				>
 			</File>
 		</Filter>
