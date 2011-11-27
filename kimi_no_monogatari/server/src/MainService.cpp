@@ -30,7 +30,11 @@ GSTATUS MainService::run()
 	while (TRUE)
 	{
 		pi::time_ms_t last_time = pi::getTickSinceStartup();
-		m_io_service.poll();
+		// other.run();
+		while(m_io_service.poll() > 0 && (pi::getTickSinceStartup() - last_time < m_update_interval))
+		{
+			
+		}
 		pi::time_ms_t elapsed = pi::getTickSinceStartup() - last_time;
 		if (elapsed < m_update_interval)
 		{
