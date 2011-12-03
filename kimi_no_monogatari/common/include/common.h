@@ -1,5 +1,5 @@
-#ifndef _PCH_H_
-#define _PCH_H_
+#ifndef _COMMON_H_
+#define _COMMON_H_
 
 #include "Status.h"
 
@@ -27,4 +27,4 @@ typedef signed int s32;
 typedef signed long long s64;
 typedef unsigned long long u64;
 
-#endif /* _PCH_H_ */
+#endif /* _COMMON_H_ */
