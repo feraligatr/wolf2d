@@ -2,10 +2,10 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="TestConsole"
-	ProjectGUID="{2A26AF0A-CB8D-410F-ABA5-4AA8CC409601}"
-	RootNamespace="TestConsole"
-	Keyword="Win32Proj"
+	Name="LuaBind"
+	ProjectGUID="{D4C996D5-692B-4BFA-B5A5-AB7E3A8BFBDD}"
+	RootNamespace="LuaBind"
+	Keyword="ManagedCProj"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -20,8 +20,9 @@
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="4"
 			CharacterSet="1"
+			ManagedExtensions="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -41,14 +42,12 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../common/include;../../test/TestWorld;&quot;$(LUA_PATH)/include&quot;;&quot;$(BOOST_ROOT)&quot;;../../dependencies/"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
+				AdditionalIncludeDirectories="&quot;$(LUA_PATH)/include&quot;;../"
+				PreprocessorDefinitions="WIN32;_DEBUG"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -60,18 +59,10 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="$(LUA_PATH)/lua5.1.lib"
-				LinkIncremental="2"
-				GenerateDebugInformation="true"
-				SubSystem="1"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -83,9 +74,6 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -93,8 +81,9 @@
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			CharacterSet="1"
+			ManagedExtensions="1"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -114,11 +103,9 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
-				EnableIntrinsicFunctions="true"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="$(LUA_PATH)/include"
+				PreprocessorDefinitions="WIN32;NDEBUG"
 				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
 				DebugInformationFormat="3"
@@ -134,11 +121,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="$(NoInherit)"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
-				SubSystem="1"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -165,38 +150,101 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<AssemblyReference
+			RelativePath="System.dll"
+			AssemblyName="System, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
+			MinFrameworkVersion="131072"
+		/>
+		<AssemblyReference
+			RelativePath="System.Data.dll"
+			AssemblyName="System.Data, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=x86"
+			MinFrameworkVersion="131072"
+		/>
+		<AssemblyReference
+			RelativePath="System.XML.dll"
+			AssemblyName="System.Xml, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
+			MinFrameworkVersion="131072"
+		/>
 	</References>
 	<Files>
 		<Filter
-			Name="source"
+			Name="source files"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\main.cpp"
+				RelativePath="..\luabind\src\class.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\luabind\src\class_info.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\luabind\src\class_registry.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\luabind\src\class_rep.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\luabind\src\create_class.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\luabind\src\error.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\luabind\src\exception_handler.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\luabind\src\function.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\luabind\src\inheritance.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\luabind\src\link_compatibility.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\luabind\src\object_rep.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\luabind\src\open.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\luabind\src\pcall.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\luabind\src\scope.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\luabind\src\stack_content_by_name.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\luabind\src\weak_ref.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\luabind\src\wrapper_base.cpp"
 				>
 			</File>
 		</Filter>
 		<Filter
-			Name="header"
+			Name="header files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
-			>
-		</Filter>
-		<Filter
-			Name="TestWorld"
-			>
-			<File
-				RelativePath="..\TestWorld\src\TestWorld.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\TestWorld\TestWorld.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="luabind"
 			>
 		</Filter>
 	</Files>

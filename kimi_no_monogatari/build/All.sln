@@ -8,6 +8,13 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{BC1963D5-F3A5-4E92-A364-FED6A64B74ED}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestConsole", "..\test\TestConsole\TestConsole.vcproj", "{2A26AF0A-CB8D-410F-ABA5-4AA8CC409601}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D4C996D5-692B-4BFA-B5A5-AB7E3A8BFBDD} = {D4C996D5-692B-4BFA-B5A5-AB7E3A8BFBDD}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dependencies", "dependencies", "{16CBFEBF-C585-497C-9290-0D1BB2C4B9DB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LuaBind", "..\dependencies\build\LuaBind.vcproj", "{D4C996D5-692B-4BFA-B5A5-AB7E3A8BFBDD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,11 +34,16 @@ Global
 		{2A26AF0A-CB8D-410F-ABA5-4AA8CC409601}.Debug|Win32.Build.0 = Debug|Win32
 		{2A26AF0A-CB8D-410F-ABA5-4AA8CC409601}.Release|Win32.ActiveCfg = Release|Win32
 		{2A26AF0A-CB8D-410F-ABA5-4AA8CC409601}.Release|Win32.Build.0 = Release|Win32
+		{D4C996D5-692B-4BFA-B5A5-AB7E3A8BFBDD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D4C996D5-692B-4BFA-B5A5-AB7E3A8BFBDD}.Debug|Win32.Build.0 = Debug|Win32
+		{D4C996D5-692B-4BFA-B5A5-AB7E3A8BFBDD}.Release|Win32.ActiveCfg = Release|Win32
+		{D4C996D5-692B-4BFA-B5A5-AB7E3A8BFBDD}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2A26AF0A-CB8D-410F-ABA5-4AA8CC409601} = {BC1963D5-F3A5-4E92-A364-FED6A64B74ED}
+		{D4C996D5-692B-4BFA-B5A5-AB7E3A8BFBDD} = {16CBFEBF-C585-497C-9290-0D1BB2C4B9DB}
 	EndGlobalSection
 EndGlobal
