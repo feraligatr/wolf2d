@@ -251,10 +251,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\MessageHandler.h"
-				>
-			</File>
-			<File
 				RelativePath="..\include\MessageManager.h"
 				>
 			</File>
