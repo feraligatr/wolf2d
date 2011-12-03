@@ -1,7 +1,7 @@
-#include "include/common.h"
+#include "common.h"
 
 #include "msg/Message.h"
-#include "MessageManager.h"
+#include "msg/MessageManager.h"
 
 Message::Message(MessageManager* manager, u32 capacity)
 :m_manager(manager), m_buffer(NULL), m_capacity(capacity)

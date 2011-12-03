@@ -1,6 +1,6 @@
-#include "server_pch.h"
+#include "common.h"
 
-#include "MessageManager.h"
+#include "msg/MessageManager.h"
 
 
 MessageManager::MessageManager()
