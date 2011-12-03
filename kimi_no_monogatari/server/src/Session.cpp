@@ -2,7 +2,7 @@
 
 #include "Session.h"
 #include "SessionManager.h"
-#include "MessageDispatcher.h"
+#include "msg/MessageDispatcher.h"
 #include "MessageManager.h"
 
 using namespace boost::asio;

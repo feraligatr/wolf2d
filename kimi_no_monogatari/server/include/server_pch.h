@@ -1,8 +1,8 @@
 #ifndef _SERVER_PCH_H_
 #define _SERVER_PCH_H_
 
-#include "common.h"
-#include "MessageDefine.h"
+#include "include/common.h"
+#include "msg/MessageDefine.h"
 #include <boost/asio.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/thread.hpp>

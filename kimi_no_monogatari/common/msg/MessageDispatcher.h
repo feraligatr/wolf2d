@@ -1,7 +1,7 @@
 #ifndef _MESSAGE_DISPATCHER_H_
 #define _MESSAGE_DISPATCHER_H_
 
-#include "Message.h"
+#include "msg/Message.h"
 
 class Session;
 

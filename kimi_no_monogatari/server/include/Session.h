@@ -5,7 +5,7 @@ class SessionManager;
 class MessageDispatcher;
 class MessageManager;
 
-#include "Message.h"
+#include "msg/Message.h"
 #include <vector>
 
 class Session : public boost::enable_shared_from_this<Session>,

@@ -1,7 +1,7 @@
 #ifndef _MESSAGE_H_
 #define _MESSAGE_H_
 
-#include "MessageDefine.h"
+#include "msg/MessageDefine.h"
 
 // TODO: change to template<u32 capacity>Message?
 //

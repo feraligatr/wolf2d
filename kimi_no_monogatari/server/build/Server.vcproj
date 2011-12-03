@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\include;..\..\common\include"
+				AdditionalIncludeDirectories="..\include;..\..\common"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -213,13 +213,21 @@
 				>
 			</File>
 			<Filter
-				Name="common"
+				Name="Message"
 				>
 				<File
-					RelativePath="..\..\common\src\Message.cpp"
+					RelativePath="..\..\common\msg\Message.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -255,6 +263,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\server_pch.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\Session.h"
 				>
 			</File>
@@ -269,28 +281,28 @@
 					RelativePath="..\..\common\include\common.h"
 					>
 				</File>
-				<File
-					RelativePath="..\..\common\include\Message.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\common\include\MessageDefine.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\common\include\MessageDispatcher.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\server_pch.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="DummyServer"
 				>
 				<File
 					RelativePath="..\dummy\DummyServer.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Message"
+				>
+				<File
+					RelativePath="..\..\common\msg\Message.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\common\msg\MessageDefine.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\common\msg\MessageDispatcher.h"
 					>
 				</File>
 			</Filter>

@@ -1,7 +1,7 @@
 #ifndef _SERVER_H_
 #define _SERVER_H_
 
-#include "MessageDispatcher.h"
+#include "msg/MessageDispatcher.h"
 
 class Session;
 class SessionManager;
