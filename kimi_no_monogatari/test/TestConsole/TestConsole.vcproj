@@ -187,7 +187,11 @@
 			Name="TestWorld"
 			>
 			<File
-				RelativePath="..\TestWorld\src\TestWorld.cpp"
+				RelativePath="..\TestWorld\src\LuaTestWorld.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\TestWorld\LuaTestWorld.h"
 				>
 			</File>
 			<File
