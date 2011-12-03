@@ -212,6 +212,14 @@
 			Name="client"
 			>
 			<File
+				RelativePath="..\client\TestClient.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\client\TestClient.h"
+				>
+			</File>
+			<File
 				RelativePath="..\client\TestMessageQueue.cpp"
 				>
 			</File>

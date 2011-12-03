@@ -4,19 +4,26 @@
 #include <boost/thread.hpp>
 
 #include "TestMessageQueue.h"
+#include "TestClient.h"
+#include "MessageDispatcher.h"
 
-class TestWorker
+class TestWorker : public MessageDispatcher
 {
 public:
 	TestWorker();
 	void operator()();
 
 	void chat(const char* content);
+	virtual void dispatchMessage(Session* from, Message* message);
+
+protected:
+	void process();
 
 private:
-	bool m_connected;
-	TestClient m_client;
-
+	TestMessageQuque m_queue;
+	boost::asio::deadline_timer* m_processTimer;
+	MessageManager m_messageManager;
+	TestClient* m_client;
 };
 
 
