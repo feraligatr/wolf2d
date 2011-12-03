@@ -2,7 +2,7 @@
 
 #include "Server.h"
 #include "SessionManager.h"
-#include "MessageManager.h"
+#include "msg/MessageManager.h"
 
 Server::Server()
 {

@@ -201,14 +201,6 @@
 				RelativePath="..\src\server_pi.cpp"
 				>
 			</File>
-			<File
-				RelativePath="..\..\common\src\Session.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\src\SessionManager.cpp"
-				>
-			</File>
 			<Filter
 				Name="Message"
 				>
@@ -223,10 +215,6 @@
 							UsePrecompiledHeader="0"
 						/>
 					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\..\common\msg\MessageManager.cpp"
-					>
 				</File>
 				<File
 					RelativePath="..\..\common\msg\MessageManager.cpp"
@@ -267,6 +255,50 @@
 				<File
 					RelativePath="..\dummy\DummyServer.cpp"
 					>
+				</File>
+			</Filter>
+			<Filter
+				Name="common"
+				>
+				<File
+					RelativePath="..\..\common\src\Session.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\common\src\SessionManager.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
 				</File>
 			</Filter>
 		</Filter>
