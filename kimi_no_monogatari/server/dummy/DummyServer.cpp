@@ -1,7 +1,9 @@
 #include "server_pch.h"
 
-#include "DummyServer.h"
 #include "Session.h"
+#include "msg/MessageParsers.h"
+
+#include "DummyServer.h"
 
 void DummyServer::update()
 {
@@ -21,5 +23,22 @@ void DummyServer::destroy()
 
 void DummyServer::dispatchMessage(Session* from, Message* message)
 {
+	switch (message->getMessageType())
+	{
+	case MESSAGE_ECHO:
+		{
+			EchoMessageParser mp(message);
+			handleEchoMessage(from, &mp);
+		}
+		break;
+	default:
+		printf("Invalid message %x.\n", message->getMessageType());
+	}
+
 	Server::dispatchMessage(from, message);
+}
+
+void DummyServer::handleEchoMessage(Session* from, EchoMessageParser* mp)
+{
+	from->deliver(mp->getMessage());
 }

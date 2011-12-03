@@ -17,12 +17,12 @@ public:
 		return m_size;
 	}
 
-	MessageType getType() const {
+	int getType() const {
 		return m_type;
 	}
 
 	u32 m_size;
-	MessageType m_type;
+	int m_type;
 };
 
 class Message
@@ -51,7 +51,7 @@ public:
 		return m_capacity;
 	}
 
-	MessageType getMessageType() const {
+	int getMessageType() const {
 		return ((MessageHeader*)m_buffer)->getType();
 	}
 	
