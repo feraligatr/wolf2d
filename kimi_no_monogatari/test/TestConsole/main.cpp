@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 	world.start();
 	while(true)
 	{
-		std::cout << "please input the command" << std::endl;
+		std::cout << "$ ";
 		std::cin.getline(buffer, 1024);
 		world.runString(buffer);
 	}
