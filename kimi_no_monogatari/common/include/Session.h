@@ -6,6 +6,11 @@ class MessageDispatcher;
 class MessageManager;
 
 #include "msg/Message.h"
+#include <boost/asio.hpp>
+#include <boost/bind.hpp>
+#include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
 #include <vector>
 
 class Session : public boost::enable_shared_from_this<Session>,

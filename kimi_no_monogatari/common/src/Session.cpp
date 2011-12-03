@@ -1,4 +1,4 @@
-#include "server_pch.h"
+#include "common.h"
 
 #include "Session.h"
 #include "SessionManager.h"
@@ -65,7 +65,14 @@ void Session::handle_read_header(const boost::system::error_code& error)
 
 void Session::socketError()
 {
-	m_pSessionManager->stop(shared_from_this());
+	if (m_pSessionManager)
+	{
+		m_pSessionManager->stop(shared_from_this());
+	}
+	else
+	{
+		stop();
+	}
 }
 
 void Session::handle_read_body(const boost::system::error_code& error)

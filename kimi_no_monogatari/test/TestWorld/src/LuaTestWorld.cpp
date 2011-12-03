@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include "LuaTestWorld.h"
+#include "TestWorker.h"
 #include <iostream>
 extern "C"
 {
@@ -75,16 +76,24 @@ void LuaTestWorld::registerFunctions()
 	[
 		class_<LuaTestWorld>("LuaTestWorld")
 			.def("test", &LuaTestWorld::test)
+			.def("chat", &LuaTestWorld::chat)
 	];
 }
 
 void LuaTestWorld::startup()
 {
 	luabind::globals(m_L)["world"] = this;
+
+	m_mainWorkerThread = boost::thread(m_mainWorker);
 }
 
 void LuaTestWorld::test()
 {
 	std::cout << "Hello World!" << std::endl;
+}
+
+void LuaTestWorld::chat(const char* content)
+{
+	m_mainWorker.chat(content);
 }
 

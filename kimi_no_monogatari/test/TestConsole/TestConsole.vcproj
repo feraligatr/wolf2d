@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../common/include;../../test/TestWorld;&quot;$(LUA_PATH)/include&quot;;&quot;$(BOOST_ROOT)&quot;;../../dependencies/"
+				AdditionalIncludeDirectories="../../common/include;../../test/TestWorld;&quot;$(LUA_PATH)/include&quot;;&quot;$(BOOST_ROOT)&quot;;../../dependencies/;../../test/client;../../common/msg;../../common"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,6 +63,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(LUA_PATH)/lua5.1.lib"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="$(BOOST_ROOT)/stage/lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -195,6 +196,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\TestWorld\src\TestWorker.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\TestWorld\TestWorld.h"
 				>
 			</File>
@@ -202,6 +207,50 @@
 		<Filter
 			Name="luabind"
 			>
+		</Filter>
+		<Filter
+			Name="client"
+			>
+			<File
+				RelativePath="..\client\TestMessageQueue.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\client\TestMessageQueue.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="other"
+			>
+			<File
+				RelativePath="..\..\common\include\common.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\msg\Message.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\msg\MessageManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\src\Session.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\Session.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\src\SessionManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\SessionManager.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

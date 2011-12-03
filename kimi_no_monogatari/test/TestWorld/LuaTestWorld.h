@@ -3,6 +3,11 @@
 
 #include "TestWorld.h"
 
+#include <boost/thread.hpp>
+#include <vector>
+
+#include "TestWorker.h"
+
 struct lua_State;
 
 class LuaTestWorld : public TestWorld
@@ -22,6 +27,8 @@ public:
 
 public: // export
 	void test();
+	// only for the main worker.
+	void chat(const char* content);
 
 protected:
 	void initLua();
@@ -30,6 +37,12 @@ protected:
 	void startup();
 
 	lua_State* m_L;
+
+	boost::thread m_mainWorkerThread;
+	TestWorker m_mainWorker;
+
+	std::vector<TestWorker*> m_otherWorkers;
+
 };
 
 #endif

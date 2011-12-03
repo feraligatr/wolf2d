@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\include;..\..\common;..\..\common\include"
+				AdditionalIncludeDirectories="..\include;..\..\common\include;&quot;$(BOOST_ROOT)&quot;..\..\common"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,6 +63,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="$(BOOST_ROOT)/stage/lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -201,11 +202,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\Session.cpp"
+				RelativePath="..\..\common\src\Session.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\SessionManager.cpp"
+				RelativePath="..\..\common\src\SessionManager.cpp"
 				>
 			</File>
 			<Filter
@@ -222,14 +223,10 @@
 							UsePrecompiledHeader="0"
 						/>
 					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\common\msg\MessageManager.cpp"
+					>
 				</File>
 				<File
 					RelativePath="..\..\common\msg\MessageManager.cpp"
