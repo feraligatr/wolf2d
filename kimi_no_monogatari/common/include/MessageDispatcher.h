@@ -3,11 +3,13 @@
 
 #include "Message.h"
 
+class Session;
+
 class MessageDispatcher
 {
 public:
 	virtual ~MessageDispatcher() {}
-	virtual void dispatchMessage(Message* message) = 0;
+	virtual void dispatchMessage(Session* from, Message* message) = 0;
 };
 
 

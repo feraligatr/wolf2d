@@ -1,29 +1,31 @@
 #ifndef _SERVER_H_
 #define _SERVER_H_
 
-#include "Session.h"
+#include "MessageDispatcher.h"
 
+class Session;
 class SessionManager;
+class MessageManager;
 
-class Server
+class Server : public MessageDispatcher
 {
 public:
-	static Server* getInstance();
-
-	virtual Session* getNewSession(boost::asio::io_service& io_service) = 0;
+	Session* getNewSession(boost::asio::io_service& io_service);
+	SessionManager* getSessionManager();
 
 	// update everything every interval time.
 	// TODO: add float inerval as update parameter. ? or get interval from other place?
 	virtual void update() = 0;
-	virtual SessionManager* getSessionManager() = 0;
-	virtual void destroy() = 0;
+	virtual void destroy();
+
+	virtual void dispatchMessage(Session* from, Message* message);
 
 protected:
-	Server() {}
-	~Server() {}
+	Server();
+	virtual ~Server();
 
-private:
-	static Server* m_instance;
+	SessionManager* m_pSessionManager;
+	MessageManager* m_pMessageManager;
 };
 
 #endif /* _SERVER_H_ */

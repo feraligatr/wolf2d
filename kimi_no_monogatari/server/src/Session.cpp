@@ -7,11 +7,11 @@
 
 using namespace boost::asio;
 
-Session::Session(boost::asio::io_service& io_service, SessionManager& sm, MessageDispatcher& dispatcher, MessageManager& mm)
-:m_sessionManager(sm)
+Session::Session(boost::asio::io_service& io_service, SessionManager* sm, MessageDispatcher* dispatcher, MessageManager* mm)
+:m_pSessionManager(sm)
 ,m_socket(io_service)
-,m_dispatcher(dispatcher)
-,m_messageManager(mm)
+,m_pDispatcher(dispatcher)
+,m_pMessageManager(mm)
 ,m_closeTimer(io_service)
 {
 	
@@ -50,7 +50,7 @@ void Session::handle_read_header(const boost::system::error_code& error)
 		}
 		else
 		{
-			m_readMessage = m_messageManager.getFreeMessage(m_readHeader);
+			m_readMessage = m_pMessageManager->getFreeMessage(m_readHeader);
 			async_read(m_socket,
 					buffer(m_readMessage->getBody(), m_readMessage->getBodySize()),
 					boost::bind(&Session::handle_read_body, shared_from_this(),
@@ -65,14 +65,14 @@ void Session::handle_read_header(const boost::system::error_code& error)
 
 void Session::socketError()
 {
-	m_sessionManager.stop(shared_from_this());
+	m_pSessionManager->stop(shared_from_this());
 }
 
 void Session::handle_read_body(const boost::system::error_code& error)
 {
 	if (!error)
 	{
-		m_dispatcher.dispatchMessage(m_readMessage);
+		m_pDispatcher->dispatchMessage(this, m_readMessage);
 		async_read(m_socket,
 				buffer(&m_readHeader, sizeof(m_readHeader)),
 				boost::bind(&Session::handle_read_header, shared_from_this(),

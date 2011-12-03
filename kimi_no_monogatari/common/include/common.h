@@ -3,6 +3,8 @@
 
 #include "Status.h"
 
+#include <stdio.h>
+#include <memory.h>
 #include <assert.h>
 
 // TODO classify the defines and functions and move into different files.

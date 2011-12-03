@@ -8,7 +8,7 @@ class SessionManager;
 class MainService
 {
 public:
-	MainService();
+	MainService(Server *server);
 	virtual ~MainService();
 public:
 	GSTATUS init();
@@ -30,6 +30,7 @@ private:
 
 	SessionManager* m_sessionManager;
 	SessionPtr m_newSession;
+	Server *m_pServer;
 };
 
 #endif // #ifndef _MAIN_SERVICE_H_
