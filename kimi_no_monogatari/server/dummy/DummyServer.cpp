@@ -1,4 +1,4 @@
-#include "server_pch.h"
+#include "pch/pch.h"
 
 #include "Session.h"
 #include "msg/MessageParsers.h"

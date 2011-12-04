@@ -3,6 +3,12 @@
 
 class Message;
 
+// TODO. save string as header(len) + real content? (/0 end)
+// then decode will be faster. 
+// and all setFunction should return new position for next set.
+// all getFunction should return new position too.
+// how about this?
+
 class MessageParser
 {
 public:

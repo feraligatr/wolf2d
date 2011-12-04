@@ -3,6 +3,7 @@
 
 #include "Server.h"
 #include "Session.h"
+#include "server_pi.h"
 class SessionManager;
 
 class MainService

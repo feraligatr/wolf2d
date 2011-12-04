@@ -1,7 +1,8 @@
-#include "server_pch.h"
+#include "pch/pch.h"
 
 #include "../dummy/DummyServer.h"
 #include "MainService.h"
+#include "server_pi.h"
 
 int main(int argc, char *argv[])
 {

@@ -1,6 +1,7 @@
-#include "common.h"
+#include "pch/pch.h"
 
-#include <string.h>
+#include <cstring>
+
 #include "msg/Message.h"
 #include "msg/MessageParser.h"
 
