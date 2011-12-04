@@ -4,8 +4,10 @@
 #include "TestMessageQueue.h"
 #include "TestClient.h"
 #include "msg/MessageDispatcher.h"
+#include "TestGameApp.h"
+#include "ConnectionManager.h"
 
-class TestWorker : public MessageDispatcher,
+class TestWorker : public MessageDispatcher, public ConnectionManager
 	private boost::noncopyable
 {
 public:
@@ -22,7 +24,10 @@ private:
 	TestMessageQuque m_queue;
 	boost::asio::deadline_timer* m_processTimer;
 	MessageManager m_messageManager;
-	TestClient* m_client;
+
+	std::vector<TestGameApp*> m_games;
+	TestGameApp* m_controlGame;
+
 };
 
 

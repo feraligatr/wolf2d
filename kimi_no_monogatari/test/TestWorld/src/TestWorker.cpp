@@ -1,11 +1,12 @@
 #include "pch/pch.h"
 
 #include "TestWorker.h"
-#include "TestClient.h"
+#include "Client.h"
 
 
 TestWorker::TestWorker()
-:m_processTimer(NULL)
+:m_processTimer(NULL),
+m_controlGame(
 {
 
 }

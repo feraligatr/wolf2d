@@ -226,11 +226,19 @@
 			Name="client"
 			>
 			<File
-				RelativePath="..\client\TestClient.cpp"
+				RelativePath="..\client\Connection.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\client\TestClient.h"
+				RelativePath="..\client\Connection.h"
+				>
+			</File>
+			<File
+				RelativePath="..\client\ConnectionManager.h"
+				>
+			</File>
+			<File
+				RelativePath="..\client\TestGameApp.cpp"
 				>
 			</File>
 			<File
