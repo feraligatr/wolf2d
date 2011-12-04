@@ -84,7 +84,7 @@ void LuaTestWorld::startup()
 {
 	luabind::globals(m_L)["world"] = this;
 
-	m_mainWorkerThread = boost::thread(m_mainWorker);
+	m_mainWorkerThread = boost::thread(boost::bind(&TestWorker::run, &m_mainWorker));
 }
 
 void LuaTestWorld::test()

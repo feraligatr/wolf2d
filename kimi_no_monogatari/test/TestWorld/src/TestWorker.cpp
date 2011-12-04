@@ -10,13 +10,23 @@ TestWorker::TestWorker()
 
 }
 
-void TestWorker::operator()()
+void TestWorker::run()
 {
 	boost::asio::io_service io_service;
 	m_client = new TestClient(io_service, &m_messageManager);
-	if (!client.isConnected())
+	if (!m_client->isConnected())
 	{
-		client.connect(this);
+		try
+		{
+			m_client->connect(this);
+		}
+		catch (std::exception& e)
+		{
+			delete m_client;
+			std::cerr << "Exception: " << e.what() << "\n";
+			std::cerr << "TestWorker terminate" << "\n";
+			return;
+		}
 	}
 	m_processTimer = new boost::asio::deadline_timer(io_service);
 	m_processTimer->expires_from_now(boost::posix_time::milliseconds(50));

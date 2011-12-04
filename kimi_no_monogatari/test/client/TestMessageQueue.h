@@ -6,16 +6,17 @@
 
 #include <boost/thread.hpp>
 
-class TestMessageQuque
+class TestMessageQuque : private boost::noncopyable
 {
 public:
+	TestMessageQuque();
 	void push(Message*);
 	Message* pop();
 
 protected:
 	typedef std::queue<Message*> MessageMap;
 	MessageMap m_messages;
-	boost::mutex m_access;
+	boost::mutex m_mutex;
 };
 
 #endif /* _TEST_MESSAGE_QUEUE_H_ */

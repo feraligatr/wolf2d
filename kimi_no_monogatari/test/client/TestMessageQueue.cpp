@@ -5,13 +5,13 @@
 
 void TestMessageQuque::push(Message* msg)
 {
-	boost::mutex::scoped_lock m_access;
+	boost::mutex::scoped_lock scoped_lock(m_mutex);
 	m_messages.push(msg);
 }
 
 Message* TestMessageQuque::pop()
 {
-	boost::mutex::scoped_lock m_access;
+	boost::mutex::scoped_lock scoped_lock(m_mutex);
 	Message* msg = NULL;
 	if (!m_messages.empty())
 	{

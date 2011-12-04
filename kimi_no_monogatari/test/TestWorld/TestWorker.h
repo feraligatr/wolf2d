@@ -7,11 +7,12 @@
 #include "TestClient.h"
 #include "MessageDispatcher.h"
 
-class TestWorker : public MessageDispatcher
+class TestWorker : public MessageDispatcher,
+	private boost::noncopyable
 {
 public:
 	TestWorker();
-	void operator()();
+	virtual void run();
 
 	void chat(const char* content);
 	virtual void dispatchMessage(Session* from, Message* message);

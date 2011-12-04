@@ -10,7 +10,8 @@
 
 struct lua_State;
 
-class LuaTestWorld : public TestWorld
+class LuaTestWorld : public TestWorld,
+	private boost::noncopyable
 {
 public:
 	LuaTestWorld();
