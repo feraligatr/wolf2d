@@ -1,11 +1,9 @@
 #ifndef _TEST_WORKER_H_
 #define _TEST_WORKER_H_
 
-#include <boost/thread.hpp>
-
 #include "TestMessageQueue.h"
 #include "TestClient.h"
-#include "MessageDispatcher.h"
+#include "msg/MessageDispatcher.h"
 
 class TestWorker : public MessageDispatcher,
 	private boost::noncopyable

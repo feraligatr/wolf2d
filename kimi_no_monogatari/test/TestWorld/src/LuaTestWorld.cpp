@@ -1,13 +1,7 @@
-#include "common.h"
+#include "pch/pch.h"
 
 #include "LuaTestWorld.h"
 #include "TestWorker.h"
-#include <iostream>
-extern "C"
-{
- #include <lualib.h>
-}
-#include <luabind/luabind.hpp>
 
 using namespace luabind;
 

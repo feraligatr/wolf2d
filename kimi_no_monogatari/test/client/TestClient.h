@@ -1,11 +1,9 @@
 #ifndef _TEST_CLIENT_H_
 #define _TEST_CLIENT_H_
 
-#include <boost/asio.hpp>
-
 #include "Session.h"
-#include "MessageManager.h"
-#include "MessageDispatcher.h"
+#include "msg/MessageManager.h"
+#include "msg/MessageDispatcher.h"
 
 class TestClient
 {

@@ -3,10 +3,6 @@
 
 #include "msg/MessageDefine.h"
 
-// TODO: change to template<u32 capacity>Message?
-//
-// the message is mainly a buffer, so no derived message.
-
 class MessageHeader
 {
 public:

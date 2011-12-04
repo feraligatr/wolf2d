@@ -3,12 +3,7 @@
 
 #include "TestWorld.h"
 
-#include <boost/thread.hpp>
-#include <vector>
-
 #include "TestWorker.h"
-
-struct lua_State;
 
 class LuaTestWorld : public TestWorld,
 	private boost::noncopyable

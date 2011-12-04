@@ -1,15 +1,11 @@
 #ifndef _TEST_MESSAGE_QUEUE_H_
 #define _TEST_MESSAGE_QUEUE_H_
 
-#include <queue>
-#include "Message.h"
-
-#include <boost/thread.hpp>
+#include "msg/Message.h"
 
 class TestMessageQuque : private boost::noncopyable
 {
 public:
-	TestMessageQuque();
 	void push(Message*);
 	Message* pop();
 

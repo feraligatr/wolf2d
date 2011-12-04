@@ -2,7 +2,6 @@
 #define _SESSION_MANAGER_H_
 
 #include "Session.h"
-#include <set>
 
 class SessionManager
 {

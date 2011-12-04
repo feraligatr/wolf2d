@@ -1,9 +1,7 @@
-#include "common.h"
+#include "pch/pch.h"
 
 #include "LuaTestWorld.h"
 
-#include <iostream>
-#include <string>
 
 int main(int argc, char *argv[])
 {
