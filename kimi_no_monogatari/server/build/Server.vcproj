@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\include;..\..\common\include;&quot;$(BOOST_ROOT)&quot;..\..\common"
+				AdditionalIncludeDirectories="..\include;..\..\common\include;&quot;$(BOOST_ROOT)&quot;;..\..\common"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
