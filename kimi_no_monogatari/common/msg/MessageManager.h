@@ -9,7 +9,8 @@ public:
 	MessageManager();
 	virtual ~MessageManager();
 	void disposeMessage(Message* message);
-	Message* getFreeMessage(MessageHeader header);
+	Message* getFreeMessage(const MessageHeader& header);
+	Message* getFreeMessage(u32 size);
 };
 
 #endif

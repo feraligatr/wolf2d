@@ -9,12 +9,23 @@ public:
 	MessageHeader::MessageHeader()
 		:m_size(0), m_type(MESSAGE_INVALID) {}
 
+	explicit MessageHeader(int type, u32 size)
+		:m_size(size), m_type(type) {}
+
 	u32 getSize() const {
 		return m_size;
 	}
 
 	int getType() const {
 		return m_type;
+	}
+
+	void setType(int type) {
+		m_type = type;
+	}
+
+	void setSize(u32 size) {
+		m_size = size;
 	}
 
 	u32 m_size;
@@ -47,11 +58,19 @@ public:
 		return m_capacity;
 	}
 
-	int getMessageType() const {
+	int getType() const {
 		return ((MessageHeader*)m_buffer)->getType();
 	}
 	
-	void setMessageHeader(const MessageHeader& header);
+	void setType(int type) {
+		((MessageHeader*)m_buffer)->setType(type);
+	}
+
+	void setBodySize(u32 size) {
+		((MessageHeader*)m_buffer)->setSize(size);
+	}
+
+	void setHeader(const MessageHeader& header);
 	void dispose();
 
 protected:

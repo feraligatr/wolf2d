@@ -1,32 +1,37 @@
 #ifndef _TEST_WORKER_H_
 #define _TEST_WORKER_H_
 
-#include "TestMessageQueue.h"
-#include "TestClient.h"
-#include "msg/MessageDispatcher.h"
 #include "TestGameApp.h"
 #include "ConnectionManager.h"
 
-class TestWorker : public MessageDispatcher, public ConnectionManager
+class TestWorker : public ConnectionManager,
 	private boost::noncopyable
 {
 public:
 	TestWorker();
 	virtual void run();
 
-	void chat(const char* content);
-	virtual void dispatchMessage(Session* from, Message* message);
+	virtual void removeConnection(ConnectionPtr con);
+	virtual ConnectionPtr createConnection();
+
+	void echo(const char* content);
 
 protected:
 	void process();
 
 private:
-	TestMessageQuque m_queue;
-	boost::asio::deadline_timer* m_processTimer;
+	boost::shared_ptr<boost::asio::deadline_timer> m_processTimer;
 	MessageManager m_messageManager;
 
-	std::vector<TestGameApp*> m_games;
-	TestGameApp* m_controlGame;
+	typedef boost::shared_ptr<TestGameApp> GameAppPtr;
+
+	std::vector<GameAppPtr> m_games;
+	GameAppPtr m_controlGame;
+
+	u32 m_numGames;
+	boost::asio::io_service m_io_service;
+
+	std::set<ConnectionPtr> m_connections;
 
 };
 

@@ -242,11 +242,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\client\TestMessageQueue.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\TestMessageQueue.h"
+				RelativePath="..\client\TestGameApp.h"
 				>
 			</File>
 		</Filter>
@@ -263,6 +259,10 @@
 			</File>
 			<File
 				RelativePath="..\..\common\msg\MessageManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\msg\MessageParser.cpp"
 				>
 			</File>
 			<File

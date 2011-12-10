@@ -19,7 +19,7 @@ bool Connection::isConnected() const
 	return m_isConnected;
 }
 
-void Connection::connect(MessageDispatcher* dispatcher)
+bool Connection::connect(MessageDispatcher* dispatcher)
 {
 	try
 	{
@@ -29,15 +29,24 @@ void Connection::connect(MessageDispatcher* dispatcher)
 		tcp::resolver::iterator iterator = resolver.resolve(query);
 
 		boost::asio::connect(m_session->socket(), iterator);
+		m_session->start();
 	}
-	catch(std::exception&)
+	catch(std::exception& e)
 	{
-		return;
+		std::cerr << "Exception: " << e.what() << "\n";
+		std::cerr << "TestWorker terminate" << "\n";
+		return false;
 	}
 	m_isConnected = true;
+	return true;
 }
 
-void Connection::sendMessage(Message* message)
+void Connection::stop()
+{
+	m_session->stop();
+}
+
+void Connection::deliver(Message* message)
 {
 	m_session->deliver(message);
 }
@@ -45,5 +54,5 @@ void Connection::sendMessage(Message* message)
 void Connection::dispose()
 {
 	ASSERT(m_pConnectionManager);
-	m_pConnectionManager->removeConnection(this);
+	m_pConnectionManager->removeConnection(shared_from_this());
 }

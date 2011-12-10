@@ -30,6 +30,10 @@ public:
 	void handle_write(const boost::system::error_code& error);
 protected:
 	void socketError();
+	void performWrite();
+	bool canWrite() const;
+	bool m_writing;
+
 
 	boost::asio::ip::tcp::socket m_socket;
 

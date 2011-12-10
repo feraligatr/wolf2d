@@ -18,10 +18,15 @@ void MessageManager::disposeMessage(Message* message)
 	delete message;
 }
 
-Message* MessageManager::getFreeMessage(MessageHeader header)
+Message* MessageManager::getFreeMessage(const MessageHeader& header)
 {
 	Message* m = new Message(this, header.getSize());
-	m->setMessageHeader(header);
+	m->setHeader(header);
 	return m;
 }
 
+Message* MessageManager::getFreeMessage(u32 size)
+{
+	Message* m = new Message(this, size);
+	return m;
+}

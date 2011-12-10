@@ -6,11 +6,8 @@
 class ConnectionManager
 {
 public:
-	void removeConnection(Connection* con);
-	Connection* createConnection();
-
-private:
-
+	virtual void removeConnection(ConnectionPtr con) = 0;
+	virtual ConnectionPtr createConnection() = 0;
 };
 
 

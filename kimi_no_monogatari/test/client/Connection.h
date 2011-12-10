@@ -4,21 +4,21 @@
 #include "Session.h"
 #include "msg/MessageManager.h"
 #include "msg/MessageDispatcher.h"
-#include "ConnectionManager.h"
 
-class Connection
+class ConnectionManager;
+
+class Connection : public boost::enable_shared_from_this<Connection>,
+	private boost::noncopyable
 {
 public:
 	bool isConnected() const;
-	void connect(MessageDispatcher* dispatcher);
-	void sendMessage(Message* message);
+	bool connect(MessageDispatcher* dispatcher);
+	void stop();
+	void deliver(Message* message);
 
 	void dispose();
 
-	friend class ConnectionManager;
-private:
 	Connection(boost::asio::io_service& io_service, MessageManager* messageManager, ConnectionManager* connectionManager);
-	~Connection();
 
 private:
 	boost::asio::io_service& m_io_service;
@@ -26,8 +26,9 @@ private:
 	ConnectionManager* m_pConnectionManager;
 	SessionPtr m_session;
 	bool m_isConnected;
-
 };
 
+typedef boost::shared_ptr<Connection> ConnectionPtr;
 
-#endif /* _CLIENT_H_ */
+
+#endif /* _CONNECTION_H_ */

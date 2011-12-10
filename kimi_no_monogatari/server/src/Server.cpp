@@ -12,7 +12,7 @@ Server::Server()
 
 void Server::dispatchMessage(Session* from, Message* message)
 {
-	message->dispose();
+
 }
 
 void Server::destroy()

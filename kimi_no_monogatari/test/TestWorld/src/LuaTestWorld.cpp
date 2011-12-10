@@ -69,8 +69,7 @@ void LuaTestWorld::registerFunctions()
 	module(m_L)
 	[
 		class_<LuaTestWorld>("LuaTestWorld")
-			.def("test", &LuaTestWorld::test)
-			.def("chat", &LuaTestWorld::chat)
+			.def("echo", &LuaTestWorld::echo)
 	];
 }
 
@@ -81,13 +80,8 @@ void LuaTestWorld::startup()
 	m_mainWorkerThread = boost::thread(boost::bind(&TestWorker::run, &m_mainWorker));
 }
 
-void LuaTestWorld::test()
+void LuaTestWorld::echo(const char* content)
 {
-	std::cout << "Hello World!" << std::endl;
-}
-
-void LuaTestWorld::chat(const char* content)
-{
-	m_mainWorker.chat(content);
+	m_mainWorker.echo(content);
 }
 

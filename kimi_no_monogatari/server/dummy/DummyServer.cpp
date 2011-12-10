@@ -23,7 +23,7 @@ void DummyServer::destroy()
 
 void DummyServer::dispatchMessage(Session* from, Message* message)
 {
-	switch (message->getMessageType())
+	switch (message->getType())
 	{
 	case MESSAGE_ECHO:
 		{
@@ -32,7 +32,7 @@ void DummyServer::dispatchMessage(Session* from, Message* message)
 		}
 		break;
 	default:
-		printf("Invalid message %x.\n", message->getMessageType());
+		printf("Invalid message %x.\n", message->getType());
 	}
 
 	Server::dispatchMessage(from, message);

@@ -1,64 +1,66 @@
 #include "pch/pch.h"
 
 #include "TestWorker.h"
-#include "Client.h"
 
+#define UPDATE_INTERVAL 50
 
 TestWorker::TestWorker()
-:m_processTimer(NULL),
-m_controlGame(
+:m_numGames(1)
 {
 
+}
+
+void TestWorker::removeConnection(ConnectionPtr con)
+{
+	con->stop();
+	m_connections.erase(con);
+}
+
+ConnectionPtr TestWorker::createConnection()
+{
+	ConnectionPtr con;
+	con.reset(new Connection(m_io_service, &m_messageManager, this));
+	m_connections.insert(con);
+	return con;
 }
 
 void TestWorker::run()
 {
-	boost::asio::io_service io_service;
-	m_client = new TestClient(io_service, &m_messageManager);
-	if (!m_client->isConnected())
+	for (u32 i = 0; i < m_numGames; i++)
 	{
-		try
+		GameAppPtr app;
+		app.reset(new TestGameApp(this, &m_messageManager));
+		if (app->init())
 		{
-			m_client->connect(this);
-		}
-		catch (std::exception& e)
-		{
-			delete m_client;
-			std::cerr << "Exception: " << e.what() << "\n";
-			std::cerr << "TestWorker terminate" << "\n";
-			return;
+			m_games.push_back(app);
 		}
 	}
-	m_processTimer = new boost::asio::deadline_timer(io_service);
-	m_processTimer->expires_from_now(boost::posix_time::milliseconds(50));
-	m_processTimer->async_wait(boost::bind(&TestWorker::process, this));
-	io_service.run();
+	if (m_games.empty())
+	{
+		return;
+	}
+	m_controlGame = m_games.at(0);
 
-	delete m_client;
-	delete m_processTimer;
+	m_processTimer.reset(new boost::asio::deadline_timer(m_io_service));
+	m_processTimer->expires_from_now(boost::posix_time::milliseconds(UPDATE_INTERVAL));
+	m_processTimer->async_wait(boost::bind(&TestWorker::process, this));
+	m_io_service.run();
 }
 
 void TestWorker::process()
 {
-	Message* message = NULL;
-	while(message = m_queue.pop())
+	for (std::vector<GameAppPtr>::iterator iter = m_games.begin(); iter != m_games.end(); ++iter)
 	{
-		m_client->sendMessage(message);
-		message->dispose();
+		(*iter)->update((float)UPDATE_INTERVAL / 1000);
 	}
-	m_processTimer->expires_from_now(boost::posix_time::milliseconds(50));
+	m_processTimer->expires_from_now(boost::posix_time::milliseconds(UPDATE_INTERVAL));
+	m_processTimer->async_wait(boost::bind(&TestWorker::process, this));
 }
 
-void TestWorker::chat(const char* content)
+void TestWorker::echo(const char* content)
 {
-//	Message* message = m_messageManager->getFreeMessage(chat_message, 1024);
-//	// package message by content.
-//	m_queue.push(message);
+	if (m_controlGame)
+	{
+		m_controlGame->echo(content);
+	}
 }
-
-void TestWorker::dispatchMessage(Session* from, Message* message)
-{
-	// handle the message.
-	message->dispose();
-}
-

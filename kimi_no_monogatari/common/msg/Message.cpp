@@ -21,7 +21,7 @@ void Message::dispose()
 	m_manager->disposeMessage(this);
 }
 
-void Message::setMessageHeader(const MessageHeader& header) 
+void Message::setHeader(const MessageHeader& header) 
 {
 	memcpy(m_buffer, &header, sizeof(MessageHeader));
 }

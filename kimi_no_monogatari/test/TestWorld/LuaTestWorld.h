@@ -22,9 +22,8 @@ public:
 	virtual void runString(const char* str);
 
 public: // export
-	void test();
-	// only for the main worker.
-	void chat(const char* content);
+	// for the only manual game.
+	void echo(const char* content);
 
 protected:
 	void initLua();
