@@ -17,10 +17,10 @@ MessageParser::~MessageParser()
 void MessageParser::setData(u32 pos, const void* data, u32 len)
 {
 	ASSERT(len > 0 && data);
-	ASSERT(m_pMessage && m_pMessage->getBodySize() >= pos + len && m_pMessage->getBody());
+	ASSERT(m_pMessage && m_pMessage->getBodySize() > pos + len && m_pMessage->getBody());
 
 	u8* msgBody = m_pMessage->getBody();
-	memcpy(msgBody + pos, data, len);
+	memcpy(msgBody + pos, data, len + 1);
 }
 
 const void* MessageParser::getData(u32 pos)
