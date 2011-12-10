@@ -7,9 +7,10 @@
 class SessionManager
 {
 public:
-	void start(SessionPtr session);
-	void stop(SessionPtr session);
-	void stopAll();
+	virtual ~SessionManager();
+	virtual void start(SessionPtr session);
+	virtual void stop(SessionPtr session);
+	virtual void stopAll();
 
 	typedef std::set<SessionPtr> SessionSet;
 

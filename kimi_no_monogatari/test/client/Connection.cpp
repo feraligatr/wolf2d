@@ -5,11 +5,11 @@
 
 using boost::asio::ip::tcp;
 
-Connection::Connection(boost::asio::io_service& io_service, MessageManager* messageManager, ConnectionManager* connectionManager)
+Connection::Connection(boost::asio::io_service& io_service, MessageManager& messageManager, ConnectionManager& connectionManager)
 :m_io_service(io_service)
 ,m_isConnected(false)
-,m_pMessageManager(messageManager)
-,m_pConnectionManager(connectionManager)
+,r_messageManager(messageManager)
+,r_connectionManager(connectionManager)
 {
 
 }
@@ -19,17 +19,19 @@ bool Connection::isConnected() const
 	return m_isConnected;
 }
 
-bool Connection::connect(MessageDispatcher* dispatcher)
+bool Connection::connect(MessageDispatcher& dispatcher)
 {
 	try
 	{
-		m_session.reset(new Session(m_io_service, NULL, dispatcher, m_pMessageManager));
+		SessionPtr session(new Session(m_io_service, *this, dispatcher, r_messageManager));
 		tcp::resolver resolver(m_io_service);
 		tcp::resolver::query query(tcp::v4(), "127.0.0.1", "92");
 		tcp::resolver::iterator iterator = resolver.resolve(query);
 
-		boost::asio::connect(m_session->socket(), iterator);
-		m_session->start();
+		boost::asio::connect(session->socket(), iterator);
+		session->start();
+		m_session = session;
+		start(session);
 	}
 	catch(std::exception& e)
 	{
@@ -41,11 +43,6 @@ bool Connection::connect(MessageDispatcher* dispatcher)
 	return true;
 }
 
-void Connection::stop()
-{
-	m_session->stop();
-}
-
 void Connection::deliver(Message* message)
 {
 	m_session->deliver(message);
@@ -53,6 +50,23 @@ void Connection::deliver(Message* message)
 
 void Connection::dispose()
 {
-	ASSERT(m_pConnectionManager);
-	m_pConnectionManager->removeConnection(shared_from_this());
+	r_connectionManager.removeConnection(shared_from_this());
+}
+
+void Connection::start(SessionPtr session)
+{
+	ASSERT(session == session);
+	SessionManager::start(session);
+}
+
+void Connection::stop(SessionPtr session)
+{
+	ASSERT(session == session);
+	SessionManager::stop(session);
+}
+
+void Connection::stopAll()
+{
+	m_session.swap(SessionPtr());
+	SessionManager::stopAll();
 }

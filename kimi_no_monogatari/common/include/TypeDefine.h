@@ -4,4 +4,7 @@
 class Session;
 typedef boost::shared_ptr<Session> SessionPtr;
 
+class Connection;
+typedef boost::shared_ptr<Connection> ConnectionPtr;
+
 #endif

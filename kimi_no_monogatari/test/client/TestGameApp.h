@@ -9,19 +9,19 @@
 class TestGameApp : public Client, MessageDispatcher
 {
 public:
-	TestGameApp(ConnectionManager* conMgr, MessageManager* msgMgr);
+	TestGameApp(ConnectionManager& connectionManager, MessageManager& messageManager);
 	virtual ~TestGameApp();
 	virtual bool init();
 	virtual void update(float interval);
 
-	virtual void dispatchMessage(Session* from, Message* message);
+	virtual void dispatchMessage(SessionPtr from, Message* message);
 
 	void echo(const char*);
 
 private:
 	ConnectionPtr m_connection;
-	ConnectionManager* m_pConMgr;
-	MessageManager* m_msgMgr;
+	ConnectionManager& r_connectionManager;
+	MessageManager& r_messageManager;
 
 };
 

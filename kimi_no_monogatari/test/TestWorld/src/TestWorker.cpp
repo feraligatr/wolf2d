@@ -12,14 +12,14 @@ TestWorker::TestWorker()
 
 void TestWorker::removeConnection(ConnectionPtr con)
 {
-	con->stop();
+	con->stopAll();
 	m_connections.erase(con);
 }
 
 ConnectionPtr TestWorker::createConnection()
 {
 	ConnectionPtr con;
-	con.reset(new Connection(m_io_service, &m_messageManager, this));
+	con.reset(new Connection(m_io_service, m_messageManager, *this));
 	m_connections.insert(con);
 	return con;
 }
@@ -29,7 +29,7 @@ void TestWorker::run()
 	for (u32 i = 0; i < m_numGames; i++)
 	{
 		GameAppPtr app;
-		app.reset(new TestGameApp(this, &m_messageManager));
+		app.reset(new TestGameApp(*this, m_messageManager));
 		if (app->init())
 		{
 			m_games.push_back(app);

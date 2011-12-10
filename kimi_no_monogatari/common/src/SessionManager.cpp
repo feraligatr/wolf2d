@@ -2,6 +2,11 @@
 
 #include "SessionManager.h"
 
+SessionManager::~SessionManager()
+{
+	stopAll();
+}
+
 void SessionManager::start(SessionPtr session)
 {
 	m_sessions.insert(session);
@@ -20,3 +25,4 @@ void SessionManager::stopAll()
 		boost::bind(&Session::stop, _1));
 	m_sessions.clear();
 }
+

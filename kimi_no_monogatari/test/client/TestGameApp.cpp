@@ -4,23 +4,23 @@
 
 #include "msg/MessageParsers.h"
 
-TestGameApp::TestGameApp(ConnectionManager* conMgr, MessageManager* msgMgr)
-:m_pConMgr(conMgr),
-m_msgMgr(msgMgr)
+TestGameApp::TestGameApp(ConnectionManager& connectionManager, MessageManager& messageManager)
+:r_connectionManager(connectionManager),
+r_messageManager(messageManager)
 {
 
 }
 
 TestGameApp::~TestGameApp()
 {
-	m_pConMgr->removeConnection(m_connection);
+	r_connectionManager.removeConnection(m_connection);
 }
 
 bool TestGameApp::init()
 {
 	ASSERT(m_connection == NULL);
-	m_connection = m_pConMgr->createConnection();
-	return m_connection->connect(this);
+	m_connection = r_connectionManager.createConnection();
+	return m_connection->connect(*this);
 }
 
 void TestGameApp::update(float interval)
@@ -28,7 +28,7 @@ void TestGameApp::update(float interval)
 
 }
 
-void TestGameApp::dispatchMessage(Session* from, Message* message)
+void TestGameApp::dispatchMessage(SessionPtr from, Message* message)
 {
 	ASSERT(message);
 	switch(message->getType())
@@ -54,7 +54,7 @@ void TestGameApp::echo(const char* content)
 		// log it.
 		return;
 	}
-	Message* m = m_msgMgr->getFreeMessage(EchoMessageParser::getRecommendSize());
+	Message* m = r_messageManager.getFreeMessage(EchoMessageParser::getRecommendSize());
 	EchoMessageParser parser(m);
 	parser.setText(content);
 	m->setHeader(MessageHeader(MESSAGE_ECHO, EchoMessageParser::getRecommendSize()));

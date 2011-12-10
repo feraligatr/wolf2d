@@ -1,8 +1,6 @@
 #ifndef _PCH_H_
 #define _PCH_H_
 
-#include "common.h"
-
 #include <vector>
 #include <set>
 #include <map>
@@ -25,5 +23,8 @@ extern "C"
  #include <lualib.h>
 }
 #include <luabind/luabind.hpp>
+
+#include "common.h"
+#include "TypeDefine.h"
 
 #endif /* _PCH_H_ */
