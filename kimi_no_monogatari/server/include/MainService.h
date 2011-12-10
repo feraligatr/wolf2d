@@ -9,7 +9,7 @@ class SessionManager;
 class MainService
 {
 public:
-	MainService(Server *server);
+	MainService(Server& server);
 	virtual ~MainService();
 public:
 	GSTATUS init();
@@ -29,9 +29,8 @@ private:
 
 	pi::time_ms_t m_update_interval;
 
-	SessionManager* m_sessionManager;
 	SessionPtr m_newSession;
-	Server *m_pServer;
+	Server& r_server;
 };
 
 #endif // #ifndef _MAIN_SERVICE_H_

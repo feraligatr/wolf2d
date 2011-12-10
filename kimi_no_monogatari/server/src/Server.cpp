@@ -3,35 +3,31 @@
 #include "Server.h"
 #include "SessionManager.h"
 #include "msg/MessageManager.h"
+#include "Session.h"
 
 Server::Server()
 {
-	m_pSessionManager = new SessionManager();
-	m_pMessageManager = new MessageManager();
-}
-
-void Server::dispatchMessage(Session* from, Message* message)
-{
-
+	m_sessionManager = new SessionManager();
+	m_messageManager = new MessageManager();
 }
 
 void Server::destroy()
 {
-	m_pSessionManager->stopAll();
+	m_sessionManager->stopAll();
 }
 
 Server::~Server()
 {
-	delete m_pMessageManager;
-	delete m_pSessionManager;
+	delete m_messageManager;
+	delete m_sessionManager;
 }
 
-SessionManager* Server::getSessionManager()
+SessionPtr Server::getNewSession(boost::asio::io_service& io_service)
 {
-	return m_pSessionManager;
+	return SessionPtr(new Session(io_service, *m_sessionManager, *this, *m_messageManager));
 }
 
-Session* Server::getNewSession(boost::asio::io_service& io_service)
+void Server::startSession(SessionPtr session)
 {
-	return new Session(io_service, m_pSessionManager, this, m_pMessageManager);
+	m_sessionManager->start(session);
 }

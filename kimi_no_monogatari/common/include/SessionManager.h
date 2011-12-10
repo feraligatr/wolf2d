@@ -1,6 +1,7 @@
 #ifndef _SESSION_MANAGER_H_
 #define _SESSION_MANAGER_H_
 
+#include "TypeDefine.h"
 #include "Session.h"
 
 class SessionManager

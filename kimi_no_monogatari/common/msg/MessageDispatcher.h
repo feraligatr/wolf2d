@@ -9,7 +9,7 @@ class MessageDispatcher
 {
 public:
 	virtual ~MessageDispatcher() {}
-	virtual void dispatchMessage(Session* from, Message* message) = 0;
+	virtual void dispatchMessage(SessionPtr from, Message* message) = 0;
 };
 
 

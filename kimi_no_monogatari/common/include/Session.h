@@ -12,7 +12,7 @@ class Session : public boost::enable_shared_from_this<Session>,
 {
 public:
 	explicit Session(boost::asio::io_service& io_service,
-		SessionManager* sm, MessageDispatcher* dispatcher, MessageManager* mm);
+		SessionManager& sessionManager, MessageDispatcher& dispatcher, MessageManager& messageManager);
 
 	virtual ~Session() {}
 
@@ -40,9 +40,9 @@ protected:
 	// TODO: write here for Session timeout things.
 	boost::asio::deadline_timer m_closeTimer;
 
-	MessageDispatcher* m_pDispatcher;
-	SessionManager* m_pSessionManager;
-	MessageManager* m_pMessageManager;
+	MessageDispatcher& r_dispatcher;
+	SessionManager& r_sessionManager;
+	MessageManager& r_messageManager;
 
 	MessageHeader m_readHeader;
 	Message* m_readMessage;
@@ -51,7 +51,5 @@ protected:
 	MessageList m_writingList;
 	MessageList m_pendingList;
 };
-
-typedef boost::shared_ptr<Session> SessionPtr;
 
 #endif /* _SESSION_H_ */

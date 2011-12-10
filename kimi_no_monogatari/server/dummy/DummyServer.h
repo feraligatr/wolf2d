@@ -9,10 +9,9 @@ class DummyServer : public Server
 {
 public:
 	virtual void update();
-	virtual void destroy();
-	virtual void dispatchMessage(Session* from, Message* message);
+	virtual void dispatchMessage(SessionPtr from, Message* message);
 private:
-	void handleEchoMessage(Session* from, EchoMessageParser* mp);
+	void handleEchoMessage(SessionPtr from, EchoMessageParser* mp);
 };
 
 

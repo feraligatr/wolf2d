@@ -7,15 +7,15 @@
 
 using namespace boost::asio;
 
-Session::Session(boost::asio::io_service& io_service, SessionManager* sm, MessageDispatcher* dispatcher, MessageManager* mm)
-:m_pSessionManager(sm)
+Session::Session(boost::asio::io_service& io_service, SessionManager& sessionManager, MessageDispatcher& dispatcher, MessageManager& messageManager)
+:r_sessionManager(sessionManager)
 ,m_socket(io_service)
-,m_pDispatcher(dispatcher)
-,m_pMessageManager(mm)
+,r_dispatcher(dispatcher)
+,r_messageManager(messageManager)
 ,m_closeTimer(io_service)
 ,m_writing(false)
 {
-	
+
 }
 
 boost::asio::ip::tcp::socket& Session::socket()
@@ -52,7 +52,7 @@ void Session::handle_read_header(const boost::system::error_code& error)
 		}
 		else
 		{
-			m_readMessage = m_pMessageManager->getFreeMessage(m_readHeader);
+			m_readMessage = r_messageManager.getFreeMessage(m_readHeader);
 			async_read(m_socket,
 					buffer(m_readMessage->getBody(), m_readMessage->getBodySize()),
 					boost::bind(&Session::handle_read_body, shared_from_this(),
@@ -67,21 +67,14 @@ void Session::handle_read_header(const boost::system::error_code& error)
 
 void Session::socketError()
 {
-	if (m_pSessionManager)
-	{
-		m_pSessionManager->stop(shared_from_this());
-	}
-	else
-	{
-		stop();
-	}
+	r_sessionManager.stop(shared_from_this());
 }
 
 void Session::handle_read_body(const boost::system::error_code& error)
 {
 	if (!error)
 	{
-		m_pDispatcher->dispatchMessage(this, m_readMessage);
+		r_dispatcher.dispatchMessage(shared_from_this(), m_readMessage);
 		async_read(m_socket,
 				buffer(&m_readHeader, sizeof(m_readHeader)),
 				boost::bind(&Session::handle_read_header, shared_from_this(),

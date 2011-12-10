@@ -7,21 +7,10 @@
 
 void DummyServer::update()
 {
-// TODO. move the logic into the needed position.
-//{
-//	message = got message from queue;
-//	handler = factory->gethandler(message);
-//	handler->handle(environment);
-//	message->dispose();
-//}
+
 }
 
-void DummyServer::destroy()
-{
-	Server::destroy();
-}
-
-void DummyServer::dispatchMessage(Session* from, Message* message)
+void DummyServer::dispatchMessage(SessionPtr from, Message* message)
 {
 	switch (message->getType())
 	{
@@ -34,11 +23,9 @@ void DummyServer::dispatchMessage(Session* from, Message* message)
 	default:
 		printf("Invalid message %x.\n", message->getType());
 	}
-
-	Server::dispatchMessage(from, message);
 }
 
-void DummyServer::handleEchoMessage(Session* from, EchoMessageParser* mp)
+void DummyServer::handleEchoMessage(SessionPtr from, EchoMessageParser* mp)
 {
 	from->deliver(mp->getMessage());
 }

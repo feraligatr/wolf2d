@@ -1,14 +1,13 @@
 #include "pch/pch.h"
 
 #include "MainService.h"
-#include "SessionManager.h"
 
 #define DEFAULT_UPDATE_INTERVAL 100
 
-MainService::MainService(Server* server)
+MainService::MainService(Server& server)
 : m_acceptor(m_io_service)
 , m_signals(m_io_service)
-, m_pServer(server)
+, r_server(server)
 {
 }
 
@@ -42,7 +41,7 @@ GSTATUS MainService::run()
 	while (true)
 	{
 		pi::time_ms_t last_time = pi::getTickSinceStartup();
-		m_pServer->update();
+		r_server.update();
 		while(m_io_service.poll() > 0 && (pi::getTickSinceStartup() - last_time < m_update_interval))
 		{
 			
@@ -62,7 +61,7 @@ void MainService::destroy()
 
 void MainService::startAccept()
 {
-	m_newSession.reset(m_pServer->getNewSession(m_io_service));
+	m_newSession = r_server.getNewSession(m_io_service);
 	m_acceptor.async_accept(m_newSession->socket(),
 		boost::bind(&MainService::handleAccept, this,
 			boost::asio::placeholders::error));
@@ -76,7 +75,7 @@ void MainService::handleAccept(const boost::system::error_code& e)
 	}
 	if (!e)
 	{
-		m_pServer->getSessionManager()->start(m_newSession);
+		r_server.startSession(m_newSession);
 	}
 	startAccept();
 }
@@ -85,5 +84,5 @@ void MainService::handle_stop()
 {
 	// TODO. other clear work?
 	m_acceptor.close();
-	m_pServer->destroy();
+	r_server.destroy();
 }
