@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-Zm225"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../common/include;../../test/TestWorld;&quot;$(LUA_PATH)/include&quot;;&quot;$(BOOST_ROOT)&quot;;../../dependencies/;../../test/client;../../common;../../test"
+				AdditionalIncludeDirectories="../../common/include;../../test/TestWorld;&quot;$(LUA_PATH)/include&quot;;&quot;$(BOOST_ROOT)&quot;;../../dependencies/;../../test/client;../../common;../../test;../../dependencies/logging"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"

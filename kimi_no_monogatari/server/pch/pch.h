@@ -18,6 +18,12 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
+#include <boost/logging/format_fwd.hpp>
+#include <boost/logging/format/named_write.hpp>
+#include <boost/logging/format.hpp>
+#include <boost/logging/format/formatter/tags.hpp>
+#include <boost/logging/logging.hpp>
+
 #include "common.h"
 #include "TypeDefine.h"
 
