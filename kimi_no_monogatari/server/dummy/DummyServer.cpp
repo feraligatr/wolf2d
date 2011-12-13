@@ -2,6 +2,7 @@
 
 #include "Session.h"
 #include "msg/MessageParsers.h"
+#include "SessionManager.h"
 
 #include "DummyServer.h"
 
@@ -21,7 +22,10 @@ void DummyServer::dispatchMessage(SessionPtr from, Message* message)
 		}
 		break;
 	default:
-		printf("Invalid message %x.\n", message->getType());
+		{
+			LERR_ << "Invalid message " << message->getType();
+			m_sessionManager->stop(from);
+		}
 	}
 }
 
