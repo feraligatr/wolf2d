@@ -29,14 +29,13 @@ bool Connection::connect(MessageDispatcher& dispatcher)
 		tcp::resolver::iterator iterator = resolver.resolve(query);
 
 		boost::asio::connect(session->socket(), iterator);
-		session->start();
 		m_session = session;
 		start(session);
 	}
 	catch(std::exception& e)
 	{
-		std::cerr << "Exception: " << e.what() << "\n";
-		std::cerr << "TestWorker terminate" << "\n";
+		LERR_ << "Exception: " << e.what();
+		LERR_ << "TestWorker terminate";
 		return false;
 	}
 	m_isConnected = true;

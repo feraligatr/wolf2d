@@ -3,10 +3,12 @@
 #include "TestGameApp.h"
 
 #include "msg/MessageParsers.h"
+#include "Logger.h"
 
-TestGameApp::TestGameApp(ConnectionManager& connectionManager, MessageManager& messageManager)
+TestGameApp::TestGameApp(ConnectionManager& connectionManager, MessageManager& messageManager, LoggerType* logger)
 :r_connectionManager(connectionManager),
-r_messageManager(messageManager)
+r_messageManager(messageManager),
+m_logger(logger)
 {
 
 }
@@ -36,7 +38,7 @@ void TestGameApp::dispatchMessage(SessionPtr from, Message* message)
 	case MESSAGE_ECHO:
 		{
 			EchoMessageParser parser(message);
-			// log it.
+			LAPP_L_(m_logger) << parser.getText();
 		}
 		break;
 	default:
@@ -51,13 +53,13 @@ void TestGameApp::echo(const char* content)
 	ASSERT(m_connection);
 	if (!m_connection->isConnected())
 	{
-		// log it.
+		LAPP_L_(m_logger) << "Echoing but Connection invalid." ;
 		return;
 	}
 	Message* m = r_messageManager.getFreeMessage(EchoMessageParser::getRecommendSize());
 	EchoMessageParser parser(m);
 	parser.setText(content);
 	m->setHeader(MessageHeader(MESSAGE_ECHO, EchoMessageParser::getRecommendSize()));
-	// log it.
+	LAPP_L_(m_logger) << "echo " << content << " but parser.getText() == " << parser.getText();
 	m_connection->deliver(m);
 }

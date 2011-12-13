@@ -19,6 +19,8 @@ public:
 protected:
 	void process();
 
+	void initLogger();
+
 private:
 	boost::shared_ptr<boost::asio::deadline_timer> m_processTimer;
 	MessageManager m_messageManager;
@@ -33,6 +35,8 @@ private:
 
 	std::set<ConnectionPtr> m_connections;
 
+	LoggerType m_consoleLogger;
+	LoggerType m_fileLogger;
 };
 
 

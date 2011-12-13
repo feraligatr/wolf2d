@@ -5,6 +5,7 @@
 
 int main(int argc, char *argv[])
 {
+	init_global_logs();
 	char buffer[1024];
 	LuaTestWorld world;
 	std::cout << "use lua as intepreter, world is global environment. " << std::endl;

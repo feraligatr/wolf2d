@@ -53,6 +53,11 @@ void Session::handle_read_header(const boost::system::error_code& error)
 		else
 		{
 			m_readMessage = r_messageManager.getFreeMessage(m_readHeader);
+			if (!m_readMessage)
+			{
+				// message header wrong.
+				socketError();
+			}
 			async_read(m_socket,
 					buffer(m_readMessage->getBody(), m_readMessage->getBodySize()),
 					boost::bind(&Session::handle_read_body, shared_from_this(),

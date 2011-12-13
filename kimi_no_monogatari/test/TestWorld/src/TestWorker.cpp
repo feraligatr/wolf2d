@@ -4,10 +4,31 @@
 
 #define UPDATE_INTERVAL 50
 
+using namespace boost::logging;
+
 TestWorker::TestWorker()
 :m_numGames(1)
 {
+	initLogger();
+}
 
+void TestWorker::initLogger()
+{
+	m_consoleLogger.writer().add_formatter( formatter::idx() );
+	m_consoleLogger.writer().add_formatter( formatter::time("$hh:$mm.$ss ") );
+	m_consoleLogger.writer().add_formatter( formatter::append_newline() );
+
+	//        ... and where should it be written to
+	m_consoleLogger.writer().add_destination( destination::dbg_window() );
+	m_consoleLogger.turn_cache_off();
+
+	m_fileLogger.writer().add_formatter( formatter::idx() );
+	m_fileLogger.writer().add_formatter( formatter::time("$hh:$mm.$ss ") );
+	m_fileLogger.writer().add_formatter( formatter::append_newline() );
+
+	//        ... and where should it be written to
+	m_fileLogger.writer().add_destination( destination::file("out.txt") );
+	m_fileLogger.turn_cache_off();
 }
 
 void TestWorker::removeConnection(ConnectionPtr con)
@@ -18,18 +39,25 @@ void TestWorker::removeConnection(ConnectionPtr con)
 
 ConnectionPtr TestWorker::createConnection()
 {
-	ConnectionPtr con;
-	con.reset(new Connection(m_io_service, m_messageManager, *this));
+	ConnectionPtr con(new Connection(m_io_service, m_messageManager, *this));
 	m_connections.insert(con);
 	return con;
 }
 
 void TestWorker::run()
 {
+	ASSERT(m_numGames > 0);
 	for (u32 i = 0; i < m_numGames; i++)
 	{
 		GameAppPtr app;
-		app.reset(new TestGameApp(*this, m_messageManager));
+		if (i == 0)
+		{
+			app.reset(new TestGameApp(*this, m_messageManager, &m_consoleLogger));
+		}
+		else
+		{
+			app.reset(new TestGameApp(*this, m_messageManager, &m_fileLogger));
+		}
 		if (app->init())
 		{
 			m_games.push_back(app);

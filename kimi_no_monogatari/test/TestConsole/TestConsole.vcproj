@@ -43,7 +43,7 @@
 				AdditionalOptions="-Zm225"
 				Optimization="0"
 				AdditionalIncludeDirectories="../../common/include;../../test/TestWorld;&quot;$(LUA_PATH)/include&quot;;&quot;$(BOOST_ROOT)&quot;;../../dependencies/;../../test/client;../../common;../../test;../../dependencies/logging"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -251,6 +251,14 @@
 			>
 			<File
 				RelativePath="..\..\common\include\common.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Logger.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\Logger.h"
 				>
 			</File>
 			<File

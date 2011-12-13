@@ -9,7 +9,7 @@
 class TestGameApp : public Client, MessageDispatcher
 {
 public:
-	TestGameApp(ConnectionManager& connectionManager, MessageManager& messageManager);
+	TestGameApp(ConnectionManager& connectionManager, MessageManager& messageManager, LoggerType* logger);
 	virtual ~TestGameApp();
 	virtual bool init();
 	virtual void update(float interval);
@@ -22,6 +22,7 @@ private:
 	ConnectionPtr m_connection;
 	ConnectionManager& r_connectionManager;
 	MessageManager& r_messageManager;
+	LoggerType* m_logger;
 
 };
 
