@@ -34,5 +34,6 @@ extern "C"
 
 #include "common.h"
 #include "TypeDefine.h"
+#include "Random.h"
 
 #endif /* _PCH_H_ */

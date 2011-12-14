@@ -38,7 +38,7 @@ void TestGameApp::dispatchMessage(SessionPtr from, Message* message)
 	case MESSAGE_ECHO:
 		{
 			EchoMessageParser parser(message);
-			LAPP_L_(m_logger) << parser.getText();
+			LAPP_L_(m_logger) << " receiving message echo: " << parser.getText();
 		}
 		break;
 	default:
@@ -60,6 +60,6 @@ void TestGameApp::echo(const char* content)
 	EchoMessageParser parser(m);
 	parser.setText(content);
 	m->setHeader(MessageHeader(MESSAGE_ECHO, EchoMessageParser::getRecommendSize()));
-	LAPP_L_(m_logger) << "echo " << content << " but parser.getText() == " << parser.getText();
+	LAPP_L_(m_logger) << "echo " << content;
 	m_connection->deliver(m);
 }

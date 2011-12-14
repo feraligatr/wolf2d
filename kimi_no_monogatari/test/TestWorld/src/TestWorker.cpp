@@ -1,6 +1,7 @@
 #include "pch/pch.h"
 
 #include "TestWorker.h"
+#include "TestGameRobot.h"
 
 #define UPDATE_INTERVAL 50
 
@@ -56,7 +57,9 @@ void TestWorker::run()
 		}
 		else
 		{
-			app.reset(new TestGameApp(*this, m_messageManager, &m_fileLogger));
+			char buffer[128];
+			sprintf(buffer, "robot %d", i);
+			app.reset(new TestGameRobot(*this, m_messageManager, &m_fileLogger, buffer));
 		}
 		if (app->init())
 		{
