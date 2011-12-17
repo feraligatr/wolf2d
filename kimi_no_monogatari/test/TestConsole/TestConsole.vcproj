@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-Zm225"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../common/include;../../test/TestWorld;&quot;$(LUA_PATH)/include&quot;;&quot;$(BOOST_ROOT)&quot;;../../dependencies/;../../test/client;../../common;../../test;../../dependencies/logging"
+				AdditionalIncludeDirectories="../../common/include;&quot;$(LUA_PATH)/include&quot;;&quot;$(BOOST_ROOT)&quot;;../../dependencies/;../../common;../../test/src;../../dependencies/logging;../../test;../../client/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -193,70 +193,60 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="header"
-			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
-			>
-		</Filter>
-		<Filter
-			Name="TestWorld"
+			Name="test"
 			>
 			<File
-				RelativePath="..\TestWorld\src\LuaTestWorld.cpp"
+				RelativePath="..\src\Logger.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\TestWorld\LuaTestWorld.h"
+				RelativePath="..\src\LuaTestWorld.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\TestWorld\src\TestWorker.cpp"
+				RelativePath="..\src\LuaTestWorld.h"
 				>
 			</File>
 			<File
-				RelativePath="..\TestWorld\TestWorld.h"
+				RelativePath="..\src\TestGameApp.cpp"
 				>
 			</File>
-		</Filter>
-		<Filter
-			Name="luabind"
-			>
+			<File
+				RelativePath="..\src\TestGameApp.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\TestGameRobot.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\TestGameRobot.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\TestWorker.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\TestWorker.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\TestWorld.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="client"
 			>
 			<File
-				RelativePath="..\client\Connection.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\Connection.h"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ConnectionManager.h"
-				>
-			</File>
-			<File
-				RelativePath="..\client\TestGameApp.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\TestGameApp.h"
+				RelativePath="..\..\client\src\Connection.cpp"
 				>
 			</File>
 		</Filter>
 		<Filter
-			Name="other"
+			Name="depend"
 			>
-			<File
-				RelativePath="..\..\common\include\common.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\Logger.cpp"
-				>
-			</File>
 			<File
 				RelativePath="..\..\common\include\Logger.h"
 				>
@@ -274,7 +264,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\include\Random.cpp"
+				RelativePath="..\..\common\src\Random.cpp"
 				>
 			</File>
 			<File
@@ -282,11 +272,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\client\RandomUtil.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\RandomUtil.h"
+				RelativePath="..\..\common\utils\RandomUtil.cpp"
 				>
 			</File>
 			<File
@@ -303,14 +289,6 @@
 			</File>
 			<File
 				RelativePath="..\..\common\include\SessionManager.h"
-				>
-			</File>
-			<File
-				RelativePath="..\client\TestGameRobot.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\TestGameRobot.h"
 				>
 			</File>
 		</Filter>

@@ -2,7 +2,7 @@
 #define _TEST_GAME_ROBOT_H_
 
 #include "TestGameApp.h"
-#include "RandomUtil.h"
+#include "utils/RandomUtil.h"
 
 class TestGameRobot : public TestGameApp
 {
