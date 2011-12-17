@@ -27,7 +27,7 @@ public:
 
 private:
 	// implement a parameter list to start different games.
-	// every game maybe need different render context(qt, 2d, 3d, opengl, directx)
+	// each game may need a different render context(qt, 2d, 3d, opengl, directx)
 	// gamename, server, id....
 	// other limitation or something.
 
@@ -48,7 +48,7 @@ private:
 	Game* m_currentGame;
 
 	QTime m_time;
-	
+
 };
 
 }

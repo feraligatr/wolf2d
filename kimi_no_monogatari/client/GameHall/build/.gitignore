@@ -1,0 +1,6 @@
+debug
+release
+wuser32.pdb
+GameHall.*
+Makefile*
+vc90.*

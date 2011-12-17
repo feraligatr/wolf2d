@@ -1,4 +1,4 @@
-#include "pch.h"
+#include "pch/pch.h"
 #include "GameHallApplication.h"
 #include "GameHallService.h"
 
