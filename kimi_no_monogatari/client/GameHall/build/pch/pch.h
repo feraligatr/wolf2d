@@ -32,6 +32,8 @@ extern "C"
 }
 #include <luabind/luabind.hpp>
 
+#include "Ogre.h"
+
 #include "common.h"
 #include "TypeDefine.h"
 #include "Random.h"

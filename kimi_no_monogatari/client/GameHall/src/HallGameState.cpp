@@ -3,25 +3,33 @@
 #include "HallWindow.h"
 #include "HallGameState.h"
 #include "GameGLWidget.h"
-#include "Sample3dGame.h"
 #include "GameHallApplication.h"
+
+#include "OgreRenderContext.h"
+#include "SimpleClient.h"
 
 namespace hall
 {
 
 GameState::GameState()
-:m_currentGame(NULL)
+	:m_currentClient(NULL),
+	 m_renderContext(NULL)
 {
 
 }
 
 GSTATUS GameState::exit()
 {
-	if (m_currentGame)
+	if (m_currentClient)
 	{
-		// TODO: exit should be asyc, invoke m_currentGame->exit() and wait the exit success message to come back.
-		delete m_currentGame;
-		m_currentGame = NULL;
+		// TODO: exit should be asyc, invoke m_currentClient->exit() and wait the exit success message to come back.
+		delete m_currentClient;
+		m_currentClient = NULL;
+	}
+	if (m_renderContext)
+	{
+		delete m_renderContext;
+		m_renderContext = NULL;
 	}
 	delete m_window;
 	m_window = NULL;
@@ -32,8 +40,12 @@ GSTATUS GameState::enter()
 {
 	// TODO: by parameter to create different GameContent and Game.
 	m_window = new GameGLWidget(this);
-	m_currentGame = new Sample3DGame(this, this);
-	m_currentGame->start(m_window->width(), m_window->height());
+	
+	m_renderContext = new OgreRenderContext((size_t)(HWND)(m_window->winId()));
+	m_renderContext->start(m_window->width(), m_window->height());
+
+	m_currentClient = new SimpleClient(m_renderContext);
+
 	m_time = QTime::currentTime();
 	m_time.start();
 
@@ -43,18 +55,22 @@ GSTATUS GameState::enter()
 void GameState::onInvoked(QWidget* owner, QWidget* , QString msg, void* data)
 {
 	ASSERT(owner == m_window);
+	if (!m_currentClient)
+	{
+		return;
+	}
 	if (msg == "update")
 	{
-		m_currentGame->update(m_time.restart() / 1000.0f);
+		m_currentClient->update(m_time.restart() / 1000.0f);
 	}
 	else if (msg == "paint")
 	{
-		m_currentGame->update(0);
+		m_currentClient->update(0);
 	}
 	else if (msg == "resize")
 	{
 		QSize* size = (QSize*)data;
-		m_currentGame->resize(size->width(), size->height());
+		m_renderContext->resize(size->width(), size->height());
 	}
 }
 
@@ -66,17 +82,6 @@ void GameState::onGenericMessage(const QString& , void*)
 void GameState::onResizeEvent(QResizeEvent * )
 {
 	// TODO: resize the widget 
-}
-
-int GameState::getWindowId()
-{
-	return (size_t)(HWND)(m_window->winId());
-}
-
-void GameState::changeWindowId(int )
-{
-	m_window->setAttribute( Qt::WA_PaintOnScreen, true );
-	m_window->setAttribute( Qt::WA_NoBackground );
 }
 
 }

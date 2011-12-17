@@ -24,6 +24,8 @@ INCLUDEPATH += $${ROOT_DIR}/dependencies
 INCLUDEPATH += $${ROOT_DIR}/common
 INCLUDEPATH += $${ROOT_DIR}/common/include
 INCLUDEPATH += $${GAMEHALL_DIR}/build
+INCLUDEPATH += $${CLIENT_DIR}/include
+INCLUDEPATH += $${CLIENT_DIR}/Game/Renderer
 
 PRECOMPILED_HEADER = pch/pch.h
 
@@ -39,6 +41,14 @@ HEADERS += $${GAMEHALL_DIR}/include/HallHallState.h
 HEADERS += $${GAMEHALL_DIR}/include/HallGameState.h
 HEADERS += $${GAMEHALL_DIR}/include/HallWindow.h
 
+HEADERS += $${CLIENT_DIR}/include/Client.h
+HEADERS += $${CLIENT_DIR}/include/Connection.h
+HEADERS += $${CLIENT_DIR}/include/ConnectionManager.h
+
+HEADERS += $${ROOT_DIR}/common/include/common.h
+HEADERS += $${ROOT_DIR}/common/include/Logger.h
+
+
 SOURCES += $${GAMEHALL_DIR}/src/GameHallWindow.cpp
 SOURCES += $${GAMEHALL_DIR}/src/GameHallApplication.cpp
 SOURCES += $${GAMEHALL_DIR}/src/HallLoginState.cpp
@@ -51,9 +61,23 @@ SOURCES += $${GAMEHALL_DIR}/src/HallWindow.cpp
 SOURCES += $${GAMEHALL_DIR}/src/Sample3DGame.cpp
 SOURCES += $${GAMEHALL_DIR}/src/GameGLWidget.cpp
 SOURCES += $${GAMEHALL_DIR}/src/main.cpp
-
 SOURCES += $${GAMEHALL_DIR}/src/Logger.cpp
 
+SOURCES += $${CLIENT_DIR}/src/Connection.cpp
+SOURCES += $${CLIENT_DIR}/src/SimpleClient.cpp
+SOURCES += $${CLIENT_DIR}/Game/renderer/OgreGraphicsWorld.cpp
+SOURCES += $${CLIENT_DIR}/Game/renderer/OgreRenderContext.cpp
+
+SOURCES += $${ROOT_DIR}/common/msg/Message.cpp
+SOURCES += $${ROOT_DIR}/common/msg/MessageManager.cpp
+SOURCES += $${ROOT_DIR}/common/msg/MessageParser.cpp
+SOURCES += $${ROOT_DIR}/common/msg/MessageParsers.cpp
+
+SOURCES += $${ROOT_DIR}/common/src/Random.cpp
+SOURCES += $${ROOT_DIR}/common/src/Session.cpp
+SOURCES += $${ROOT_DIR}/common/src/SessionManager.cpp
+
+SOURCES += $${ROOT_DIR}/common/utils/RandomUtil.cpp
 
 
 win32:LIBS += $(OGRE_LIB)/OgreMain_d.lib

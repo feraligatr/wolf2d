@@ -1,50 +1,58 @@
 #include "pch/pch.h"
 
-#include "Sample3DGame.h"
-#include <QString>
+#include "OgreRenderContext.h"
+#include "OgreGraphicsWorld.h"
 #include "Ogre.h"
 
+#include <QString>
 
-Sample3DGame::Sample3DGame(GameContext* context, GameListener* listener)
-:Game(context, listener)
-,m_sceneManager(NULL)
-,m_camera(NULL)
-,m_root(NULL)
-,m_renderWindow(NULL)
-,m_viewport(NULL)
+OgreRenderContext::OgreRenderContext(int windowId)
+	:m_gWorld(NULL),
+	 m_windowId(windowId)
 {
 
 }
 
-bool Sample3DGame::start(int width, int height)
+OgreRenderContext::~OgreRenderContext()
 {
-	initOgre("plugins_d.cfg", "resources_d.cfg", "output.log", width, height);
-	createRenderWindow(m_gameContext->getWindowId(), width, height);
-	setupScene();
-	return true;
+	exit();
 }
 
-void Sample3DGame::exit()
+GraphicsWorld* OgreRenderContext::getGraphicsWorld()
 {
-	if (m_root)
-	{
-		m_root->shutdown();
-		delete m_root;
-	}
+	return m_gWorld;
 }
 
-void Sample3DGame::resize(int width, int height)
+void OgreRenderContext::resize(int , int )
 {
 	m_renderWindow->windowMovedOrResized();
 }
 
-void Sample3DGame::intenal_update(float )
+bool OgreRenderContext::start(int width, int height)
 {
-	// do nothing.
-	m_root->renderOneFrame();
+	initOgre("plugins_d.cfg", "resources_d.cfg", "output.log", width, height);
+	createRenderWindow(m_windowId, width, height);
+	ASSERT(m_gWorld == NULL);
+	m_gWorld = new OgreGraphicsWorld(m_root, m_renderWindow);
+	return m_gWorld->start();
 }
 
-void Sample3DGame::createRenderWindow(int windowId, int width, int height)
+void OgreRenderContext::exit()
+{
+	if (m_gWorld)
+	{
+		delete m_gWorld;
+		m_gWorld = NULL;
+	}
+	if (m_root)
+	{
+		m_root->shutdown();
+		delete m_root;
+		m_root = NULL;
+	}
+}
+
+void OgreRenderContext::createRenderWindow(int windowId, int width, int height)
 {
 	Ogre::String winHandle;
 #ifdef WIN32
@@ -69,7 +77,7 @@ void Sample3DGame::createRenderWindow(int windowId, int width, int height)
 		&params );
 }
 
-void Sample3DGame::initOgre(const std::string& plugins_file,
+void OgreRenderContext::initOgre(const std::string& plugins_file,
 		const std::string& ogre_cfg_file,
 		const std::string& ogre_log,
 		int width, int height)
@@ -87,20 +95,4 @@ void Sample3DGame::initOgre(const std::string& plugins_file,
 	m_root->saveConfig();
 	m_root->initialise(false);
 
-}
-
-void Sample3DGame::setupScene()
-{
-	Ogre::SceneType scene_manager_type = Ogre::ST_EXTERIOR_CLOSE;
-
-	m_sceneManager = m_root->createSceneManager( scene_manager_type );
-	m_sceneManager->setAmbientLight( Ogre::ColourValue(1,1,1) );
-
-	m_camera = m_sceneManager->createCamera( "sample_cam" );
-	m_camera->setPosition( Ogre::Vector3(0,1,0) );
-	m_camera->lookAt( Ogre::Vector3(0,0,0) );
-	m_camera->setNearClipDistance( 1.0 );
-
-	m_viewport = m_renderWindow->addViewport( m_camera );
-	m_viewport->setBackgroundColour( Ogre::ColourValue( 0,0,0 ) );
 }

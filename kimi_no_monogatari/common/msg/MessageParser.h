@@ -11,8 +11,8 @@ public:
 
 	Message* getMessage() { return m_pMessage; }
 private:
-	static void* operator new (size_t size) {return NULL;}
-	static void operator delete (void *p) {}
+	static void* operator new (size_t ) {return NULL;}
+	static void operator delete (void *) {}
 protected:
 	Message* m_pMessage;
 

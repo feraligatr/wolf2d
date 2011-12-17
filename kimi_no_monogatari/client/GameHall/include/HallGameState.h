@@ -2,14 +2,15 @@
 #define _HALL_GAME_STATE_H_
 
 #include "HallState.h"
-#include "Game.h"
+#include "Client.h"
+#include "RenderContext.h"
 
 #include <QTime>
 
 namespace hall
 {
 
-class GameState : public State, public WidgetListener, public GameContext, public GameListener
+class GameState : public State, public WidgetListener
 {
 public:
 	GameState();
@@ -21,9 +22,6 @@ public:
 
 	virtual void onResizeEvent(QResizeEvent * event);
 
-	virtual int getWindowId();
-
-	virtual void changeWindowId(int windowId);
 
 private:
 	// implement a parameter list to start different games.
@@ -45,7 +43,9 @@ private:
 	// but for simplicity, we inherit the two interface.
 	// dont use delegate util we have enough apis.
 
-	Game* m_currentGame;
+	Client* m_currentClient;
+	
+	RenderContext* m_renderContext;
 
 	QTime m_time;
 
