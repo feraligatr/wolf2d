@@ -58,7 +58,6 @@ SOURCES += $${GAMEHALL_DIR}/src/GameHallService.cpp
 SOURCES += $${GAMEHALL_DIR}/src/HallHallState.cpp
 SOURCES += $${GAMEHALL_DIR}/src/HallGameState.cpp
 SOURCES += $${GAMEHALL_DIR}/src/HallWindow.cpp
-SOURCES += $${GAMEHALL_DIR}/src/Sample3DGame.cpp
 SOURCES += $${GAMEHALL_DIR}/src/GameGLWidget.cpp
 SOURCES += $${GAMEHALL_DIR}/src/main.cpp
 SOURCES += $${GAMEHALL_DIR}/src/Logger.cpp

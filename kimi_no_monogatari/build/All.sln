@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server", "..\server\build\Server.vcproj", "{068EA90A-D32D-4883-ACA8-B060E1985C5E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameHall", "..\client\GameHall\build\GameHall.vcproj", "{01B61F1C-0A20-3101-9DB8-D979A32E7EDE}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameHall", "..\client\GameHall\build\GameHall.vcproj", "{A3F8A99A-6817-368E-A8D6-A4F79E0C88E5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{BC1963D5-F3A5-4E92-A364-FED6A64B74ED}"
 EndProject
@@ -26,10 +26,10 @@ Global
 		{068EA90A-D32D-4883-ACA8-B060E1985C5E}.Debug|Win32.Build.0 = Debug|Win32
 		{068EA90A-D32D-4883-ACA8-B060E1985C5E}.Release|Win32.ActiveCfg = Release|Win32
 		{068EA90A-D32D-4883-ACA8-B060E1985C5E}.Release|Win32.Build.0 = Release|Win32
-		{01B61F1C-0A20-3101-9DB8-D979A32E7EDE}.Debug|Win32.ActiveCfg = Debug|Win32
-		{01B61F1C-0A20-3101-9DB8-D979A32E7EDE}.Debug|Win32.Build.0 = Debug|Win32
-		{01B61F1C-0A20-3101-9DB8-D979A32E7EDE}.Release|Win32.ActiveCfg = Release|Win32
-		{01B61F1C-0A20-3101-9DB8-D979A32E7EDE}.Release|Win32.Build.0 = Release|Win32
+		{A3F8A99A-6817-368E-A8D6-A4F79E0C88E5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A3F8A99A-6817-368E-A8D6-A4F79E0C88E5}.Debug|Win32.Build.0 = Debug|Win32
+		{A3F8A99A-6817-368E-A8D6-A4F79E0C88E5}.Release|Win32.ActiveCfg = Release|Win32
+		{A3F8A99A-6817-368E-A8D6-A4F79E0C88E5}.Release|Win32.Build.0 = Release|Win32
 		{2A26AF0A-CB8D-410F-ABA5-4AA8CC409601}.Debug|Win32.ActiveCfg = Debug|Win32
 		{2A26AF0A-CB8D-410F-ABA5-4AA8CC409601}.Debug|Win32.Build.0 = Debug|Win32
 		{2A26AF0A-CB8D-410F-ABA5-4AA8CC409601}.Release|Win32.ActiveCfg = Release|Win32
