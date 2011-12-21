@@ -30,7 +30,7 @@ void OgreRenderContext::resize(int , int )
 
 bool OgreRenderContext::start(int width, int height)
 {
-	initOgre("plugins_d.cfg", "resources_d.cfg", "output.log", width, height);
+	initOgre("plugins_d.cfg", "ogre_config.cfg", "output.log", width, height);
 	createRenderWindow(m_windowId, width, height);
 	ASSERT(m_gWorld == NULL);
 	m_gWorld = new OgreGraphicsWorld(m_root, m_renderWindow);

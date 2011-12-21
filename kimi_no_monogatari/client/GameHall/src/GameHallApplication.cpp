@@ -1,8 +1,15 @@
 #include "pch/pch.h"
 #include "GameHallApplication.h"
 #include "GameHallService.h"
+#include "AsioConnectionManager.h"
+
+#include <QApplication>
+
+#include <QTimer>
 
 using namespace hall;
+
+#define TWEAK_CONNECTION_UPDATE_INTERVAL 20
 
 GameHallApplication::GameHallApplication(int argc, char *argv[])
 :QApplication(argc, argv)
@@ -16,6 +23,7 @@ GameHallApplication::GameHallApplication(int argc, char *argv[])
 GameHallApplication::~GameHallApplication()
 {
 	delete m_stateManager;
+	delete m_connectionManager;
 	delete m_win;
 }
 
@@ -39,6 +47,10 @@ GSTATUS GameHallApplication::init()
 		m_win->setDisplayWindow(m_stateManager->getCurrentWindow());
 	}
 	m_win->show();
+	m_connectionManager = new AsioConnectionManager();
+	QTimer *timer = new QTimer(this);
+	connect(timer, SIGNAL(timeout()), this, SLOT(connection_update()));
+	timer->start(TWEAK_CONNECTION_UPDATE_INTERVAL);
 	return GSTATUS_OK;
 }
 
@@ -74,3 +86,7 @@ void GameHallApplication::onResizeEvent(QResizeEvent * event)
 	}
 }
 
+void GameHallApplication::connection_update()
+{
+	((AsioConnectionManager*)m_connectionManager)->update();
+}

@@ -32,6 +32,8 @@ extern "C"
 }
 #include <luabind/luabind.hpp>
 
+#include "qt_pch.h"
+
 #include "Ogre.h"
 
 #include "common.h"

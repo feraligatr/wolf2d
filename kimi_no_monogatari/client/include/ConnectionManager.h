@@ -6,6 +6,7 @@
 class ConnectionManager
 {
 public:
+	virtual ~ConnectionManager() {}
 	virtual void removeConnection(ConnectionPtr con) = 0;
 	virtual ConnectionPtr createConnection() = 0;
 };

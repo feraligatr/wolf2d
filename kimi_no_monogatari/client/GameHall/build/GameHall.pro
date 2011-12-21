@@ -66,6 +66,7 @@ SOURCES += $${CLIENT_DIR}/src/Connection.cpp
 SOURCES += $${CLIENT_DIR}/src/SimpleClient.cpp
 SOURCES += $${CLIENT_DIR}/Game/renderer/OgreGraphicsWorld.cpp
 SOURCES += $${CLIENT_DIR}/Game/renderer/OgreRenderContext.cpp
+SOURCES += $${CLIENT_DIR}/GameHall/src/AsioConnectionManager.cpp
 
 SOURCES += $${ROOT_DIR}/common/msg/Message.cpp
 SOURCES += $${ROOT_DIR}/common/msg/MessageManager.cpp
