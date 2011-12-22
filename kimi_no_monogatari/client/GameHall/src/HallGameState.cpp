@@ -47,7 +47,10 @@ GSTATUS GameState::enter()
 	m_currentClient = new SimpleClient(m_renderContext, g_app->getConnectionManager());
 	// got username from g_app->getService()->getUserName();
 
-	m_currentClient->init();
+	if (!m_currentClient->init())
+	{
+		return GSTATUS_ERR;
+	}
 
 	m_time = QTime::currentTime();
 	m_time.start();

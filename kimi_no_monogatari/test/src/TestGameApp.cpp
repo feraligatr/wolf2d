@@ -6,7 +6,8 @@
 #include "Logger.h"
 
 TestGameApp::TestGameApp(ConnectionManager& connectionManager, MessageManager& messageManager, LoggerType* logger)
-:r_connectionManager(connectionManager),
+:Client(NULL),
+r_connectionManager(connectionManager),
 r_messageManager(messageManager),
 m_logger(logger)
 {
@@ -22,7 +23,8 @@ bool TestGameApp::init()
 {
 	ASSERT(m_connection == NULL);
 	m_connection = r_connectionManager.createConnection();
-	return m_connection->connect(*this);
+	m_connection->setMessageHandler(boost::bind(&TestGameApp::handleMessage, this, _1));
+	return m_connection->connect();
 }
 
 void TestGameApp::update(float interval)
@@ -30,7 +32,7 @@ void TestGameApp::update(float interval)
 
 }
 
-void TestGameApp::dispatchMessage(SessionPtr from, Message* message)
+void TestGameApp::handleMessage(Message* message)
 {
 	ASSERT(message);
 	switch(message->getType())

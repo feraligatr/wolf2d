@@ -19,11 +19,11 @@ bool Connection::isConnected() const
 	return m_isConnected;
 }
 
-bool Connection::connect(MessageDispatcher& dispatcher)
+bool Connection::connect()
 {
 	try
 	{
-		SessionPtr session(new Session(m_io_service, *this, dispatcher, r_messageManager));
+		SessionPtr session(new Session(m_io_service, *this, *this, r_messageManager));
 		tcp::resolver resolver(m_io_service);
 		tcp::resolver::query query(tcp::v4(), "127.0.0.1", "92");
 		tcp::resolver::iterator iterator = resolver.resolve(query);
@@ -40,6 +40,11 @@ bool Connection::connect(MessageDispatcher& dispatcher)
 	}
 	m_isConnected = true;
 	return true;
+}
+
+void Connection::dispatchMessage(SessionPtr from, Message* message)
+{
+	m_messageHandler(message);
 }
 
 void Connection::deliver(Message* message)

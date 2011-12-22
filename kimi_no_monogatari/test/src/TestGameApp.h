@@ -6,7 +6,7 @@
 #include "msg/MessageManager.h"
 #include "Client.h"
 
-class TestGameApp : public Client, MessageDispatcher
+class TestGameApp : public Client
 {
 public:
 	TestGameApp(ConnectionManager& connectionManager, MessageManager& messageManager, LoggerType* logger);
@@ -14,7 +14,7 @@ public:
 	virtual bool init();
 	virtual void update(float interval);
 
-	virtual void dispatchMessage(SessionPtr from, Message* message);
+	void handleMessage(Message* message);
 
 	void echo(const char*);
 

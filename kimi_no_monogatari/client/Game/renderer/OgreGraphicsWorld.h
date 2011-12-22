@@ -18,6 +18,10 @@ public:
 	OgreGraphicsWorld(Ogre::Root* root, Ogre::RenderWindow* renderWindow);
 	virtual bool start();
 	
+
+	virtual bool locateResources(const char* cfgfile);
+	virtual bool loadAllResources();
+
 	Ogre::SceneManager* m_sceneManager;
 	Ogre::Camera* m_camera;
 	Ogre::Root* m_root;

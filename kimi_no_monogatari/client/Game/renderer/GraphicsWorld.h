@@ -7,6 +7,9 @@ public:
 	virtual ~GraphicsWorld() {}
 
 	virtual bool start() = 0;
+
+	virtual bool locateResources(const char* cfgfile) = 0;
+	virtual bool loadAllResources() = 0;
 	
 };
 
