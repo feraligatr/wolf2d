@@ -12,6 +12,7 @@ public:
 	virtual void resize(int width, int height) = 0;
 	virtual bool start(int width, int height) = 0;
 	virtual void exit() = 0;
+	virtual void render() = 0;
 };
 
 #endif /* _RENDER_CONTEXT_H_ */

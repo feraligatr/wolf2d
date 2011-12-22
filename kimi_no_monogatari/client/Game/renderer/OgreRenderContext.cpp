@@ -52,6 +52,11 @@ void OgreRenderContext::exit()
 	}
 }
 
+void OgreRenderContext::render()
+{
+	m_root->renderOneFrame();
+}
+
 void OgreRenderContext::createRenderWindow(int windowId, int width, int height)
 {
 	Ogre::String winHandle;

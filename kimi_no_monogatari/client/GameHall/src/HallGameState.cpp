@@ -44,7 +44,10 @@ GSTATUS GameState::enter()
 	m_renderContext = new OgreRenderContext((size_t)(HWND)(m_window->winId()));
 	m_renderContext->start(m_window->width(), m_window->height());
 
-	m_currentClient = new SimpleClient(m_renderContext);
+	m_currentClient = new SimpleClient(m_renderContext, g_app->getConnectionManager());
+	// got username from g_app->getService()->getUserName();
+
+	m_currentClient->init();
 
 	m_time = QTime::currentTime();
 	m_time.start();
@@ -62,10 +65,11 @@ void GameState::onInvoked(QWidget* owner, QWidget* , QString msg, void* data)
 	if (msg == "update")
 	{
 		m_currentClient->update(m_time.restart() / 1000.0f);
+		m_renderContext->render();
 	}
 	else if (msg == "paint")
 	{
-		m_currentClient->update(0);
+		m_renderContext->render();
 	}
 	else if (msg == "resize")
 	{

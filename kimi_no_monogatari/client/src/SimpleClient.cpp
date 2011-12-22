@@ -2,8 +2,14 @@
 
 #include "SimpleClient.h"
 
-SimpleClient::SimpleClient(RenderContext* renderContext)
+SimpleClient::SimpleClient(RenderContext* renderContext, ConnectionManager& connectionManager)
 :Client(renderContext)
+,r_connectionManager(connectionManager)
+{
+
+}
+
+SimpleClient::~SimpleClient()
 {
 
 }

@@ -17,6 +17,10 @@ public:
 	void loginSuccess();
 	void loginFailed();
 
+	const QString& getUserName() const {
+		return m_username;
+	}
+
 private:
 	GameHallApplication* m_app;
 

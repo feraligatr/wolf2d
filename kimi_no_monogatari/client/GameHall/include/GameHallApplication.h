@@ -22,8 +22,12 @@ public:
 		return m_stateManager;
 	}
 
-	ConnectionManager* getConnectionManager() {
-		return m_connectionManager;
+	ConnectionManager& getConnectionManager() {
+		return *m_connectionManager;
+	}
+
+	GameHallService& getService() {
+		return *m_gameService;
 	}
 
 	void login(const QString& username, const QString& passwd);

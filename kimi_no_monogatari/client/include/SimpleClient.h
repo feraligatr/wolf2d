@@ -3,12 +3,18 @@
 
 #include "Client.h"
 
+class ConnectionManager;
+
 class SimpleClient : public Client
 {
 public:
-	SimpleClient(RenderContext* renderContext);
+	SimpleClient(RenderContext* renderContext, ConnectionManager& connectionManager);
+	virtual ~SimpleClient();
 	virtual void update(float);
 	virtual bool init();
+
+protected:
+	ConnectionManager& r_connectionManager;
 
 };
 

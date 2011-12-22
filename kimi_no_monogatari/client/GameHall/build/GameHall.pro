@@ -40,6 +40,7 @@ HEADERS += $${GAMEHALL_DIR}/include/GameHallService.h
 HEADERS += $${GAMEHALL_DIR}/include/HallHallState.h
 HEADERS += $${GAMEHALL_DIR}/include/HallGameState.h
 HEADERS += $${GAMEHALL_DIR}/include/HallWindow.h
+HEADERS += $${GAMEHALL_DIR}/include/GameGLWidget.h
 
 HEADERS += $${CLIENT_DIR}/include/Client.h
 HEADERS += $${CLIENT_DIR}/include/Connection.h
