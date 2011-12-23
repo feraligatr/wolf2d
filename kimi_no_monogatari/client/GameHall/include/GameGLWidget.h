@@ -6,11 +6,25 @@
 
 #include "WidgetListener.h"
 
+#include "SimpleClient.h"
+
 class GameGLWidget : public QGLWidget
 {
 	Q_OBJECT
 public:
 	GameGLWidget(WidgetListener* listener);
+
+	void setClient(SimpleClient* client);
+
+	virtual void mousePressEvent(QMouseEvent *);
+	virtual void mouseReleaseEvent(QMouseEvent *);
+	virtual void mouseDoubleClickEvent(QMouseEvent *);
+	virtual void mouseMoveEvent(QMouseEvent *);
+#ifndef QT_NO_WHEELEVENT
+	virtual void wheelEvent(QWheelEvent *);
+#endif
+	virtual void keyPressEvent(QKeyEvent *);
+	virtual void keyReleaseEvent(QKeyEvent *);
 
 protected:
 	virtual void initializeGL();
@@ -22,6 +36,7 @@ private slots:
 
 private:
 	WidgetListener* m_listener;
+	SimpleClient* m_client;
 };
 
 #endif /* _GAME_GL_WIDGET_H_ */

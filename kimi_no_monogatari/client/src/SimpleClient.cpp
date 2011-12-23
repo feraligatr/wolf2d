@@ -44,7 +44,7 @@ bool SimpleClient::init()
 bool SimpleClient::setupConnection()
 {
 	m_connection = r_connectionManager.createConnection();
-	m_connection->setMessageHandler(boost::bind(&SimpleClient::handleGameMessage, this, _1));
+	m_connection->setMessageHandler(boost::bind(&SimpleClient::onGameMessage, this, _1));
 	if (!m_connection->connect())
 	{
 		r_connectionManager.removeConnection(m_connection);
@@ -53,10 +53,20 @@ bool SimpleClient::setupConnection()
 	return true;
 }
 
-void SimpleClient::handleGameMessage(Message* )
+void SimpleClient::onGameMessage(Message* message)
 {
 	// m_game->onMessage();
-	// message->dispose();
+	message->dispose();
+}
+
+void SimpleClient::onMouseEvent(tree::MouseEvent& evt)
+{
+	// m_game->onMouseEvent(evt);
+}
+
+void SimpleClient::onKeyEvent(tree::KeyEvent& evt)
+{
+	// m_game->onKeyEvent(evt);
 }
 
 bool SimpleClient::initGraphics()

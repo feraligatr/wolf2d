@@ -4,6 +4,7 @@
 #include "Client.h"
 
 #include "Msg/MessageDispatcher.h"
+#include "InputDefine.h"
 
 class ConnectionManager;
 class GraphicsWorld;
@@ -17,7 +18,10 @@ public:
 	virtual void update(float);
 	virtual bool init();
 
-	void handleGameMessage(Message* message);
+	void onGameMessage(Message* message);
+	void onMouseEvent(tree::MouseEvent& evt);
+	void onKeyEvent(tree::KeyEvent& evt);
+
 protected:
 	bool setupConnection();
 	bool initGraphics();
