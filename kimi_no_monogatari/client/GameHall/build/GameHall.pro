@@ -3,6 +3,7 @@ ROOT_DIR = ../../..
 GAMEHALL_DIR = ..
 CLIENT_DIR = $${ROOT_DIR}/client
 
+WOLF_GAME_DIR = $${CLIENT_DIR}/Game/wolf
 
 QMAKE_LIBDIR += $(BOOST_ROOT)/stage/lib
 
@@ -18,7 +19,6 @@ INCLUDEPATH += $(OGRE_BUILD_INCLUDE)
 INCLUDEPATH += $(BOOST_ROOT)
 INCLUDEPATH += $(LUA_PATH)/include
 INCLUDEPATH += $${GAMEHALL_DIR}/../../common/include
-INCLUDEPATH += $${CLIENT_DIR}/include
 INCLUDEPATH += $${ROOT_DIR}/dependencies/logging
 INCLUDEPATH += $${ROOT_DIR}/dependencies
 INCLUDEPATH += $${ROOT_DIR}/common
@@ -26,7 +26,8 @@ INCLUDEPATH += $${ROOT_DIR}/common/include
 INCLUDEPATH += $${GAMEHALL_DIR}/build
 INCLUDEPATH += $${CLIENT_DIR}/include
 INCLUDEPATH += $${CLIENT_DIR}/Game/Renderer
-
+INCLUDEPATH += $${CLIENT_DIR}/Game
+INCLUDEPATH += $${CLIENT_DIR}
 PRECOMPILED_HEADER = pch/pch.h
 
 HEADERS += $${GAMEHALL_DIR}/include/GameHallWindow.h
@@ -68,6 +69,8 @@ SOURCES += $${CLIENT_DIR}/src/SimpleClient.cpp
 SOURCES += $${CLIENT_DIR}/Game/renderer/OgreGraphicsWorld.cpp
 SOURCES += $${CLIENT_DIR}/Game/renderer/OgreRenderContext.cpp
 SOURCES += $${CLIENT_DIR}/GameHall/src/AsioConnectionManager.cpp
+
+SOURCES += $${WOLF_GAME_DIR}/WolfGame.cpp
 
 SOURCES += $${ROOT_DIR}/common/msg/Message.cpp
 SOURCES += $${ROOT_DIR}/common/msg/MessageManager.cpp

@@ -6,6 +6,8 @@
 #include "RenderContext.h"
 #include "GraphicsWorld.h"
 
+#include "wolf/WolfGame.h"
+
 SimpleClient::SimpleClient(RenderContext* renderContext, ConnectionManager& connectionManager)
 :Client(renderContext)
 ,r_connectionManager(connectionManager)
@@ -55,18 +57,18 @@ bool SimpleClient::setupConnection()
 
 void SimpleClient::onGameMessage(Message* message)
 {
-	// m_game->onMessage();
+	m_game->onHandleMessage(message);
 	message->dispose();
 }
 
 void SimpleClient::onMouseEvent(tree::MouseEvent& evt)
 {
-	// m_game->onMouseEvent(evt);
+	m_game->onMouseEvent(evt);
 }
 
 void SimpleClient::onKeyEvent(tree::KeyEvent& evt)
 {
-	// m_game->onKeyEvent(evt);
+	m_game->onKeyEvent(evt);
 }
 
 bool SimpleClient::initGraphics()
@@ -77,7 +79,7 @@ bool SimpleClient::initGraphics()
 
 bool SimpleClient::initGame()
 {
-//	m_game = new WolfGame();
+	m_game = new WolfGame(*m_graphicsWorld);
 	return true;
 }
 
