@@ -28,6 +28,7 @@ INCLUDEPATH += $${CLIENT_DIR}/include
 INCLUDEPATH += $${CLIENT_DIR}/Game/Renderer
 INCLUDEPATH += $${CLIENT_DIR}/Game
 INCLUDEPATH += $${CLIENT_DIR}
+INCLUDEPATH += $(BULLET_ROOT)/src
 PRECOMPILED_HEADER = pch/pch.h
 
 HEADERS += $${GAMEHALL_DIR}/include/GameHallWindow.h
@@ -89,5 +90,8 @@ SOURCES += $${ROOT_DIR}/common/utils/RandomUtil.cpp
 win32:LIBS += $(OGRE_LIB)/OgreMain_d.lib
 win32:LIBS += $(OGRE_LIB)/RenderSystem_Direct3D9_d.lib
 win32:LIBS += $(OGRE_LIB)/RenderSystem_GL_d.lib
+win32:LIBS += $(BULLET_ROOT)/lib/LinearMath_debug.lib
+win32:LIBS += $(BULLET_ROOT)/lib/BulletCollision_debug.lib
+win32:LIBS += $(BULLET_ROOT)/lib/BulletDynamics_debug.lib
 win32:LIBS += $(LUA_PATH)/lua5.1.lib
 
