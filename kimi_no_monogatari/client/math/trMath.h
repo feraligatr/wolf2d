@@ -67,5 +67,7 @@ namespace tree
 #include "trVec.h"
 #include "trMat3.h"
 #include "trMat4.h"
+#include "trAABB.h"
+#include "trPlane.h"
 
 #endif /* _TR_MATH_H_ */

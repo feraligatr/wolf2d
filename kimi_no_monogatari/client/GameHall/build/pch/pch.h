@@ -36,6 +36,8 @@ extern "C"
 
 #include "Ogre.h"
 
+#include "btBulletDynamicsCommon.h"
+
 #include "common.h"
 #include "TypeDefine.h"
 #include "Random.h"
