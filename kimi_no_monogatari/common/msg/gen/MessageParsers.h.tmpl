@@ -1,0 +1,32 @@
+#ifndef _MESSAGE_PARSERS_H_
+#define _MESSAGE_PARSERS_H_
+
+<%def name="className(msg)">${msg.getName().capitalize()}MessageParser</%def>
+
+#include "msg/MessageDefine.h"
+#include "msg/MessageParser.h"
+
+% for msg in msg_list:
+class <%self:className msg="${msg}"/>: public MessageParser
+{
+public:
+	<%self:className msg="${msg}"/>(Message* message)
+		: MessageParser(message) {}
+	virtual ~<%self:className msg="${msg}"/>() {}
+
+%  for var in msg.members:
+protected:
+%  endfor
+	static const int FIELD_STR_USERNAME_POS = 0;
+	static const int FIELD_STR_USERNAME_LEN = 20;
+	static const int MESSAGE_LEN = 20;
+	static const int MESSAGE_TYPE = MESSAGE_LOGIN;
+public:
+	const char* getUsername() { return getStr(FIELD_STR_USERNAME_POS); }
+	void setUsername(const char* username) { setStr(username, FIELD_STR_USERNAME_POS, FIELD_STR_USERNAME_LEN); }
+	static u32 getRecommendSize() {return MESSAGE_LEN; }
+};
+
+% endfor
+
+#endif /*  _MESSAGE_PARSERS_H_ */

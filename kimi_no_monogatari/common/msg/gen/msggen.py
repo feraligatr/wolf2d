@@ -18,6 +18,9 @@ class DataTypeMessage(DataType):
 		self.name = name
 		self.members = members
 
+	def getName(self):
+		return self.name
+
 class DataTypeStruct(DataType):
 	def __init__(self, name, members):
 		self.name = name
@@ -130,6 +133,12 @@ class MsgParser:
 	def __init__(self):
 		self.type_list = {}
 
+	def p_declarations(self, p):
+		''' declarations : declarations declaration
+		                 | declaration
+		'''
+		pass
+
 	def p_declaration(self, p):
 		''' declaration : struct
 		                | message
@@ -147,7 +156,7 @@ class MsgParser:
 		'''
 		p[0] = DataTypeMessage(p[2], p[4])
 		self.type_list[p[2]] = p[0]
-		print p[0]
+		self.addmsg_cb(p[0])
 
 	def p_vardecls(self, p):
 		''' vardecls : vardecls vardecl
@@ -188,7 +197,8 @@ class MsgParser:
 		self.tokens = self.lexer.tokens
 		self.parser = ply.yacc.yacc(module=self, **kwargs)
 
-	def test(self, data):
+	def test(self, data, addmsg_cb):
+		self.addmsg_cb = addmsg_cb
 		self.parser.parse(data, lexer = self.lexer.lexer)
 
 import logging
@@ -202,13 +212,12 @@ log = logging.getLogger()
 
 m = MsgParser()
 m.build(debug=True, debuglog=log)
-testprog = """
-/*
- * This is test comment
- */
-message sample { // This is test
-	int a;
-};
+msg_list = []
+with open('messages.def', 'r') as f:
+	m.test(f.read(), lambda msg: msg_list.append(msg))
+print msg_list
 
-"""
-m.test(testprog)
+import mako.template
+h_tmpl = mako.template.Template(filename='MessageParsers.h.tmpl')
+with open('MessageParsers.h', 'w') as f:
+	f.write(h_tmpl.render(msg_list=msg_list))

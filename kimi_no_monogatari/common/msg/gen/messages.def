@@ -1,0 +1,15 @@
+/*
+ * This is test comment
+ */
+message login {
+};
+
+message sample { // This is test
+	int a;
+	int b;
+};
+
+message hello {
+	int a;
+	int b;
+};
