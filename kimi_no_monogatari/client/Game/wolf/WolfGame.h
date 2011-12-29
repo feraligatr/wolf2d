@@ -2,6 +2,10 @@
 #define _WOLF_GAME_H_
 
 #include "Game.h"
+#include "renderer/Graphics.h"
+
+class WolfPlayer;
+class WolfEnemy;
 
 // This is the pure game, not including any menu and overlay outof game like pause menu or end menu. 
 

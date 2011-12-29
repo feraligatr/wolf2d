@@ -3,5 +3,4 @@
 
 #include "GraphicsWorld.h"
 
-
 #endif /* _GRAPHICS_H_ */

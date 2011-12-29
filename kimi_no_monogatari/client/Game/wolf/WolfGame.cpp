@@ -2,7 +2,10 @@
 
 #include "WolfGame.h"
 #include "math/trMath.h"
-#include "renderer/Graphics.h"
+
+#define GRID_SIZE 1
+#define GRID_COLS 64
+#define GRID_ROWS 64
 
 WolfGame::WolfGame(GraphicsWorld& gw)
 	:Game(gw)
@@ -43,23 +46,23 @@ bool WolfGame::init()
 
 	fakeResources();
 
-	m_scene = r_gw.createScene();
+//	m_scene = r_gw.createScene();
 
-	m_scene->setSkyBox("Examples/SpaceSkyBox", 5000);
+//	m_scene->setSkyBox("Examples/SpaceSkyBox", 5000);
 
 	// set light.
-	m_scene->setAmbientLight(0.3, 0.3, 0.3);
+//	m_scene->setAmbientLight(0.3, 0.3, 0.3);
 
-	m_terrain = new WolfTerrain(NULL);
+//	m_terrain = new WolfTerrain(m_scene->getRoot());
 	// the terrain is root object in the scene. 
 	// add Physics World(Grid Physics World).
 	// Every Game Object can has a physics object. 
 
-	m_terrain->init(m_scene);
+//	m_terrain->init(m_scene);
 
-	// the walls is to render all walls, including transparent and pushing walls. 
+	// the walls is to render all walls, including transparent and pushing walls.
 	// use manual object to generate the walls on the fly.
-	m_walls = new WolfWalls(m_terrain);
+//	m_walls = new WolfWalls(m_terrain);
 
 	// Doors?
 	// m_doors
@@ -70,7 +73,7 @@ bool WolfGame::init()
 
 
 	// 
-	m_player = new WolfPlayer(m_terrain);
+//	m_player = new WolfPlayer(m_terrain);
 	// construct enemys;
 	
 
@@ -87,6 +90,21 @@ void WolfGame::fakeResources()
 	// currently fake init by manual.
 
 	// TODO: create plane as initial terrain appr.
+
+	Ogre::Plane oceanSurface;
+	oceanSurface.normal = Ogre::Vector3::UNIT_Y;
+	oceanSurface.d = 0;
+	Ogre::MeshManager::getSingleton().createPlane("TerrainMesh",
+		Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+		oceanSurface,
+		GRID_COLS, GRID_ROWS, GRID_COLS, GRID_ROWS, true, 1, 8, 8, Ogre::Vector3::UNIT_Z);
+
+
+	//// create a floor entity, give it a material, and place it at the origin
+	//Entity* floor = mSceneMgr->createEntity("Floor", "floor");
+	//floor->setMaterialName("Examples/Rockwall");
+	//floor->setCastShadows(false);
+	//mSceneMgr->getRootSceneNode()->attachObject(floor);
 }
 
 #endif /* _FAKE_ */

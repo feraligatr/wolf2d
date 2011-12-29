@@ -2,6 +2,7 @@
 #define _GAME_OBJECT_H_
 
 #include "renderer/Graphics.h"
+#include "physics/Physics.h"
 
 class GameObject
 {
@@ -19,15 +20,16 @@ protected:
 	}
 
 protected:
-	GameObject m_parent;
+	GameObject* m_parent;
 	ObjectList m_children;
 
+	GraphicsWorld* m_graphicsWorld;
+	PhysicsWorld* m_physicsWorld;
 	// TODO: decide the time to create the graphics entity.
 	// link to Graphics.
+	// m_gwEntity can not be null. because the Graphics World 
+	// need the object hierachy.
 	GWEntity* m_gwEntity;
-	// TODO: add phycis entity to do collisions.
-	// PhysicsObject : public GameObject.
-	// PhysicsObject(PhysicsWorld* world);
 
 };
 
