@@ -4,6 +4,7 @@ GAMEHALL_DIR = ..
 CLIENT_DIR = $${ROOT_DIR}/client
 
 WOLF_GAME_DIR = $${CLIENT_DIR}/Game/wolf
+PHYSICS_DIR = $${CLIENT_DIR}/Game/physics
 
 QMAKE_LIBDIR += $(BOOST_ROOT)/stage/lib
 
@@ -53,6 +54,11 @@ HEADERS += $${CLIENT_DIR}/include/ConnectionManager.h
 HEADERS += $${ROOT_DIR}/common/include/common.h
 HEADERS += $${ROOT_DIR}/common/include/Logger.h
 
+HEADERS += $${PHYSICS_DIR}/trCollisionObject.h
+HEADERS += $${PHYSICS_DIR}/trCollisionShape.h
+HEADERS += $${PHYSICS_DIR}/trCollisionWorld.h
+HEADERS += $${PHYSICS_DIR}/trPhysicsWorld.h
+HEADERS += $${PHYSICS_DIR}/trRigidBody.h
 
 SOURCES += $${GAMEHALL_DIR}/src/GameHallWindow.cpp
 SOURCES += $${GAMEHALL_DIR}/src/GameHallApplication.cpp
@@ -66,6 +72,12 @@ SOURCES += $${GAMEHALL_DIR}/src/HallWindow.cpp
 SOURCES += $${GAMEHALL_DIR}/src/GameGLWidget.cpp
 SOURCES += $${GAMEHALL_DIR}/src/main.cpp
 SOURCES += $${GAMEHALL_DIR}/src/Logger.cpp
+
+SOURCES += $${PHYSICS_DIR}/trCollisionObject.cpp
+SOURCES += $${PHYSICS_DIR}/trCollisionShape.cpp
+SOURCES += $${PHYSICS_DIR}/trCollisionWorld.cpp
+SOURCES += $${PHYSICS_DIR}/trPhysicsWorld.cpp
+SOURCES += $${PHYSICS_DIR}/trRigidBody.cpp
 
 SOURCES += $${CLIENT_DIR}/src/Connection.cpp
 SOURCES += $${CLIENT_DIR}/src/SimpleClient.cpp
