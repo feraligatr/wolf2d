@@ -16,7 +16,10 @@ class OgreRenderContext : public RenderContext
 public:
 	OgreRenderContext::OgreRenderContext(int windowId);
 	virtual ~OgreRenderContext();
-	virtual GraphicsWorld* getGraphicsWorld();
+	virtual GraphicsWorld* createGraphicsWorld(const char* name);
+	virtual void destroyGraphicsWorld(GraphicsWorld* graphics);
+	virtual bool locateResources(const char* cfgfile);
+	virtual bool loadAllResources();
 	virtual void resize(int width, int height);
 	virtual bool start(int width, int height);
 	virtual void exit();
