@@ -8,8 +8,8 @@ class RenderContext
 {
 public:
 	virtual ~RenderContext() {}
-	virtual GraphicsWorld* createGraphicsWorld(const char* name) = 0;
-	virtual void destroyGraphicsWorld(GraphicsWorld* graphics) = 0;
+	virtual GraphicsWorld* createGraphicsWorld() = 0;
+	virtual void destroyGraphicsWorld(GraphicsWorld* world) = 0;
 	virtual bool locateResources(const char* cfgfile) = 0;
 	virtual bool loadAllResources() = 0;
 	virtual void resize(int width, int height) = 0;

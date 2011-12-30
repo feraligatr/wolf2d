@@ -41,5 +41,6 @@ extern "C"
 #include "common.h"
 #include "TypeDefine.h"
 #include "Random.h"
+#include "math/trMath.h"
 
 #endif /* _PCH_H_ */

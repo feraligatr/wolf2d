@@ -4,11 +4,20 @@
 #include "renderer/Graphics.h"
 #include "physics/Physics.h"
 
+// before the GameObject is used, the GraphicsEntity must be inited. or be nullEntity.
+
+// 1. handle scene graph things. 
+// 2. design GraphicsWorld interface.
+// 3. GraphicsEntity has tree hierachy structure.
+// 4. GameObject has their own tree hierachy structure. And only hierachy structure.
+// then WolfGameObject decide how to handle the physics and graphics node.
+
 class GameObject
 {
 public:
-	GameObject(GameObject* parent);
+	GameObject(GraphicsWorld* gw, PhysicsWorld* pw);
 	virtual ~GameObject();
+
 	addChild(GameObject* obj);
 	removeChild(GameObject* obj);
 

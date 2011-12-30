@@ -7,8 +7,7 @@
 #include <QString>
 
 OgreRenderContext::OgreRenderContext(int windowId)
-	:m_gWorld(NULL),
-	 m_windowId(windowId)
+	:m_windowId(windowId)
 {
 
 }
@@ -18,10 +17,19 @@ OgreRenderContext::~OgreRenderContext()
 	exit();
 }
 
-GraphicsWorld* OgreRenderContext::getGraphicsWorld()
+GraphicsWorld* OgreRenderContext::createGraphicsWorld()
 {
-	return m_gWorld;
+	GraphicsWorld* world = new OgreGraphicsWorld(m_root, m_renderWindow);
+	m_worlds.insert(world);
+	return world;
 }
+
+void OgreRenderContext::destroyGraphicsWorld(GraphicsWorld* world)
+{
+	m_worlds.erase(world);
+	delete world;
+}
+
 
 void OgreRenderContext::resize(int , int )
 {
@@ -32,18 +40,17 @@ bool OgreRenderContext::start(int width, int height)
 {
 	initOgre("plugins_d.cfg", "ogre_config.cfg", "output.log", width, height);
 	createRenderWindow(m_windowId, width, height);
-	ASSERT(m_gWorld == NULL);
-	m_gWorld = new OgreGraphicsWorld(m_root, m_renderWindow);
-	return m_gWorld->start();
+	return true;
 }
 
 void OgreRenderContext::exit()
 {
-	if (m_gWorld)
+	for (GraphicsWorldList::iterator iter = m_worlds.begin(); iter != m_worlds.end(); ++iter)
 	{
-		delete m_gWorld;
-		m_gWorld = NULL;
+		delete *iter;
 	}
+	m_worlds.clear();
+
 	if (m_root)
 	{
 		m_root->shutdown();
@@ -99,5 +106,52 @@ void OgreRenderContext::initOgre(const std::string& plugins_file,
 	m_root->getRenderSystem()->setConfigOption( "Full Screen", "No" );
 	m_root->saveConfig();
 	m_root->initialise(false);
+}
 
+bool OgreRenderContext::locateResources(const char* cfgfile)
+{
+	// load resource paths from config file
+	try
+	{
+		Ogre::ConfigFile cf;
+		cf.load(cfgfile);
+
+		Ogre::ConfigFile::SectionIterator seci = cf.getSectionIterator();
+		Ogre::String sec, type, arch;
+
+		// go through all specified resource groups
+		while (seci.hasMoreElements())
+		{
+			sec = seci.peekNextKey();
+			Ogre::ConfigFile::SettingsMultiMap* settings = seci.getNext();
+			Ogre::ConfigFile::SettingsMultiMap::iterator i;
+
+			// go through all resource paths
+			for (i = settings->begin(); i != settings->end(); i++)
+			{
+				type = i->first;
+				arch = i->second;
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_IPHONE
+				// OS X does not set the working directory relative to the app,
+				// In order to make things portable on OS X we need to provide
+				// the loading with it's own bundle path location
+				if (!Ogre::StringUtil::startsWith(arch, "/", false)) // only adjust relative dirs
+					arch = Ogre::String(Ogre::macBundlePath() + "/" + arch);
+#endif
+				Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch, type, sec);
+			}
+		}
+	}
+	catch (Ogre::Exception e)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool OgreRenderContext::loadAllResources()
+{
+	Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
+	return true;
 }

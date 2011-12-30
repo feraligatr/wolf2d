@@ -5,10 +5,34 @@
 using namespace Ogre;
 
 OgreGraphicsWorld::OgreGraphicsWorld(Ogre::Root* root, Ogre::RenderWindow* renderWindow)
-	:m_root(root),
+	:m_ogreRoot(root),
 	 m_renderWindow(renderWindow)
 {
+
+}
+
+void OgreGraphicsWorld::_createOgreSceneManager()
+{
+	Ogre::SceneType scene_manager_type = Ogre::ST_EXTERIOR_CLOSE;
+
+	m_sceneManager = m_ogreRoot->createSceneManager(scene_manager_type);
+
+
+}
+
+GWEntity* OgreGraphicsWorld::getRoot()
+{
+	return m_rootNode;
+}
+
+void OgreGraphicsWorld::setSkyBox(const char* skybox_rs, float far)
+{
 	
+}
+
+void OgreGraphicsWorld::setAmbientLight(float r, float g, float b)
+{
+
 }
 
 //bool OgreGraphicsWorld::start()
@@ -28,5 +52,5 @@ OgreGraphicsWorld::OgreGraphicsWorld(Ogre::Root* root, Ogre::RenderWindow* rende
 //	m_viewport = m_renderWindow->addViewport( m_camera );
 //	m_viewport->setBackgroundColour( Ogre::ColourValue( 0,0,0 ) );
 //	return true;
-}
+//}
 

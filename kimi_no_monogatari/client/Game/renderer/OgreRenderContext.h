@@ -16,8 +16,8 @@ class OgreRenderContext : public RenderContext
 public:
 	OgreRenderContext::OgreRenderContext(int windowId);
 	virtual ~OgreRenderContext();
-	virtual GraphicsWorld* createGraphicsWorld(const char* name);
-	virtual void destroyGraphicsWorld(GraphicsWorld* graphics);
+	virtual GraphicsWorld* createGraphicsWorld();
+	virtual void destroyGraphicsWorld(GraphicsWorld* world);
 	virtual bool locateResources(const char* cfgfile);
 	virtual bool loadAllResources();
 	virtual void resize(int width, int height);
@@ -33,7 +33,9 @@ private:
 	void createRenderWindow(int windowId, int width, int height);
 
 private:
-	OgreGraphicsWorld* m_gWorld;
+	typedef std::set<GraphicsWorld*> GraphicsWorldList;
+	GraphicsWorldList m_worlds;	
+
 	int m_windowId;
 
 	// Ogre things. 

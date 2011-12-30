@@ -35,7 +35,6 @@ protected:
 	ConnectionManager& r_connectionManager;
 	ConnectionPtr m_connection;
 
-	GraphicsWorld* m_graphicsWorld;
 	Game* m_game;
 
 };

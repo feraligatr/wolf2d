@@ -14,7 +14,7 @@ WolfGame::WolfGame(GraphicsWorld& gw)
 
 WolfGame::~WolfGame()
 {
-	r_gw.destroyScene(m_scene);
+	
 }
 
 void WolfGame::onMouseEvent(tree::MouseEvent& evt)

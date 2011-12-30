@@ -85,8 +85,6 @@ SOURCES += $${CLIENT_DIR}/Game/renderer/OgreGraphicsWorld.cpp
 SOURCES += $${CLIENT_DIR}/Game/renderer/OgreRenderContext.cpp
 SOURCES += $${CLIENT_DIR}/GameHall/src/AsioConnectionManager.cpp
 
-SOURCES += $${CLIENT_DIR}/math/trMath.cpp
-
 SOURCES += $${WOLF_GAME_DIR}/WolfGame.cpp
 
 SOURCES += $${ROOT_DIR}/common/msg/Message.cpp

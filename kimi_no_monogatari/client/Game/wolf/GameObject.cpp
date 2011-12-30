@@ -2,14 +2,13 @@
 
 #include "GameObject.h"
 
-GameObject::GameObject(GameObject* parent)
+GameObject::GameObject(GraphicsWorld* gw, PhysicsWorld* pw);
 :m_gwEntity(NULL),
-m_parent(NULL)
+m_parent(NULL),
+m_graphicsWorld(gw),
+m_physicsWorld(pw)
 {
-	if (parent)
-	{
-		parent->addChild(this);
-	}
+
 }
 
 GameObject::~GameObject()
@@ -27,6 +26,7 @@ GameObject::~GameObject()
 
 void GameObject::addChild(GameObject* obj)
 {
+	// TODO. add graphics hirachy.
 	ASSERT(!obj->getParent());
 	ObjectList::iterator iter = find(m_children.begin(), m_children.end(), obj);
 	ASSERT(iter == m_children.end());
