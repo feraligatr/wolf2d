@@ -3,15 +3,20 @@
 
 // TODO. wrap Graphics into namespace graphics or some other names.
 
-// TODO. Move GraphicsWorld functions to RenderContext. 
-// and Rename GWScene to GraphicsWorld.
 
-class GWScene;
+class GWEntity;
 
 class GraphicsWorld
 {
 public:
 	virtual ~GraphicsWorld() {}
+
+	virtual GWEntity* createEntity(const std::string& meshName = "", const std::string& matName = "") = 0;
+
+	virtual GWEntity* getRoot() = 0;
+
+	virtual void setSkyBox(const std::string& skybox_rs, float far) = 0;
+	virtual void setAmbientLight(float r, float g, float b) = 0;
 
 };
 

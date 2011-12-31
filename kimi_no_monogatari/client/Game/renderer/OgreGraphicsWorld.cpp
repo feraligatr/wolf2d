@@ -1,38 +1,48 @@
 #include "pch/pch.h"
 
 #include "OgreGraphicsWorld.h"
+#include "OgreGWEntity.h"
 
 using namespace Ogre;
 
 OgreGraphicsWorld::OgreGraphicsWorld(Ogre::Root* root, Ogre::RenderWindow* renderWindow)
 	:m_ogreRoot(root),
-	 m_renderWindow(renderWindow)
+	 m_renderWindow(renderWindow),
+	 m_rootEntity(NULL)
+{
+
+}
+
+OgreGraphicsWorld::~OgreGraphicsWorld()
 {
 
 }
 
 void OgreGraphicsWorld::_createOgreSceneManager()
 {
-	Ogre::SceneType scene_manager_type = Ogre::ST_EXTERIOR_CLOSE;
-
-	m_sceneManager = m_ogreRoot->createSceneManager(scene_manager_type);
-
-
+	m_sceneManager = m_ogreRoot->createSceneManager(Ogre::ST_EXTERIOR_CLOSE);
 }
 
 GWEntity* OgreGraphicsWorld::getRoot()
 {
-	return m_rootNode;
+	return m_rootEntity;
 }
 
-void OgreGraphicsWorld::setSkyBox(const char* skybox_rs, float far)
+void OgreGraphicsWorld::setSkyBox(const std::string& skybox_rs, float distance)
 {
-	
+	m_sceneManager->setSkyBox(true, skybox_rs, distance);
 }
 
 void OgreGraphicsWorld::setAmbientLight(float r, float g, float b)
 {
+	m_sceneManager->setAmbientLight(Ogre::ColourValue(r, g, b));
+}
 
+GWEntity* OgreGraphicsWorld::createEntity(const std::string& meshName, const std::string& matName)
+{
+	OgreGWEntity* entity = new OgreGWEntity(this, meshName, matName);
+	m_allEntitys.insert(entity);
+	return entity;
 }
 
 //bool OgreGraphicsWorld::start()

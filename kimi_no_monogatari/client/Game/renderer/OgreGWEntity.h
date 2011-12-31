@@ -8,7 +8,7 @@ class OgreGraphicsWorld;
 class OgreGWEntity : public GWEntity
 {
 public:
-	OgreGWEntity(OgreGraphicsWorld* gw, OgreGWEntity* parent);
+	OgreGWEntity(OgreGraphicsWorld* gw, const std::string& meshName, const std::string& matName);
 	virtual void setPosition(const tree::Vec3& pos);
 	virtual void setRotation(const tree::Quat& quat);
 	virtual void setScale(const tree::Vec3& scale);
@@ -21,7 +21,7 @@ private:
 private:
 	u32 m_uniqueId;
 	Ogre::SceneNode* m_node;
-	Ogre::SceneEntity* m_entity;
+	Ogre::Entity* m_entity;
 	OgreGraphicsWorld* m_gw;
 
 	OgreGWEntity* m_parent;

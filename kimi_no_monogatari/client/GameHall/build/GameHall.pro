@@ -5,6 +5,7 @@ CLIENT_DIR = $${ROOT_DIR}/client
 
 WOLF_GAME_DIR = $${CLIENT_DIR}/Game/wolf
 PHYSICS_DIR = $${CLIENT_DIR}/Game/physics
+RENDERER_DIR = $${CLIENT_DIR}/Game/renderer
 
 QMAKE_LIBDIR += $(BOOST_ROOT)/stage/lib
 
@@ -81,11 +82,18 @@ SOURCES += $${PHYSICS_DIR}/trRigidBody.cpp
 
 SOURCES += $${CLIENT_DIR}/src/Connection.cpp
 SOURCES += $${CLIENT_DIR}/src/SimpleClient.cpp
-SOURCES += $${CLIENT_DIR}/Game/renderer/OgreGraphicsWorld.cpp
-SOURCES += $${CLIENT_DIR}/Game/renderer/OgreRenderContext.cpp
 SOURCES += $${CLIENT_DIR}/GameHall/src/AsioConnectionManager.cpp
 
+SOURCES += $${RENDERER_DIR}/OgreGraphicsWorld.cpp
+SOURCES += $${RENDERER_DIR}/OgreRenderContext.cpp
+SOURCES += $${RENDERER_DIR}/OgreGWEntity.cpp
+SOURCES += $${RENDERER_DIR}/OgreRenderContext.cpp
+SOURCES += $${RENDERER_DIR}/OgreRenderContext.cpp
+
 SOURCES += $${WOLF_GAME_DIR}/WolfGame.cpp
+SOURCES += $${WOLF_GAME_DIR}/GameObject.cpp
+SOURCES += $${WOLF_GAME_DIR}/WolfGameObject.cpp
+
 
 SOURCES += $${ROOT_DIR}/common/msg/Message.cpp
 SOURCES += $${ROOT_DIR}/common/msg/MessageManager.cpp

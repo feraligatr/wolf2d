@@ -1,12 +1,6 @@
 #ifndef _GAME_OBJECT_H_
 #define _GAME_OBJECT_H_
 
-#include "renderer/Graphics.h"
-#include "physics/Physics.h"
-
-// before the GameObject is used, the GraphicsEntity must be inited. or be nullEntity.
-
-// 1. handle scene graph things. 
 // 2. design GraphicsWorld interface.
 // 3. GraphicsEntity has tree hierachy structure.
 // 4. GameObject has their own tree hierachy structure. And only hierachy structure.
@@ -15,30 +9,52 @@
 class GameObject
 {
 public:
-	GameObject(GraphicsWorld* gw, PhysicsWorld* pw);
+	GameObject();
 	virtual ~GameObject();
 
-	addChild(GameObject* obj);
-	removeChild(GameObject* obj);
+// position
+	void setPosition(float x, float y, float z);
+	void setPosition(const tree::Vec3& v);
 
-	typedef std::vector<GameObject*> ObjectList;
+	void setRotation(const tree::Quat& rot);
+	void setRotation(const tree::Mat3& rot);
+
+	void setTransform(const tree::Transform& tr);
+
+	const tree::Vec3& getPosition() const;
+	const tree::Quat getRotation() const;
+	const tree::Transform& getTransform() const;
+
+// structure
+	void addChild(GameObject* obj);
+	void removeChild(GameObject* obj);
+	// update position from root. this function should be called on root.
+	void updatePosition();
+	// update the final position of the object. will update all dirty parent position.
+	// just update the final position of the parent, but not update dirty.
+	// so no essential requirement, do not call it.
+	// return value. whether the parent is dirty.
+	bool updateFromParent();
+	typedef std::set<GameObject*> ObjectList;
 
 protected:
-	GameObject* getParent() {
+	inline GameObject* getParent() {
 		return m_parent;
+	}
+
+	inline bool isDirty() const {
+		return m_dirty;
 	}
 
 protected:
 	GameObject* m_parent;
 	ObjectList m_children;
 
-	GraphicsWorld* m_graphicsWorld;
-	PhysicsWorld* m_physicsWorld;
-	// TODO: decide the time to create the graphics entity.
-	// link to Graphics.
-	// m_gwEntity can not be null. because the Graphics World 
-	// need the object hierachy.
-	GWEntity* m_gwEntity;
+	bool m_dirty;
+	// local.
+	tree::Transform m_transform;
+	// global
+	tree::Transform m_globalTransform;
 
 };
 

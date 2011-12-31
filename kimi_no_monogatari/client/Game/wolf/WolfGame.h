@@ -31,8 +31,6 @@ private:
 	void fakeResources();
 #endif /* _FAKE_ */
 
-	GWScene* m_scene;
-
 	WolfPlayer* m_player;
 
 	typedef std::vector<WolfEnemy*> EnemyList;

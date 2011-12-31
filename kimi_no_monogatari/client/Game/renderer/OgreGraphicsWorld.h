@@ -19,11 +19,14 @@ class OgreGraphicsWorld : public GraphicsWorld
 {
 public:
 	OgreGraphicsWorld(Ogre::Root* root, Ogre::RenderWindow* renderWindow);
+	virtual ~OgreGraphicsWorld();
 
 	virtual GWEntity* getRoot();
 
-	virtual void setSkyBox(const char* skybox_rs, float far);
+	virtual void setSkyBox(const std::string& skybox_rs, float distance);
 	virtual void setAmbientLight(float r, float g, float b);
+
+	virtual GWEntity* createEntity(const std::string& meshName, const std::string& matName);
 
 	Ogre::SceneManager* getOgreSceneManager() {
 		return m_sceneManager;
@@ -33,8 +36,10 @@ private:
 	void _createOgreSceneManager();
 
 private:
-	GWEntity* m_rootNode;
+	GWEntity* m_rootEntity;
 
+	typedef std::set<GWEntity*> EntityList;
+	EntityList m_allEntitys;
 
 	// Ogre.
 	// SceneManager is GraphicsWorld. other variable is helper for this.
