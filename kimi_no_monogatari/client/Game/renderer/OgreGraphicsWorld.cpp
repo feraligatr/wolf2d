@@ -2,20 +2,29 @@
 
 #include "OgreGraphicsWorld.h"
 #include "OgreGWEntity.h"
+#include "OgreGWCamera.h"
 
 using namespace Ogre;
 
 OgreGraphicsWorld::OgreGraphicsWorld(Ogre::Root* root, Ogre::RenderWindow* renderWindow)
 	:m_ogreRoot(root),
 	 m_renderWindow(renderWindow),
-	 m_rootEntity(NULL)
+	 m_rootEntity(NULL),
+	 m_viewport(NULL)
 {
-
+	_createOgreSceneManager();
 }
 
 OgreGraphicsWorld::~OgreGraphicsWorld()
 {
-
+	for (EntityList::iterator iter = m_allEntitys.begin(); iter != m_allEntitys.end(); ++iter)
+	{
+		delete (*iter);
+	}
+	for (CameraList::iterator iter = m_allCameras.begin(); iter != m_allCameras.end(); ++iter)
+	{
+		delete (*iter);
+	}
 }
 
 void OgreGraphicsWorld::_createOgreSceneManager()
@@ -45,22 +54,27 @@ GWEntity* OgreGraphicsWorld::createEntity(const std::string& meshName, const std
 	return entity;
 }
 
-//bool OgreGraphicsWorld::start()
-//{
-//	// fake a scene start, In fact. the world setup should done by Game logic.
-//	
-//	Ogre::SceneType scene_manager_type = Ogre::ST_EXTERIOR_CLOSE;
-//
-//	m_sceneManager = m_root->createSceneManager( scene_manager_type );
-//	m_sceneManager->setAmbientLight( Ogre::ColourValue(1,1,1) );
-//
-//	m_camera = m_sceneManager->createCamera( "sample_cam" );
-//	m_camera->setPosition( Ogre::Vector3(0,1,0) );
-//	m_camera->lookAt( Ogre::Vector3(0,0,0) );
-//	m_camera->setNearClipDistance( 1.0 );
-//
-//	m_viewport = m_renderWindow->addViewport( m_camera );
-//	m_viewport->setBackgroundColour( Ogre::ColourValue( 0,0,0 ) );
-//	return true;
-//}
+GWCamera* OgreGraphicsWorld::createCamera(const std::string& name)
+{
+	OgreGWCamera* camera = new OgreGWCamera(this, name);
+	m_allCameras.insert(camera);
+	if (!m_activeCamera)
+	{
+		setActiveCamera(camera);
+	}
+	return camera;
+}
+
+void OgreGraphicsWorld::setActiveCamera(GWCamera* camera)
+{
+	if (m_activeCamera)
+	{
+		ASSERT(m_viewport);
+		m_renderWindow->removeAllViewports();
+	}
+	OgreGWCamera* cam = (OgreGWCamera*)camera;
+	m_viewport = m_renderWindow->addViewport(cam->getOgreCamera());
+	m_viewport->setBackgroundColour(Ogre::ColourValue( 0,0,0 ));
+	m_activeCamera = cam;
+}
 

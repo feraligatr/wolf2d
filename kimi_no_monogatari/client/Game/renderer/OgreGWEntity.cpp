@@ -2,6 +2,7 @@
 
 #include "OgreGWEntity.h"
 #include "OgreGraphicsWorld.h"
+#include "OgreGraphicsHelper.h"
 
 OgreGWEntity::OgreGWEntity(OgreGraphicsWorld* gw, const std::string& meshName, const std::string& matName)
 :m_gw(gw)
@@ -22,20 +23,44 @@ OgreGWEntity::OgreGWEntity(OgreGraphicsWorld* gw, const std::string& meshName, c
 	}
 }
 
+OgreGWEntity::~OgreGWEntity()
+{
+	Ogre::SceneManager* sm = m_gw->getOgreSceneManager();
+	if (m_node)
+	{
+		sm->destroySceneNode(m_node);
+	}
+	if (m_entity)
+	{
+		sm->destroyEntity(m_entity);
+	}
+}
+
 void OgreGWEntity::setPosition(const tree::Vec3& pos)
 {
 	ASSERT(m_node);
 	if (m_node)
 	{
+		m_node->setPosition(Vec3ToOgre(pos));
 	}
 }
 
 void OgreGWEntity::setRotation(const tree::Quat& quat)
 {
+	ASSERT(m_node);
+	if (m_node)
+	{
+		m_node->setOrientation(QuatToOgre(quat));
+	}
 }
 
 void OgreGWEntity::setScale(const tree::Vec3& scale)
 {
+	ASSERT(m_node);
+	if (m_node)
+	{
+		m_node->setScale(Vec3ToOgre(scale));
+	}
 }
 
 u32 OgreGWEntity::generateUniqueId()

@@ -32,6 +32,8 @@ void WolfGame::onHandleMessage(Message* message)
 
 void WolfGame::update(float dt)
 {
+	// update all GameObject.
+	
 }
 
 bool WolfGame::init()
@@ -46,12 +48,15 @@ bool WolfGame::init()
 
 	fakeResources();
 
-//	m_scene = r_gw.createScene();
-
-//	m_scene->setSkyBox("Examples/SpaceSkyBox", 5000);
+	r_gw.setSkyBox("Examples/SpaceSkyBox", 5000);
 
 	// set light.
-//	m_scene->setAmbientLight(0.3, 0.3, 0.3);
+	r_gw.setAmbientLight(0.3, 0.3, 0.3);
+
+	m_camera = r_gw.createCamera("wolf");
+	m_camera->setPosition(tree::Vec3(10, 10, 10));
+	m_camera->lookAt(tree::Vec3(0, 0, 0));
+	m_camera->setClipDistance(1, 5001);
 
 //	m_terrain = new WolfTerrain(m_scene->getRoot());
 	// the terrain is root object in the scene. 

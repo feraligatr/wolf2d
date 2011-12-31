@@ -9,6 +9,8 @@ class OgreGWEntity : public GWEntity
 {
 public:
 	OgreGWEntity(OgreGraphicsWorld* gw, const std::string& meshName, const std::string& matName);
+	virtual ~OgreGWEntity();
+
 	virtual void setPosition(const tree::Vec3& pos);
 	virtual void setRotation(const tree::Quat& quat);
 	virtual void setScale(const tree::Vec3& scale);

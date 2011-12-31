@@ -30,7 +30,7 @@ bool SimpleClient::init()
 	// split into small pieces.
 	if (!setupConnection())
 	{
-		return false;
+//		return false;
 	}
 	if (!initGraphics())
 	{
@@ -80,12 +80,12 @@ bool SimpleClient::initGame()
 {
 	GraphicsWorld* world = m_renderContext->createGraphicsWorld();
 	m_game = new WolfGame(*world);
-	return true;
+	return m_game->init();
 }
 
 bool SimpleClient::locateResources()
 {
-	return m_renderContext->locateResources("resources.cfg");
+	return m_renderContext->locateResources("resources_d.cfg");
 }
 
 bool SimpleClient::loadResources()

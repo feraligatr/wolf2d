@@ -13,7 +13,8 @@ namespace Ogre
 	class Root;
 }
 
-class GWEntity;
+class OgreGWEntity;
+class OgreGWCamera;
 
 class OgreGraphicsWorld : public GraphicsWorld
 {
@@ -28,6 +29,9 @@ public:
 
 	virtual GWEntity* createEntity(const std::string& meshName, const std::string& matName);
 
+	virtual GWCamera* createCamera(const std::string& name);
+	virtual void setActiveCamera(GWCamera* camera);
+
 	Ogre::SceneManager* getOgreSceneManager() {
 		return m_sceneManager;
 	}
@@ -36,10 +40,14 @@ private:
 	void _createOgreSceneManager();
 
 private:
-	GWEntity* m_rootEntity;
+	OgreGWEntity* m_rootEntity;
 
-	typedef std::set<GWEntity*> EntityList;
+	typedef std::set<OgreGWEntity*> EntityList;
 	EntityList m_allEntitys;
+
+	typedef std::set<OgreGWCamera*> CameraList;
+	CameraList m_allCameras;
+	OgreGWCamera* m_activeCamera;
 
 	// Ogre.
 	// SceneManager is GraphicsWorld. other variable is helper for this.

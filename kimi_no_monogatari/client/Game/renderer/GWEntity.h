@@ -6,6 +6,7 @@ class GraphicsWorld;
 class GWEntity
 {
 public:
+	virtual ~GWEntity() {}
 	virtual void setPosition(const tree::Vec3& pos) = 0;
 	virtual void setRotation(const tree::Quat& quat) = 0;
 	virtual void setScale(const tree::Vec3& scale) = 0;

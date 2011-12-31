@@ -5,6 +5,7 @@
 
 
 class GWEntity;
+class GWCamera;
 
 class GraphicsWorld
 {
@@ -12,6 +13,8 @@ public:
 	virtual ~GraphicsWorld() {}
 
 	virtual GWEntity* createEntity(const std::string& meshName = "", const std::string& matName = "") = 0;
+	virtual GWCamera* createCamera(const std::string& name) = 0;
+	virtual void setActiveCamera(GWCamera* camera) = 0;
 
 	virtual GWEntity* getRoot() = 0;
 

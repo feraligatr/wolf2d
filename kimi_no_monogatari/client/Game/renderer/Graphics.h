@@ -3,5 +3,6 @@
 
 #include "GraphicsWorld.h"
 #include "GWEntity.h"
+#include "GWCamera.h"
 
 #endif /* _GRAPHICS_H_ */

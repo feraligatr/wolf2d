@@ -14,7 +14,7 @@ void WolfGameObject::createGraphicsEntity(const std::string& meshName, const std
 {
 	ASSERT(!m_gwEntity);
 	ASSERT(m_graphicsWorld);
-	m_graphicsWorld->createEntity(meshName, matName);
+	m_gwEntity = m_graphicsWorld->createEntity(meshName, matName);
 }
 
 

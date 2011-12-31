@@ -25,7 +25,11 @@ public:
 	const tree::Quat getRotation() const;
 	const tree::Transform& getTransform() const;
 
+	// update this and all sub objects.
+	void update(float dt);
+
 // structure
+	void detach();
 	void addChild(GameObject* obj);
 	void removeChild(GameObject* obj);
 	// update position from root. this function should be called on root.
@@ -38,6 +42,8 @@ public:
 	typedef std::set<GameObject*> ObjectList;
 
 protected:
+	virtual void updateInternal(float dt) = 0;
+
 	inline GameObject* getParent() {
 		return m_parent;
 	}

@@ -11,9 +11,9 @@ m_dirty(true)
 
 GameObject::~GameObject()
 {
-	for (ObjectList::iterator iter = m_children.begin(); iter != m_children.end(); ++iter)
+	while(!m_children.empty())
 	{
-		delete *iter;
+		removeChild(*(m_children.begin()));
 	}
 	if (m_parent)
 	{
@@ -66,6 +66,14 @@ const tree::Transform& GameObject::getTransform() const
 	return m_transform;
 }
 
+void GameObject::detach()
+{
+	if (m_parent)
+	{
+		m_parent->removeChild(this);
+	}
+}
+
 void GameObject::updatePosition()
 {
 	if (isDirty())
@@ -114,5 +122,14 @@ void GameObject::removeChild(GameObject* obj)
 	{
 		m_children.erase(iter);
 		obj->m_parent = NULL;
+	}
+}
+
+void GameObject::update(float dt)
+{
+	updateInternal(dt);
+	for (ObjectList::iterator iter = m_children.begin(); iter != m_children.end(); ++iter)
+	{
+		(*iter)->update(dt);
 	}
 }
