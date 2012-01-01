@@ -48,16 +48,23 @@ bool WolfGame::init()
 
 	fakeResources();
 
-	r_gw.setSkyBox("Examples/SpaceSkyBox", 5000);
+	try
+	{
+		r_gw.setSkyBox("Examples/SpaceSkyBox", 5000);
 
-	// set light.
-	r_gw.setAmbientLight(0.3, 0.3, 0.3);
+		// set light.
+		r_gw.setAmbientLight(1, 1, 1);
 
-	m_camera = r_gw.createCamera("wolf");
-	m_camera->setPosition(tree::Vec3(10, 10, 10));
-	m_camera->lookAt(tree::Vec3(0, 0, 0));
-	m_camera->setClipDistance(1, 5001);
-
+		m_camera = r_gw.createCamera("wolf");
+		m_camera->setPosition(tree::Vec3(0, 0, -10));
+		m_camera->lookAt(tree::Vec3(0, 0, 0));
+		m_camera->setClipDistance(1, 5001);
+	}
+	catch (Ogre::Exception e)
+	{
+		LERR_ << "WolfGame::init exception" << e.what();
+		return false;
+	}
 //	m_terrain = new WolfTerrain(m_scene->getRoot());
 	// the terrain is root object in the scene. 
 	// add Physics World(Grid Physics World).
@@ -96,13 +103,20 @@ void WolfGame::fakeResources()
 
 	// TODO: create plane as initial terrain appr.
 
-	Ogre::Plane oceanSurface;
-	oceanSurface.normal = Ogre::Vector3::UNIT_Y;
-	oceanSurface.d = 0;
-	Ogre::MeshManager::getSingleton().createPlane("TerrainMesh",
-		Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-		oceanSurface,
-		GRID_COLS, GRID_ROWS, GRID_COLS, GRID_ROWS, true, 1, 8, 8, Ogre::Vector3::UNIT_Z);
+	try
+	{
+		Ogre::Plane oceanSurface;
+		oceanSurface.normal = Ogre::Vector3::UNIT_Y;
+		oceanSurface.d = 0;
+		Ogre::MeshManager::getSingleton().createPlane("TerrainMesh",
+			Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+			oceanSurface,
+			GRID_COLS, GRID_ROWS, GRID_COLS, GRID_ROWS, true, 1, 8, 8, Ogre::Vector3::UNIT_Z);
+	}
+	catch (Ogre::Exception e)
+	{
+		LERR_ << "WolfGame::fakeResources exception" << e.what();
+	}
 
 
 	//// create a floor entity, give it a material, and place it at the origin

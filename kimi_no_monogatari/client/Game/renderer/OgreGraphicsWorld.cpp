@@ -10,7 +10,8 @@ OgreGraphicsWorld::OgreGraphicsWorld(Ogre::Root* root, Ogre::RenderWindow* rende
 	:m_ogreRoot(root),
 	 m_renderWindow(renderWindow),
 	 m_rootEntity(NULL),
-	 m_viewport(NULL)
+	 m_viewport(NULL),
+	 m_activeCamera(NULL)
 {
 	_createOgreSceneManager();
 }
@@ -74,7 +75,7 @@ void OgreGraphicsWorld::setActiveCamera(GWCamera* camera)
 	}
 	OgreGWCamera* cam = (OgreGWCamera*)camera;
 	m_viewport = m_renderWindow->addViewport(cam->getOgreCamera());
-	m_viewport->setBackgroundColour(Ogre::ColourValue( 0,0,0 ));
+	m_viewport->setBackgroundColour(Ogre::ColourValue( 0.5,0.5,0.5 ));
 	m_activeCamera = cam;
 }
 

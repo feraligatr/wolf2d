@@ -79,6 +79,10 @@ bool SimpleClient::initGraphics()
 bool SimpleClient::initGame()
 {
 	GraphicsWorld* world = m_renderContext->createGraphicsWorld();
+	if (!world)
+	{
+		return false;
+	}
 	m_game = new WolfGame(*world);
 	return m_game->init();
 }

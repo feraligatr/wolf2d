@@ -24,6 +24,9 @@ public:
 	virtual bool start(int width, int height);
 	virtual void exit();
 	virtual void render();
+
+	WId getWindowId() const;
+
 private:
 	void initOgre(const std::string& plugins_file,
 		const std::string& ogre_cfg_file,

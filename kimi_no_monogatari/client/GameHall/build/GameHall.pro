@@ -87,8 +87,7 @@ SOURCES += $${CLIENT_DIR}/GameHall/src/AsioConnectionManager.cpp
 SOURCES += $${RENDERER_DIR}/OgreGraphicsWorld.cpp
 SOURCES += $${RENDERER_DIR}/OgreRenderContext.cpp
 SOURCES += $${RENDERER_DIR}/OgreGWEntity.cpp
-SOURCES += $${RENDERER_DIR}/OgreRenderContext.cpp
-SOURCES += $${RENDERER_DIR}/OgreRenderContext.cpp
+SOURCES += $${RENDERER_DIR}/OgreGWCamera.cpp
 
 SOURCES += $${WOLF_GAME_DIR}/WolfGame.cpp
 SOURCES += $${WOLF_GAME_DIR}/GameObject.cpp
@@ -106,9 +105,13 @@ SOURCES += $${ROOT_DIR}/common/src/SessionManager.cpp
 
 SOURCES += $${ROOT_DIR}/common/utils/RandomUtil.cpp
 
-
 win32:LIBS += $(OGRE_LIB)/OgreMain_d.lib
-win32:LIBS += $(OGRE_LIB)/RenderSystem_Direct3D9_d.lib
+win32:LIBS += $(OGRE_LIB)/RenderSystem_GL_d.lib
+win32:LIBS += $(OGRE_LIB)/Plugin_ParticleFX_d.lib
+win32:LIBS += $(OGRE_LIB)/Plugin_BSPSceneManager_d.lib
+win32:LIBS += $(OGRE_LIB)/Plugin_CgProgramManager_d.lib
+win32:LIBS += $(OGRE_LIB)/Plugin_PCZSceneManager_d.lib
+win32:LIBS += $(OGRE_LIB)/Plugin_OctreeSceneManager_d.lib
 win32:LIBS += $(OGRE_LIB)/RenderSystem_GL_d.lib
 win32:LIBS += $(BULLET_ROOT)/lib/LinearMath_debug.lib
 win32:LIBS += $(BULLET_ROOT)/lib/BulletCollision_debug.lib

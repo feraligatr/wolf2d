@@ -19,15 +19,31 @@ OgreRenderContext::~OgreRenderContext()
 
 GraphicsWorld* OgreRenderContext::createGraphicsWorld()
 {
-	GraphicsWorld* world = new OgreGraphicsWorld(m_root, m_renderWindow);
+	GraphicsWorld* world = NULL;
+	try
+	{
+		world = new OgreGraphicsWorld(m_root, m_renderWindow);
+	}
+	catch (Ogre::Exception e)
+	{
+		LERR_ << "OgreRenderContext::createGraphicsWorld exception" << e.what();
+		return NULL;
+	}
 	m_worlds.insert(world);
 	return world;
 }
 
 void OgreRenderContext::destroyGraphicsWorld(GraphicsWorld* world)
 {
-	m_worlds.erase(world);
-	delete world;
+	try
+	{
+		m_worlds.erase(world);
+		delete world;
+	}
+	catch (Ogre::Exception e)
+	{
+		LERR_ << "OgreRenderContext::destroyGraphicsWorld exception" << e.what();
+	}
 }
 
 
@@ -38,24 +54,38 @@ void OgreRenderContext::resize(int , int )
 
 bool OgreRenderContext::start(int width, int height)
 {
-	initOgre("plugins_d.cfg", "ogre_config.cfg", "output.log", width, height);
-	createRenderWindow(m_windowId, width, height);
+	try
+	{
+		initOgre("plugins_d.cfg", "ogre_config.cfg", "output.log", width, height);
+		createRenderWindow(m_windowId, width, height);
+	}
+	catch (Ogre::Exception e)
+	{
+		LERR_ << "OgreRenderContext::start: exception" << e.what();
+	}
 	return true;
 }
 
 void OgreRenderContext::exit()
 {
-	for (GraphicsWorldList::iterator iter = m_worlds.begin(); iter != m_worlds.end(); ++iter)
+	try
 	{
-		delete *iter;
-	}
-	m_worlds.clear();
+		for (GraphicsWorldList::iterator iter = m_worlds.begin(); iter != m_worlds.end(); ++iter)
+		{
+			delete *iter;
+		}
+		m_worlds.clear();
 
-	if (m_root)
+		if (m_root)
+		{
+			m_root->shutdown();
+			delete m_root;
+			m_root = NULL;
+		}
+	}
+	catch (Ogre::Exception e)
 	{
-		m_root->shutdown();
-		delete m_root;
-		m_root = NULL;
+		LERR_ << "OgreRenderContext::exit: exception" << e.what();
 	}
 }
 
@@ -66,27 +96,43 @@ void OgreRenderContext::render()
 
 void OgreRenderContext::createRenderWindow(int windowId, int width, int height)
 {
-	Ogre::String winHandle;
-#ifdef WIN32
-	// Windows code
-	winHandle += Ogre::StringConverter::toString((unsigned long)windowId);
-#else
-	// Unix code
-	QX11Info info = x11Info();
-	winHandle  = Ogre::StringConverter::toString((unsigned long)(info.display()));
-	winHandle += ":";
-	winHandle += Ogre::StringConverter::toString((unsigned int)(info.screen()));
-	winHandle += ":";
-	winHandle += Ogre::StringConverter::toString((unsigned long)(this->parentWidget()->winId()));
-#endif
-	Ogre::NameValuePairList params;
-	params["parentWindowHandle"] = winHandle;
+	try
+	{
+		Ogre::String winHandle;
+	#ifdef WIN32
+		// Windows code
+		winHandle += Ogre::StringConverter::toString((unsigned long)windowId);
+	#else
+		// Unix code
+		QX11Info info = x11Info();
+		winHandle  = Ogre::StringConverter::toString((unsigned long)(info.display()));
+		winHandle += ":";
+		winHandle += Ogre::StringConverter::toString((unsigned int)(info.screen()));
+		winHandle += ":";
+		winHandle += Ogre::StringConverter::toString((unsigned long)(this->parentWidget()->winId()));
+	#endif
+		Ogre::NameValuePairList params;
+		params["parentWindowHandle"] = winHandle;
 
-	m_renderWindow = m_root->createRenderWindow( "QOgreWidget_RenderWindow",
-		width,
-		height,
-		false,
-		&params );
+		m_renderWindow = m_root->createRenderWindow( "QOgreWidget_RenderWindow",
+			width,
+			height,
+			false,
+			&params );
+		m_renderWindow->setActive(true);
+	}
+	catch (Ogre::Exception e)
+	{
+		LERR_ << "OgreRenderContext::createRenderWindow exception " << e.what();
+	}
+}
+
+WId OgreRenderContext::getWindowId() const
+{
+	WId ogreWinId = 0x0;
+	m_renderWindow->getCustomAttribute( "WINDOW", &ogreWinId );
+	ASSERT(ogreWinId != 0);
+	return ogreWinId;
 }
 
 void OgreRenderContext::initOgre(const std::string& plugins_file,
@@ -94,18 +140,25 @@ void OgreRenderContext::initOgre(const std::string& plugins_file,
 		const std::string& ogre_log,
 		int width, int height)
 {
-	m_root = new Ogre::Root(plugins_file, ogre_cfg_file, ogre_log);
-	const Ogre::RenderSystemList& renderers = m_root->getAvailableRenderers();
-	Ogre::RenderSystem *renderSystem = *(renderers.begin());
-	m_root->setRenderSystem(renderSystem);
-	QString dimensions = QString( "%1x%2" )
-					.arg(width)
-					.arg(height);
+	try
+	{
+		m_root = new Ogre::Root(plugins_file, ogre_cfg_file, ogre_log);
+		const Ogre::RenderSystemList& renderers = m_root->getAvailableRenderers();
+		Ogre::RenderSystem *renderSystem = *(renderers.begin());
+		m_root->setRenderSystem(renderSystem);
+		QString dimensions = QString( "%1x%2" )
+						.arg(width)
+						.arg(height);
 
-	renderSystem->setConfigOption( "Video Mode", dimensions.toStdString() );
-	m_root->getRenderSystem()->setConfigOption( "Full Screen", "No" );
-	m_root->saveConfig();
-	m_root->initialise(false);
+		renderSystem->setConfigOption( "Video Mode", dimensions.toStdString() );
+		m_root->getRenderSystem()->setConfigOption( "Full Screen", "No" );
+		m_root->saveConfig();
+		m_root->initialise(false);
+	}
+	catch (Ogre::Exception e)
+	{
+		LERR_ << "OgreRenderContext::initOgre " << e.what();
+	}
 }
 
 bool OgreRenderContext::locateResources(const char* cfgfile)
@@ -145,6 +198,7 @@ bool OgreRenderContext::locateResources(const char* cfgfile)
 	}
 	catch (Ogre::Exception e)
 	{
+		LERR_ << "OgreRenderContext::locateResources exception" << e.what();
 		return false;
 	}
 	return true;
@@ -152,6 +206,16 @@ bool OgreRenderContext::locateResources(const char* cfgfile)
 
 bool OgreRenderContext::loadAllResources()
 {
-	Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
+	try
+	{
+		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Essential");
+		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Popular");
+		Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
+	}
+	catch(Ogre::Exception e)
+	{
+		LERR_ << "OgreRenderContext::loadAllResources exception" << e.what();
+		return false;
+	}
 	return true;
 }
