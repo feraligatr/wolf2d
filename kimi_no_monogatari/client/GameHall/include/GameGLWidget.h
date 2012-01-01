@@ -26,6 +26,8 @@ public:
 	virtual void keyPressEvent(QKeyEvent *);
 	virtual void keyReleaseEvent(QKeyEvent *);
 
+	void recreateFromOgreWindow(WId wid);
+
 protected:
 	virtual void initializeGL();
 	virtual void resizeGL(int w, int h);

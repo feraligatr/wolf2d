@@ -1,79 +1,81 @@
 #include "pch/pch.h"
 
 #include "OgreGraphicsWorld.h"
+#include "OgreGWEntity.h"
+#include "OgreGWCamera.h"
 
 using namespace Ogre;
 
 OgreGraphicsWorld::OgreGraphicsWorld(Ogre::Root* root, Ogre::RenderWindow* renderWindow)
-	:m_root(root),
-	 m_renderWindow(renderWindow)
+	:m_ogreRoot(root),
+	 m_renderWindow(renderWindow),
+	 m_rootEntity(NULL),
+	 m_viewport(NULL),
+	 m_activeCamera(NULL)
 {
-	
+	_createOgreSceneManager();
 }
 
-bool OgreGraphicsWorld::start()
+OgreGraphicsWorld::~OgreGraphicsWorld()
 {
-	// fake a scene start, In fact. the world setup should done by Game logic.
-	
-	Ogre::SceneType scene_manager_type = Ogre::ST_EXTERIOR_CLOSE;
-
-	m_sceneManager = m_root->createSceneManager( scene_manager_type );
-	m_sceneManager->setAmbientLight( Ogre::ColourValue(1,1,1) );
-
-	m_camera = m_sceneManager->createCamera( "sample_cam" );
-	m_camera->setPosition( Ogre::Vector3(0,1,0) );
-	m_camera->lookAt( Ogre::Vector3(0,0,0) );
-	m_camera->setNearClipDistance( 1.0 );
-
-	m_viewport = m_renderWindow->addViewport( m_camera );
-	m_viewport->setBackgroundColour( Ogre::ColourValue( 0,0,0 ) );
-	return true;
-}
-
-bool OgreGraphicsWorld::locateResources(const char* cfgfile)
-{
-	// load resource paths from config file
-	try
+	for (EntityList::iterator iter = m_allEntitys.begin(); iter != m_allEntitys.end(); ++iter)
 	{
-			Ogre::ConfigFile cf;
-			cf.load(cfgfile);
-
-			Ogre::ConfigFile::SectionIterator seci = cf.getSectionIterator();
-			Ogre::String sec, type, arch;
-
-			// go through all specified resource groups
-			while (seci.hasMoreElements())
-			{
-				sec = seci.peekNextKey();
-				Ogre::ConfigFile::SettingsMultiMap* settings = seci.getNext();
-				Ogre::ConfigFile::SettingsMultiMap::iterator i;
-
-				// go through all resource paths
-				for (i = settings->begin(); i != settings->end(); i++)
-				{
-					type = i->first;
-					arch = i->second;
-
-					#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_IPHONE
-                    // OS X does not set the working directory relative to the app,
-                    // In order to make things portable on OS X we need to provide
-                    // the loading with it's own bundle path location
-					if (!Ogre::StringUtil::startsWith(arch, "/", false)) // only adjust relative dirs
-						arch = Ogre::String(Ogre::macBundlePath() + "/" + arch);
-					#endif
-					Ogre::ResourceGroupManager::getSingleton().addResourceLocation(arch, type, sec);
-				}
-			}
+		delete (*iter);
 	}
-	catch (Ogre::Exception e)
+	for (CameraList::iterator iter = m_allCameras.begin(); iter != m_allCameras.end(); ++iter)
 	{
-		return false;
+		delete (*iter);
 	}
-	return true;
 }
 
-bool OgreGraphicsWorld::loadAllResources()
+void OgreGraphicsWorld::_createOgreSceneManager()
 {
-	Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
-	return true;
+	m_sceneManager = m_ogreRoot->createSceneManager(Ogre::ST_EXTERIOR_CLOSE);
 }
+
+GWEntity* OgreGraphicsWorld::getRoot()
+{
+	return m_rootEntity;
+}
+
+void OgreGraphicsWorld::setSkyBox(const std::string& skybox_rs, float distance)
+{
+	m_sceneManager->setSkyBox(true, skybox_rs, distance);
+}
+
+void OgreGraphicsWorld::setAmbientLight(float r, float g, float b)
+{
+	m_sceneManager->setAmbientLight(Ogre::ColourValue(r, g, b));
+}
+
+GWEntity* OgreGraphicsWorld::createEntity(const std::string& meshName, const std::string& matName)
+{
+	OgreGWEntity* entity = new OgreGWEntity(this, meshName, matName);
+	m_allEntitys.insert(entity);
+	return entity;
+}
+
+GWCamera* OgreGraphicsWorld::createCamera(const std::string& name)
+{
+	OgreGWCamera* camera = new OgreGWCamera(this, name);
+	m_allCameras.insert(camera);
+	if (!m_activeCamera)
+	{
+		setActiveCamera(camera);
+	}
+	return camera;
+}
+
+void OgreGraphicsWorld::setActiveCamera(GWCamera* camera)
+{
+	if (m_activeCamera)
+	{
+		ASSERT(m_viewport);
+		m_renderWindow->removeAllViewports();
+	}
+	OgreGWCamera* cam = (OgreGWCamera*)camera;
+	m_viewport = m_renderWindow->addViewport(cam->getOgreCamera());
+	m_viewport->setBackgroundColour(Ogre::ColourValue( 0.5,0.5,0.5 ));
+	m_activeCamera = cam;
+}
+

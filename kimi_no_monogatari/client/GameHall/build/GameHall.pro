@@ -4,6 +4,8 @@ GAMEHALL_DIR = ..
 CLIENT_DIR = $${ROOT_DIR}/client
 
 WOLF_GAME_DIR = $${CLIENT_DIR}/Game/wolf
+PHYSICS_DIR = $${CLIENT_DIR}/Game/physics
+RENDERER_DIR = $${CLIENT_DIR}/Game/renderer
 
 QMAKE_LIBDIR += $(BOOST_ROOT)/stage/lib
 
@@ -12,6 +14,8 @@ CONFIG += qt
 QT += opengl
 
 win32:DEFINES += _CRT_SECURE_NO_WARNINGS
+
+DEFINES += _FAKE_
 
 INCLUDEPATH += $${GAMEHALL_DIR}/include
 INCLUDEPATH += $(OGRE_INCLUDE)
@@ -51,6 +55,11 @@ HEADERS += $${CLIENT_DIR}/include/ConnectionManager.h
 HEADERS += $${ROOT_DIR}/common/include/common.h
 HEADERS += $${ROOT_DIR}/common/include/Logger.h
 
+HEADERS += $${PHYSICS_DIR}/trCollisionObject.h
+HEADERS += $${PHYSICS_DIR}/trCollisionShape.h
+HEADERS += $${PHYSICS_DIR}/trCollisionWorld.h
+HEADERS += $${PHYSICS_DIR}/trPhysicsWorld.h
+HEADERS += $${PHYSICS_DIR}/trRigidBody.h
 
 SOURCES += $${GAMEHALL_DIR}/src/GameHallWindow.cpp
 SOURCES += $${GAMEHALL_DIR}/src/GameHallApplication.cpp
@@ -65,15 +74,25 @@ SOURCES += $${GAMEHALL_DIR}/src/GameGLWidget.cpp
 SOURCES += $${GAMEHALL_DIR}/src/main.cpp
 SOURCES += $${GAMEHALL_DIR}/src/Logger.cpp
 
+SOURCES += $${PHYSICS_DIR}/trCollisionObject.cpp
+SOURCES += $${PHYSICS_DIR}/trCollisionShape.cpp
+SOURCES += $${PHYSICS_DIR}/trCollisionWorld.cpp
+SOURCES += $${PHYSICS_DIR}/trPhysicsWorld.cpp
+SOURCES += $${PHYSICS_DIR}/trRigidBody.cpp
+
 SOURCES += $${CLIENT_DIR}/src/Connection.cpp
 SOURCES += $${CLIENT_DIR}/src/SimpleClient.cpp
-SOURCES += $${CLIENT_DIR}/Game/renderer/OgreGraphicsWorld.cpp
-SOURCES += $${CLIENT_DIR}/Game/renderer/OgreRenderContext.cpp
 SOURCES += $${CLIENT_DIR}/GameHall/src/AsioConnectionManager.cpp
 
-SOURCES += $${CLIENT_DIR}/math/trMath.cpp
+SOURCES += $${RENDERER_DIR}/OgreGraphicsWorld.cpp
+SOURCES += $${RENDERER_DIR}/OgreRenderContext.cpp
+SOURCES += $${RENDERER_DIR}/OgreGWEntity.cpp
+SOURCES += $${RENDERER_DIR}/OgreGWCamera.cpp
 
 SOURCES += $${WOLF_GAME_DIR}/WolfGame.cpp
+SOURCES += $${WOLF_GAME_DIR}/GameObject.cpp
+SOURCES += $${WOLF_GAME_DIR}/WolfGameObject.cpp
+
 
 SOURCES += $${ROOT_DIR}/common/msg/Message.cpp
 SOURCES += $${ROOT_DIR}/common/msg/MessageManager.cpp
@@ -86,9 +105,13 @@ SOURCES += $${ROOT_DIR}/common/src/SessionManager.cpp
 
 SOURCES += $${ROOT_DIR}/common/utils/RandomUtil.cpp
 
-
 win32:LIBS += $(OGRE_LIB)/OgreMain_d.lib
-win32:LIBS += $(OGRE_LIB)/RenderSystem_Direct3D9_d.lib
+win32:LIBS += $(OGRE_LIB)/RenderSystem_GL_d.lib
+win32:LIBS += $(OGRE_LIB)/Plugin_ParticleFX_d.lib
+win32:LIBS += $(OGRE_LIB)/Plugin_BSPSceneManager_d.lib
+win32:LIBS += $(OGRE_LIB)/Plugin_CgProgramManager_d.lib
+win32:LIBS += $(OGRE_LIB)/Plugin_PCZSceneManager_d.lib
+win32:LIBS += $(OGRE_LIB)/Plugin_OctreeSceneManager_d.lib
 win32:LIBS += $(OGRE_LIB)/RenderSystem_GL_d.lib
 win32:LIBS += $(BULLET_ROOT)/lib/LinearMath_debug.lib
 win32:LIBS += $(BULLET_ROOT)/lib/BulletCollision_debug.lib
