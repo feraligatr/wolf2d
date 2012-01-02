@@ -19,7 +19,7 @@ class OgreGWCamera;
 class OgreGraphicsWorld : public GraphicsWorld
 {
 public:
-	OgreGraphicsWorld(Ogre::Root* root, Ogre::RenderWindow* renderWindow);
+	OgreGraphicsWorld(Ogre::Root* root, Ogre::RenderWindow* renderWindow, int width, int height);
 	virtual ~OgreGraphicsWorld();
 
 	virtual GWEntity* getRoot();
@@ -35,6 +35,8 @@ public:
 	Ogre::SceneManager* getOgreSceneManager() {
 		return m_sceneManager;
 	}
+
+	void resize(int width, int height);
 
 private:
 	void _createOgreSceneManager();
@@ -55,6 +57,9 @@ private:
 	Ogre::Root* m_ogreRoot;
 	Ogre::RenderWindow* m_renderWindow;
 	Ogre::Viewport* m_viewport;
+
+	int m_width;
+	int m_height;
 };
 
 #endif /* _OGRE_GRAPHICS_WORLD_H_ */

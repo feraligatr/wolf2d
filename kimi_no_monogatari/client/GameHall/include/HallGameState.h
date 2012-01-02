@@ -20,8 +20,9 @@ public:
 	virtual void onGenericMessage(const QString& msg, void* data);
 	virtual void onInvoked(QWidget* owner, QWidget* sender, QString msg, void* data);
 
-	virtual void onResizeEvent(QResizeEvent * event);
+	virtual void onResize(const QSize& size);
 
+	virtual void onSwitchStateFinished();
 
 private:
 	// implement a parameter list to start different games.

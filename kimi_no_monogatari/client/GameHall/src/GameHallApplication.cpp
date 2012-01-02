@@ -78,12 +78,18 @@ void GameHallApplication::onSwitchStateFinished()
 	}
 }
 
-void GameHallApplication::onResizeEvent(QResizeEvent * event)
+void GameHallApplication::onResize(const QSize& size)
 {
+	m_size = size;
 	if (m_win)
 	{
-		m_stateManager->onResizeEvent(event);
+		m_stateManager->onResize(size);
 	}
+}
+
+QSize GameHallApplication::getGlobalWindowSize() const
+{
+	return m_size;
 }
 
 void GameHallApplication::connection_update()

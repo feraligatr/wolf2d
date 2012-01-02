@@ -13,7 +13,6 @@ public:
 	virtual bool locateResources(const char* cfgfile) = 0;
 	virtual bool loadAllResources() = 0;
 	virtual void resize(int width, int height) = 0;
-	virtual bool start(int width, int height) = 0;
 	virtual void exit() = 0;
 	virtual void render() = 0;
 };

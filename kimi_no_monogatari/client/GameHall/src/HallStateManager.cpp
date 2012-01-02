@@ -65,6 +65,7 @@ GSTATUS StateManager::switchState(STATE state)
 	m_currentState = state;
 	// send app to update window.
 	g_app->onSwitchStateFinished();
+	m_states[m_currentState]->onSwitchStateFinished();
 	return GSTATUS_OK;
 }
 
@@ -93,13 +94,13 @@ State* StateManager::createState(STATE state)
 	return NULL;
 }
 
-void StateManager::onResizeEvent(QResizeEvent * event)
+void StateManager::onResize(const QSize& size)
 {
 	if (m_currentState == STATE_NULL || m_states[m_currentState] == NULL)
 	{
 		return;
 	}
-	m_states[m_currentState]->onResizeEvent(event);
+	m_states[m_currentState]->onResize(size);
 }
 
 }

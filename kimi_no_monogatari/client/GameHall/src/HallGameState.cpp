@@ -40,17 +40,22 @@ GSTATUS GameState::enter()
 {
 	// TODO: by parameter to create different GameContent and Game.
 	m_window = new GameGLWidget(this);
-	
 	return GSTATUS_OK;
+}
+
+void GameState::onSwitchStateFinished()
+{
+	QSize size = g_app->getGlobalWindowSize();
+	m_window->setGeometry(0, 0, size.width(), size.height());
 }
 
 void GameState::onInvoked(QWidget* owner, QWidget* , QString msg, void* data)
 {
 	ASSERT(owner == m_window);
-	if (msg == "create_window")
+	if (msg == "init")
 	{
-		m_renderContext = new OgreRenderContext((size_t)(HWND)(m_window->parentWidget()->winId()));
-		m_renderContext->start(m_window->width(), m_window->height());
+		m_renderContext = new OgreRenderContext();
+		((OgreRenderContext*)m_renderContext)->start((size_t)(HWND)(m_window->parentWidget()->winId()), m_window->width(), m_window->height());
 
 		((GameGLWidget*)m_window)->recreateFromOgreWindow(((OgreRenderContext*)m_renderContext)->getWindowId());
 		m_window->setAttribute( Qt::WA_PaintOnScreen, true );
@@ -84,10 +89,6 @@ void GameState::onInvoked(QWidget* owner, QWidget* , QString msg, void* data)
 		QSize* size = (QSize*)data;
 		m_renderContext->resize(size->width(), size->height());
 	}
-	else if (msg == "init")
-	{
-
-	}
 }
 
 void GameState::onGenericMessage(const QString& , void*)
@@ -95,9 +96,10 @@ void GameState::onGenericMessage(const QString& , void*)
 	// do nothing
 }
 
-void GameState::onResizeEvent(QResizeEvent * )
+void GameState::onResize(const QSize& size)
 {
-	// TODO: resize the widget 
+	m_window->move(0, 0);
+	m_window->resize(size.width(), size.height());
 }
 
 }
