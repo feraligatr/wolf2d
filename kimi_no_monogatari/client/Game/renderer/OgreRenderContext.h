@@ -14,16 +14,18 @@ namespace Ogre
 class OgreRenderContext : public RenderContext
 {
 public:
-	OgreRenderContext::OgreRenderContext(int windowId);
+	OgreRenderContext::OgreRenderContext();
 	virtual ~OgreRenderContext();
 	virtual GraphicsWorld* createGraphicsWorld();
 	virtual void destroyGraphicsWorld(GraphicsWorld* world);
 	virtual bool locateResources(const char* cfgfile);
 	virtual bool loadAllResources();
 	virtual void resize(int width, int height);
-	virtual bool start(int width, int height);
+	
 	virtual void exit();
 	virtual void render();
+
+	bool start(int windowId, int width, int height);
 
 	WId getWindowId() const;
 
@@ -37,13 +39,13 @@ private:
 
 private:
 	typedef std::set<GraphicsWorld*> GraphicsWorldList;
-	GraphicsWorldList m_worlds;	
-
-	int m_windowId;
+	GraphicsWorldList m_worlds;
 
 	// Ogre things. 
 	Ogre::Root* m_root;
 	Ogre::RenderWindow* m_renderWindow;
+
+	int m_width, m_height;
 };
 
 #endif /* OGRE_RENDER_CONTEXT_H_ */

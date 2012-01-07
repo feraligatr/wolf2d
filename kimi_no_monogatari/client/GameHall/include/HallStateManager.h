@@ -30,7 +30,7 @@ public:
 
 	void onGenericMessage(const QString& msg, void* data);
 
-	void onResizeEvent(QResizeEvent * event);
+	void onResize(const QSize& size);
 
 private:
 	State* createState(STATE state);

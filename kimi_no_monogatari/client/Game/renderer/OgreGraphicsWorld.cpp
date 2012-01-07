@@ -6,12 +6,14 @@
 
 using namespace Ogre;
 
-OgreGraphicsWorld::OgreGraphicsWorld(Ogre::Root* root, Ogre::RenderWindow* renderWindow)
+OgreGraphicsWorld::OgreGraphicsWorld(Ogre::Root* root, Ogre::RenderWindow* renderWindow, int width, int height)
 	:m_ogreRoot(root),
 	 m_renderWindow(renderWindow),
 	 m_rootEntity(NULL),
 	 m_viewport(NULL),
-	 m_activeCamera(NULL)
+	 m_activeCamera(NULL),
+	 m_width(width),
+	 m_height(height)
 {
 	_createOgreSceneManager();
 }
@@ -58,6 +60,7 @@ GWEntity* OgreGraphicsWorld::createEntity(const std::string& meshName, const std
 GWCamera* OgreGraphicsWorld::createCamera(const std::string& name)
 {
 	OgreGWCamera* camera = new OgreGWCamera(this, name);
+	camera->getOgreCamera()->setAspectRatio((float)m_width / m_height);
 	m_allCameras.insert(camera);
 	if (!m_activeCamera)
 	{
@@ -79,3 +82,12 @@ void OgreGraphicsWorld::setActiveCamera(GWCamera* camera)
 	m_activeCamera = cam;
 }
 
+void OgreGraphicsWorld::resize(int width, int height)
+{
+	m_width = width;
+	m_height = height;
+	for (CameraList::iterator iter = m_allCameras.begin(); iter != m_allCameras.end(); ++iter)
+	{
+		((OgreGWCamera*)(*iter))->getOgreCamera()->setAspectRatio((float)width/height);
+	}
+}

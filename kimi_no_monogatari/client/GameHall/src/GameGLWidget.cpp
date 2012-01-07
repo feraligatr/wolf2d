@@ -24,7 +24,7 @@ void GameGLWidget::setClient(SimpleClient* client)
 
 void GameGLWidget::initializeGL()
 {
-	m_listener->onInvoked(this, NULL, "create_window", NULL);
+	m_listener->onInvoked(this, NULL, "init", NULL);
 }
 
 void GameGLWidget::resizeGL(int w, int h)
@@ -45,7 +45,7 @@ void GameGLWidget::timeout_update()
 
 void GameGLWidget::recreateFromOgreWindow(WId wid)
 {
-	this->create(wid);
+//	this->create(wid);
 }
 
 void GameGLWidget::mousePressEvent(QMouseEvent *evt)

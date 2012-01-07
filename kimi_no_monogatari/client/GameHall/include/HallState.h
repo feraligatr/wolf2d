@@ -12,7 +12,9 @@ public:
 	virtual GSTATUS exit() = 0;
 	virtual GSTATUS enter() = 0;
 	virtual void onGenericMessage(const QString& msg, void* data) = 0;
-	virtual void onResizeEvent(QResizeEvent * ) {}
+	virtual void onResize(const QSize& ) {}
+
+	virtual void onSwitchStateFinished() {}
 
 	inline QWidget* getWindow() {
 		return m_window;

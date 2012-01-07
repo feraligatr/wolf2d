@@ -6,8 +6,7 @@
 
 #include <QString>
 
-OgreRenderContext::OgreRenderContext(int windowId)
-	:m_windowId(windowId)
+OgreRenderContext::OgreRenderContext()
 {
 
 }
@@ -22,7 +21,7 @@ GraphicsWorld* OgreRenderContext::createGraphicsWorld()
 	GraphicsWorld* world = NULL;
 	try
 	{
-		world = new OgreGraphicsWorld(m_root, m_renderWindow);
+		world = new OgreGraphicsWorld(m_root, m_renderWindow, m_width, m_height);
 	}
 	catch (Ogre::Exception e)
 	{
@@ -47,17 +46,34 @@ void OgreRenderContext::destroyGraphicsWorld(GraphicsWorld* world)
 }
 
 
-void OgreRenderContext::resize(int , int )
+void OgreRenderContext::resize(int width, int height)
 {
-	m_renderWindow->windowMovedOrResized();
+	m_width = width;
+	m_height = height;
+	try
+	{
+		for (GraphicsWorldList::iterator iter = m_worlds.begin(); iter != m_worlds.end(); ++iter)
+		{
+			((OgreGraphicsWorld*)(*iter))->resize(width, height);
+		}
+		m_renderWindow->reposition(0, 0);
+		m_renderWindow->resize(width, height);
+//		m_renderWindow->windowMovedOrResized();
+	}
+	catch (Ogre::Exception e)
+	{
+		LERR_ << "OgreRenderContext::resize exception" << e.what();
+	}
 }
 
-bool OgreRenderContext::start(int width, int height)
+bool OgreRenderContext::start(int windowId, int width, int height)
 {
+	m_width = width;
+	m_height = height;
 	try
 	{
 		initOgre("plugins_d.cfg", "ogre_config.cfg", "output.log", width, height);
-		createRenderWindow(m_windowId, width, height);
+		createRenderWindow(windowId, width, height);
 	}
 	catch (Ogre::Exception e)
 	{
@@ -120,6 +136,7 @@ void OgreRenderContext::createRenderWindow(int windowId, int width, int height)
 			false,
 			&params );
 		m_renderWindow->setActive(true);
+		m_renderWindow->reposition(0, 0);
 	}
 	catch (Ogre::Exception e)
 	{

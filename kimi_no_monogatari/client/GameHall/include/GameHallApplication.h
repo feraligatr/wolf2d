@@ -34,7 +34,9 @@ public:
 	void selectGame(const QString& gamename);
 	
 	void onSwitchStateFinished();
-	void onResizeEvent(QResizeEvent * event);
+	void onResize(const QSize& size);
+
+	QSize getGlobalWindowSize() const;
 
 private slots:
 	void connection_update();
@@ -44,6 +46,8 @@ private:
 	hall::StateManager *m_stateManager;
 	GameHallService* m_gameService;
 	ConnectionManager* m_connectionManager;
+
+	QSize m_size;
 };
 
 extern GameHallApplication *g_app;

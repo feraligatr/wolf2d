@@ -26,5 +26,5 @@ void GameHallWindow::setDisplayWindow(QWidget* window)
 
 void GameHallWindow::resizeEvent(QResizeEvent * event)
 {
-	g_app->onResizeEvent(event);
+	g_app->onResize(event->size());
 }
