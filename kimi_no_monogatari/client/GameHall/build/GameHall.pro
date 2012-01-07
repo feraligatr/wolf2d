@@ -94,7 +94,7 @@ SOURCES += $${RENDERER_DIR}/OgreGWCamera.cpp
 SOURCES += $${WOLF_GAME_DIR}/WolfGame.cpp
 SOURCES += $${WOLF_GAME_DIR}/GameObject.cpp
 SOURCES += $${WOLF_GAME_DIR}/WolfGameObject.cpp
-
+SOURCES += $${WOLF_GAME_DIR}/WolfLevel.cpp
 
 SOURCES += $${ROOT_DIR}/common/msg/Message.cpp
 SOURCES += $${ROOT_DIR}/common/msg/MessageManager.cpp
