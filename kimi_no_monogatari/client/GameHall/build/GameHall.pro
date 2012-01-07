@@ -54,6 +54,8 @@ HEADERS += $${CLIENT_DIR}/include/ConnectionManager.h
 
 HEADERS += $${ROOT_DIR}/common/include/common.h
 HEADERS += $${ROOT_DIR}/common/include/Logger.h
+HEADERS += $${ROOT_DIR}/common/include/trStream.h
+HEADERS += $${ROOT_DIR}/common/include/trFStream.h
 
 HEADERS += $${PHYSICS_DIR}/trCollisionObject.h
 HEADERS += $${PHYSICS_DIR}/trCollisionShape.h
@@ -102,6 +104,7 @@ SOURCES += $${ROOT_DIR}/common/msg/MessageParsers.cpp
 SOURCES += $${ROOT_DIR}/common/src/Random.cpp
 SOURCES += $${ROOT_DIR}/common/src/Session.cpp
 SOURCES += $${ROOT_DIR}/common/src/SessionManager.cpp
+SOURCES += $${ROOT_DIR}/common/src/trFStream.cpp
 
 SOURCES += $${ROOT_DIR}/common/utils/RandomUtil.cpp
 
