@@ -27,9 +27,9 @@ public:
 
 	size_t fileLength() const;
 
-	virtual int read(void *buf, size_t size) = 0;
-	virtual int write(const void *buf, size_t size) = 0;
-	virtual bool seek(Pos whence, long offset) = 0;
+	virtual int read(void *buf, size_t size);
+	virtual int write(const void *buf, size_t size);
+	virtual bool seek(Pos whence, long offset);
 
 
 private:

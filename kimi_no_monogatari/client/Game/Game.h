@@ -5,12 +5,16 @@
 #include "msg/Message.h"
 
 class GraphicsWorld;
+namespace tree
+{
+class PhysicsWorld;
+}
 
 class Game
 {
 public:
-	Game(GraphicsWorld& gw)
-		:r_gw(gw) 
+	Game(GraphicsWorld& gw, tree::PhysicsWorld& pw)
+		:r_gw(gw), r_pw(pw)
 		{}
 	virtual ~Game() {}
 
@@ -23,6 +27,7 @@ public:
 
 protected:
 	GraphicsWorld& r_gw;
+	tree::PhysicsWorld& r_pw;
 };
 
 #endif /* _GAME_H_ */

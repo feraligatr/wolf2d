@@ -83,7 +83,10 @@ bool SimpleClient::initGame()
 	{
 		return false;
 	}
-	m_game = new WolfGame(*world);
+
+	tree::PhysicsConfig p_config;
+	tree::PhysicsWorld* pw= new tree::PhysicsWorld(p_config);
+	m_game = new WolfGame(*world, *pw);
 	return m_game->init();
 }
 

@@ -25,6 +25,14 @@ OgreGWEntity::OgreGWEntity(OgreGraphicsWorld* gw, const std::string& meshName, c
 
 OgreGWEntity::~OgreGWEntity()
 {
+	while(!m_children.empty())
+	{
+		removeChild(*(m_children.begin()));
+	}
+	if (m_parent)
+	{
+		m_parent->removeChild(this);
+	}
 	Ogre::SceneManager* sm = m_gw->getOgreSceneManager();
 	if (m_node)
 	{
@@ -34,6 +42,42 @@ OgreGWEntity::~OgreGWEntity()
 	{
 		sm->destroyEntity(m_entity);
 	}
+}
+
+void OgreGWEntity::addChild(GWEntity* entity)
+{
+	EntityList::iterator iter = m_children.find(entity);
+	ASSERT(iter == m_children.end());
+	if (iter == m_children.end())
+	{
+		OgreGWEntity* oe = (OgreGWEntity*)entity;
+		m_node->addChild(oe->m_node);
+		m_children.insert(entity);
+		oe->m_parent = this;
+	}
+}
+
+void OgreGWEntity::removeChild(GWEntity* entity)
+{
+	EntityList::iterator iter = m_children.find(entity);
+	ASSERT(iter != m_children.end());
+	if (iter != m_children.end())
+	{
+		OgreGWEntity* oe = (OgreGWEntity*)entity;
+		m_node->removeChild(oe->m_node);
+		m_children.erase(iter);
+		oe->m_parent = NULL;
+	}
+}
+
+GWEntity* OgreGWEntity::getParent()
+{
+	return m_parent;
+}
+
+u16 OgreGWEntity::numChildren()
+{
+	return m_children.size();
 }
 
 void OgreGWEntity::setPosition(const tree::Vec3& pos)

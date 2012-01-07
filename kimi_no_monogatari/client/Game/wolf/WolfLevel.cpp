@@ -188,6 +188,13 @@ tree::Stream& operator>> (tree::Stream& s, WolfLevel& v)
 	v.m_mapName = mapName;
 	v.m_musicName = musicName;
 
+	v.m_floorR = (u8)((floor >> 16) & 0xff);
+	v.m_floorG = (u8)((floor >> 8) & 0xff);
+	v.m_floorB = (u8)(floor & 0xff);
+
+	v.m_width = 64;
+	v.m_height = 64;
+
 	return s;
 }
 

@@ -57,6 +57,14 @@ GWEntity* OgreGraphicsWorld::createEntity(const std::string& meshName, const std
 	return entity;
 }
 
+void OgreGraphicsWorld::destroyEntity(GWEntity* entity)
+{
+	ASSERT(!entity->getParent());
+	ASSERT(entity->numChildren() == 0);
+	m_allEntitys.erase((OgreGWEntity*)entity);
+	delete entity;
+}
+
 GWCamera* OgreGraphicsWorld::createCamera(const std::string& name)
 {
 	OgreGWCamera* camera = new OgreGWCamera(this, name);

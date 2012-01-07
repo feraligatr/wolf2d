@@ -3,12 +3,21 @@
 #include "WolfGame.h"
 #include "math/trMath.h"
 
+#include "trFStream.h"
+
+#include "WolfTerrain.h"
+
 #define GRID_SIZE 1
 #define GRID_COLS 64
 #define GRID_ROWS 64
 
-WolfGame::WolfGame(GraphicsWorld& gw)
-	:Game(gw)
+WolfGame::WolfGame(GraphicsWorld& gw, tree::PhysicsWorld& pw)
+	:Game(gw, pw),
+	m_objRoot(NULL),
+	m_camera(NULL),
+	m_terrain(NULL),
+	m_player(NULL),
+	m_levelData(NULL)
 {
 }
 
@@ -32,8 +41,7 @@ void WolfGame::onHandleMessage(Message* message)
 
 void WolfGame::update(float dt)
 {
-	// update all GameObject.
-	
+	m_objRoot->update(dt);
 }
 
 bool WolfGame::init()
@@ -65,6 +73,12 @@ bool WolfGame::init()
 		LERR_ << "WolfGame::init exception" << e.what();
 		return false;
 	}
+
+	if (!initLevel("../../Media/wolf/level0.lvl"))
+	{
+		return false;
+	}
+
 //	m_terrain = new WolfTerrain(m_scene->getRoot());
 	// the terrain is root object in the scene. 
 	// add Physics World(Grid Physics World).
@@ -92,6 +106,27 @@ bool WolfGame::init()
 	return true;
 }
 
+bool WolfGame::initLevel(const std::string& path)
+{
+	tree::FStream s(path);
+	m_levelData = WolfLevel::createLevelFromStream(s);
+
+	if (!m_levelData)
+	{
+		return false;
+	}
+
+	// create root obj
+	m_objRoot = new GameObject();
+
+	// create terrain.
+	m_terrain = new WolfTerrain(&r_gw, &r_pw, m_levelData);
+
+	m_objRoot->addChild(m_terrain);
+
+	return true;
+}
+
 #ifdef _FAKE_
 
 // include OgreGraphicsWorld and get Ogre things to create ......
@@ -111,19 +146,12 @@ void WolfGame::fakeResources()
 		Ogre::MeshManager::getSingleton().createPlane("TerrainMesh",
 			Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
 			oceanSurface,
-			GRID_COLS, GRID_ROWS, GRID_COLS, GRID_ROWS, true, 1, 8, 8, Ogre::Vector3::UNIT_Z);
+			GRID_COLS, GRID_ROWS, GRID_COLS, GRID_ROWS, true, 1, 8, 8, Ogre::Vector3::UNIT_Y);
 	}
 	catch (Ogre::Exception e)
 	{
 		LERR_ << "WolfGame::fakeResources exception" << e.what();
 	}
-
-
-	//// create a floor entity, give it a material, and place it at the origin
-	//Entity* floor = mSceneMgr->createEntity("Floor", "floor");
-	//floor->setMaterialName("Examples/Rockwall");
-	//floor->setCastShadows(false);
-	//mSceneMgr->getRootSceneNode()->attachObject(floor);
 }
 
 #endif /* _FAKE_ */

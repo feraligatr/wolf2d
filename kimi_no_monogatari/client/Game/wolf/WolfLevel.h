@@ -59,6 +59,8 @@ public:
 	};
 
 	std::vector<StaticInfo> staticInfos;
+	float tileSize;
+
 
 private:
 	WolfLevelConfig();
@@ -68,7 +70,9 @@ class WolfLevel
 {
 public:
 
-	WolfLevel* createLevelFromStream(tree::Stream& s);
+	static WolfLevel* createLevelFromStream(tree::Stream& s);
+
+	// TODO: createConfig().
 
 	// TODO: output later.
 
@@ -79,6 +83,9 @@ public:
 	u16* m_tileObjects;
 	u16* m_tileOthers;
 
+	u8 m_floorR, m_floorG, m_floorB;
+
+	u16 m_width, m_height;
 };
 
 

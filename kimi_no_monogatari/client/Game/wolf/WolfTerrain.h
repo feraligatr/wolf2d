@@ -1,12 +1,19 @@
 #ifndef _WOLF_TERRAIN_H_
 #define _WOLF_TERRAIN_H_
 
-#include "GameObject.h"
+#include "WolfGameObject.h"
 
-class WolfTerrain : public GameObject
+#include "Wolf.h"
+
+class WolfTerrain : public WolfGameObject
 {
 public:
-	WolfTerrain(GameObject* parent);
+	WolfTerrain(GraphicsWorld* gw, tree::PhysicsWorld* pw, WolfLevel* level);
+
+private:
+	void init(WolfLevel* level);
+
+	virtual ~WolfTerrain();
 };
 
 #endif /* _WOLF_TERRAIN_H_ */

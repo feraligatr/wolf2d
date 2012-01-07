@@ -28,6 +28,7 @@ public:
 	virtual void setAmbientLight(float r, float g, float b);
 
 	virtual GWEntity* createEntity(const std::string& meshName, const std::string& matName);
+	virtual void destroyEntity(GWEntity* entity);
 
 	virtual GWCamera* createCamera(const std::string& name);
 	virtual void setActiveCamera(GWCamera* camera);

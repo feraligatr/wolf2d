@@ -15,6 +15,12 @@ public:
 	virtual void setRotation(const tree::Quat& quat);
 	virtual void setScale(const tree::Vec3& scale);
 
+	// hierarchy.
+	virtual void addChild(GWEntity* entity);
+	virtual void removeChild(GWEntity* entity);
+	virtual GWEntity* getParent();
+	virtual u16 numChildren();
+
 private:
 	static u32 generateUniqueId();
 	std::string getOgreNodeName() const;
@@ -27,6 +33,8 @@ private:
 	OgreGraphicsWorld* m_gw;
 
 	OgreGWEntity* m_parent;
+	typedef std::set<GWEntity*> EntityList;
+	EntityList m_children;
 
 };
 

@@ -4,7 +4,8 @@
 
 GameObject::GameObject()
 :m_parent(NULL),
-m_dirty(true)
+m_dirty(true),
+m_transform(tree::Quat::getIdentity())
 {
 
 }
@@ -132,4 +133,8 @@ void GameObject::update(float dt)
 	{
 		(*iter)->update(dt);
 	}
+}
+
+void GameObject::updateInternal(float)
+{
 }

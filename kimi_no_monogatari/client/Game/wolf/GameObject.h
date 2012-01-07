@@ -42,7 +42,7 @@ public:
 	typedef std::set<GameObject*> ObjectList;
 
 protected:
-	virtual void updateInternal(float dt) = 0;
+	virtual void updateInternal(float dt);
 
 	inline GameObject* getParent() {
 		return m_parent;
