@@ -16,14 +16,14 @@ WolfGame::WolfGame(GraphicsWorld& gw, tree::PhysicsWorld& pw)
 	m_objRoot(NULL),
 	m_camera(NULL),
 	m_terrain(NULL),
-	m_player(NULL),
-	m_levelData(NULL)
+	m_player(NULL)
 {
 }
 
 WolfGame::~WolfGame()
 {
-	
+	delete m_objRoot;
+	delete m_terrain;
 }
 
 void WolfGame::onMouseEvent(tree::MouseEvent& evt)
@@ -74,21 +74,37 @@ bool WolfGame::init()
 		return false;
 	}
 
-	if (!initLevel("../../Media/wolf/level0.lvl"))
+	if (!initLevel("../../Media/wolf/maps/s00.map"))
 	{
 		return false;
 	}
 
-//	m_terrain = new WolfTerrain(m_scene->getRoot());
-	// the terrain is root object in the scene. 
-	// add Physics World(Grid Physics World).
-	// Every Game Object can has a physics object. 
+	return true;
+}
 
-//	m_terrain->init(m_scene);
+bool WolfGame::initLevel(const std::string& path)
+{
+	tree::FStream s(path);
+	WolfLevel* levelData = WolfLevel::createLevelFromStream(s);
+
+	if (!levelData)
+	{
+		return false;
+	}
+
+	// TODO: construct the whole game, move to a new function.
+
+	// create root obj
+	m_objRoot = new GameObject();
+
+	// create terrain.
+	m_terrain = new WolfTerrain(&r_gw, &r_pw, levelData);
+
+	m_objRoot->addChild(m_terrain);
 
 	// the walls is to render all walls, including transparent and pushing walls.
 	// use manual object to generate the walls on the fly.
-//	m_walls = new WolfWalls(m_terrain);
+	//	m_walls = new WolfWalls(m_terrain);
 
 	// Doors?
 	// m_doors
@@ -99,30 +115,11 @@ bool WolfGame::init()
 
 
 	// 
-//	m_player = new WolfPlayer(m_terrain);
+	//	m_player = new WolfPlayer(m_terrain);
 	// construct enemys;
 	
 
-	return true;
-}
-
-bool WolfGame::initLevel(const std::string& path)
-{
-	tree::FStream s(path);
-	m_levelData = WolfLevel::createLevelFromStream(s);
-
-	if (!m_levelData)
-	{
-		return false;
-	}
-
-	// create root obj
-	m_objRoot = new GameObject();
-
-	// create terrain.
-	m_terrain = new WolfTerrain(&r_gw, &r_pw, m_levelData);
-
-	m_objRoot->addChild(m_terrain);
+	delete levelData;
 
 	return true;
 }

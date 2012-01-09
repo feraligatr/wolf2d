@@ -10,6 +10,11 @@ class ConnectionManager;
 class GraphicsWorld;
 class Game;
 
+namespace tree
+{
+	class PhysicsWorld;
+}
+
 class SimpleClient : public Client
 {
 public:
@@ -36,6 +41,9 @@ protected:
 	ConnectionPtr m_connection;
 
 	Game* m_game;
+
+	GraphicsWorld* m_gameGW;
+	tree::PhysicsWorld* m_pw;
 
 };
 

@@ -43,8 +43,9 @@ void GameGLWidget::timeout_update()
 	m_listener->onInvoked(this, NULL, "update", NULL);
 }
 
-void GameGLWidget::recreateFromOgreWindow(WId wid)
+void GameGLWidget::recreateFromOgreWindow(WId)
 {
+	// TODO: not very clear for qt windows, so reconsider the connection for ogre and qt.
 //	this->create(wid);
 }
 

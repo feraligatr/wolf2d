@@ -26,7 +26,6 @@ public:
 
 	virtual void update(float dt);
 
-	// TODO: need istream to read.
 	virtual bool init();
 
 private:
@@ -47,9 +46,6 @@ private:
 
 	typedef std::vector<WolfEnemy*> EnemyList;
 	EnemyList m_enemys;
-
-	// exists after loading.
-	WolfLevel* m_levelData;
 
 };
 

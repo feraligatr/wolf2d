@@ -9,11 +9,11 @@ class WolfTerrain : public WolfGameObject
 {
 public:
 	WolfTerrain(GraphicsWorld* gw, tree::PhysicsWorld* pw, WolfLevel* level);
+	virtual ~WolfTerrain();
 
 private:
 	void init(WolfLevel* level);
 
-	virtual ~WolfTerrain();
 };
 
 #endif /* _WOLF_TERRAIN_H_ */

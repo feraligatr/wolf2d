@@ -11,18 +11,29 @@
 SimpleClient::SimpleClient(RenderContext* renderContext, ConnectionManager& connectionManager)
 :Client(renderContext)
 ,r_connectionManager(connectionManager)
+,m_game(NULL)
+,m_pw(NULL)
+,m_gameGW(NULL)
 {
 
 }
 
 SimpleClient::~SimpleClient()
 {
-
+	delete m_pw;
+	delete m_game;
+	if (m_gameGW)
+	{
+		m_renderContext->destroyGraphicsWorld(m_gameGW);
+	}
 }
 
-void SimpleClient::update(float)
+void SimpleClient::update(float dt)
 {
-	
+	if (m_game)
+	{
+		m_game->update(dt);
+	}
 }
 
 bool SimpleClient::init()
@@ -78,15 +89,15 @@ bool SimpleClient::initGraphics()
 
 bool SimpleClient::initGame()
 {
-	GraphicsWorld* world = m_renderContext->createGraphicsWorld();
-	if (!world)
+	m_gameGW = m_renderContext->createGraphicsWorld();
+	if (!m_gameGW)
 	{
 		return false;
 	}
 
 	tree::PhysicsConfig p_config;
-	tree::PhysicsWorld* pw= new tree::PhysicsWorld(p_config);
-	m_game = new WolfGame(*world, *pw);
+	m_pw = new tree::PhysicsWorld(p_config);
+	m_game = new WolfGame(*m_gameGW, *m_pw);
 	return m_game->init();
 }
 
