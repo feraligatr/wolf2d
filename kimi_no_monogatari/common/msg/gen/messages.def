@@ -2,6 +2,7 @@
  * This is test comment
  */
 message login {
+	int x;
 };
 
 message sample { // This is test

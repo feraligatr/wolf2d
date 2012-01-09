@@ -2,6 +2,9 @@
 #define _MESSAGE_PARSERS_H_
 
 <%def name="className(msg)">${msg.getName().capitalize()}MessageParser</%def>
+<%def name="varType(var)">${var.getCppType()}</%def>
+<%def name="varName(var)">${var.getName()}</%def>
+<%def name="VarName(var)">${var.getName().capitalize()}</%def>
 
 #include "msg/MessageDefine.h"
 #include "msg/MessageParser.h"
@@ -15,8 +18,11 @@ public:
 	virtual ~<%self:className msg="${msg}"/>() {}
 
 %  for var in msg.members:
-protected:
+public:
+	<%self:varType var="${var}"/> get<%self:VarName var="${var}"/>();
+	void set<%self:VarName var="${var}"/>(<%self:varType var="${var}"/> <%self:varName var="${var}"/>);
 %  endfor
+protected:
 	static const int FIELD_STR_USERNAME_POS = 0;
 	static const int FIELD_STR_USERNAME_LEN = 20;
 	static const int MESSAGE_LEN = 20;
@@ -26,7 +32,6 @@ public:
 	void setUsername(const char* username) { setStr(username, FIELD_STR_USERNAME_POS, FIELD_STR_USERNAME_LEN); }
 	static u32 getRecommendSize() {return MESSAGE_LEN; }
 };
-
 % endfor
 
-#endif /*  _MESSAGE_PARSERS_H_ */
+#endif /* _MESSAGE_PARSERS_H_ */

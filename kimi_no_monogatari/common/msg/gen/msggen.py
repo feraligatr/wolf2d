@@ -3,14 +3,21 @@
 class DataType:
 	pass
 
+class DataTypeChar(DataType):
+	def getCppType(self):
+		return 'char'
+
 class DataTypeInt(DataType):
-	pass
+	def getCppType(self):
+		return 'int'
 
 class DataTypeString(DataType):
-	pass
+	def getCppType(self):
+		return 'const char *'
 
-class DataTypeStringFixed(DataType):
-	def __init__(self, size):
+class DataTypeArray(DataType):
+	def __init__(self, src_type, size):
+		self.src = src_type
 		self.size = size
 
 class DataTypeMessage(DataType):
@@ -35,6 +42,12 @@ class DataMember:
 		self.type = type
 		self.name = name
 
+	def getCppType(self):
+		return self.type.getCppType()
+
+	def getName(self):
+		return self.name;
+
 import ply.lex
 
 class MsgLexer:
@@ -48,6 +61,7 @@ class MsgLexer:
 		"MESSAGE",
 		"STRUCT",
 		"INT",
+		"CHAR",
 		"STRING",
 
 		#symbols
@@ -68,6 +82,7 @@ class MsgLexer:
 		'message' : 'MESSAGE',
 		'struct' : 'STRUCT',
 		'int' : 'INT',
+		'char' : 'CHAR',
 		'string' : 'STRING',
 	}
 
@@ -168,25 +183,40 @@ class MsgParser:
 		'''
 		p[0] = [p[1]]
 
-	def p_vardecl_int(self, p):
-		''' vardecl : INT IDENTIFIER SEMICOLON
+	def p_vardecl(self, p):
+		''' vardecl : datatype IDENTIFIER SEMICOLON
 		'''
-		p[0] = DataMember(DataTypeInt(), p[2])
+		p[0] = DataMember(p[1], p[2])
 
-	def p_vardecl_string(self, p):
-		''' vardecl : STRING IDENTIFIER SEMICOLON
+	def p_datatype_array(self, p):
+		''' datatype : simple_datatype LBRACK NUMBER RBRACK
 		'''
-		p[0] = DataMember(DataTypeString(), p[2])
+		p[0] = DataTypeArray(p[1], p[3])
 
-	def p_vardecl_string_fixed(self, p):
-		''' vardecl : STRING LBRACK NUMBER RBRACK IDENTIFIER SEMICOLON
+	def p_datatype_simple(self, p):
+		''' datatype : simple_datatype
 		'''
-		p[0] = DataMember(DataTypeStringFixed(p[3]), p[5])
+		p[0] = p[1]
 
-	def p_vardecl_struct_ref(self, p):
-		''' vardecl : STRUCT IDENTIFIER IDENTIFIER SEMICOLON
+	def p_simple_datatype_char(self, p):
+		''' simple_datatype : CHAR
 		'''
-		p[0] = DataMember(DataTypeStructRef(self.type_list[p[2]]), p[3])
+		p[0] = DataTypeChar()
+
+	def p_simple_datatype_int(self, p):
+		''' simple_datatype : INT
+		'''
+		p[0] = DataTypeInt()
+
+	def p_simple_datatype_string(self, p):
+		''' simple_datatype : STRING
+		'''
+		p[0] = DataTypeString()
+
+	def p_simple_datatype_struct_ref(self, p):
+		''' simple_datatype : STRUCT IDENTIFIER
+		'''
+		p[0] = DataTypeStructRef(self.type_list[p[2]])
 
 	def p_error(self, p):
 		print 'parser error'
@@ -201,23 +231,32 @@ class MsgParser:
 		self.addmsg_cb = addmsg_cb
 		self.parser.parse(data, lexer = self.lexer.lexer)
 
-import logging
-logging.basicConfig(
-    level = logging.DEBUG,
-    filename = "parselog.txt",
-    filemode = "w",
-    format = "%(filename)10s:%(lineno)4d:%(message)s"
-)
-log = logging.getLogger()
+def convert(def_file, template_file, output_file, log_file = 'parselog.txt'):
+	import logging
+	logging.basicConfig(
+		level = logging.DEBUG,
+		filename = log_file,
+		filemode = "w",
+		format = "%(filename)10s:%(lineno)4d:%(message)s"
+	)
+	log = logging.getLogger()
 
-m = MsgParser()
-m.build(debug=True, debuglog=log)
-msg_list = []
-with open('messages.def', 'r') as f:
-	m.test(f.read(), lambda msg: msg_list.append(msg))
-print msg_list
+	m = MsgParser()
+	m.build(debug=True, debuglog=log)
+	msg_list = []
+	with open(def_file, 'r') as f:
+		m.test(f.read(), lambda msg: msg_list.append(msg))
+	print msg_list
 
-import mako.template
-h_tmpl = mako.template.Template(filename='MessageParsers.h.tmpl')
-with open('MessageParsers.h', 'w') as f:
-	f.write(h_tmpl.render(msg_list=msg_list))
+	import mako.template
+	h_tmpl = mako.template.Template(filename=template_file)
+	with open(output_file, 'w') as f:
+		f.write(h_tmpl.render(msg_list=msg_list))
+
+def main(argv):
+	convert(def_file = 'messages.def', template_file = 'MessageParsers.h.tmpl', output_file = 'MessageParsers.h')
+
+import sys
+
+if __name__ == "__main__":
+	sys.exit(main(sys.argv))
